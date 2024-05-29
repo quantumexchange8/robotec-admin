@@ -51,7 +51,7 @@ let removeFinishEventListener = Inertia.on("finish", () => {
 </script>
 
 <template>
-    <div class="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0" style="background: linear-gradient(180deg, rgba(0, 10, 255, 0.20) 0%, rgba(0, 0, 0, 0.00) 50%), var(--gray-900, #0C111D);">
+    <div class="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0" style="background: linear-gradient(180deg, rgba(0, 10, 255, 0.20) 0%, rgba(0, 0, 0, 0.00) 50%), #0C111D;">
         <div class="flex items-center gap-2 self-stretch w-full justify-end pt-2 pr-2 sm:pr-8">
             <Dropdown align="right">
                 <template #trigger>
@@ -61,7 +61,7 @@ let removeFinishEventListener = Inertia.on("finish", () => {
                         type="button"
                         v-slot="{ iconSizeClasses }"
                         class="inline-flex"
-                        srText="Toggle dark mode"
+                        srText="Change language"
                     >
                         <GlobeAltIcon
                             aria-hidden="true"

@@ -1,11 +1,11 @@
 <script setup>
-import {Head, usePage} from '@inertiajs/vue3'
+import { Head, usePage } from '@inertiajs/vue3'
 import Sidebar from '@/Components/Sidebar/Sidebar.vue'
 import Navbar from '@/Components/Navbar.vue'
 import { sidebarState } from '@/Composables'
 import ToastList from "@/Components/ToastList.vue";
-import {ref} from "vue";
-import {Inertia} from "@inertiajs/inertia";
+import { ref } from "vue";
+import { Inertia } from "@inertiajs/inertia";
 import Alert from "@/Components/Alert.vue";
 
 defineProps({
@@ -36,51 +36,44 @@ let removeFinishEventListener = Inertia.on("finish", () => {
 </script>
 
 <template>
-    <Head :title="title"></Head>
 
-    <div class="min-h-screen bg-gray-900">
-        <!-- Sidebar -->
+    <Head :title="title"></Head>
+    <div class="min-h-screen flex justify-center bg-gray-900">
         <Sidebar />
 
-        <div
-            style="transition-property: margin; transition-duration: 150ms"
-            :class="[
-                'min-h-screen flex flex-col',
-                {
-                    'lg:ml-72': sidebarState.isOpen,
-                    'md:ml-16': !sidebarState.isOpen,
-                },
-            ]"
-        >
-            <!-- Navbar -->
-            <nav class="fixed bg-gray-800 w-full">
-                <div class="flex justify-between">
-                    <Navbar />
+        <div class="flex justify-center w-full sm:max-w-[360px]">
+            <div class="w-full" style="transition-property: margin; transition-duration: 150ms">
+                <!-- Navbar -->
+                <nav class="bg-gray-800 w-full">
+                    <div class="flex justify-between">
+                        <Navbar />
+                    </div>
+                </nav>
+
+                <div class="px-4 py-3">
+                    <!-- Page Heading -->
+                    <header v-if="$slots.header">
+                        <div class="py-2 font-semibold">
+                            <slot name="header" />
+                        </div>
+                    </header>
+
+                    <!-- Page Content -->
+                    <main class="flex-1">
+                        <Alert
+                            :show="showAlert"
+                            :on-dismiss="() => showAlert = false"
+                            :title="alertTitle"
+                            :intent="intent"
+                            :alertButton="alertButton"
+                        >
+                            {{ alertMessage }}
+                        </Alert>
+                        <ToastList />
+                        <slot />
+                    </main>
                 </div>
-            </nav>
-
-            <!-- Page Heading -->
-            <header v-if="$slots.header" class="mt-20">
-                <div class="px-4 py-5 font-semibold">
-                    <slot name="header" />
-                </div>
-            </header>
-
-            <!-- Page Content -->
-            <main class="flex-1 px-4">
-                <Alert
-                    :show="showAlert"
-                    :on-dismiss="() => showAlert = false"
-                    :title="alertTitle"
-                    :intent="intent"
-                    :alertButton="alertButton"
-                >
-                    {{ alertMessage }}
-                </Alert>
-                <ToastList />
-                <slot />
-            </main>
-
+            </div>
         </div>
     </div>
 </template>

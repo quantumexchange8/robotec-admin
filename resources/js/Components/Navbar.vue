@@ -51,7 +51,7 @@ const changeLanguage = async (langVal) => {
 <template>
     <div
         :class="[
-            'relative flex items-center justify-between px-4 py-4 transition-transform duration-500 w-full',
+            'relative flex items-center justify-between px-4 py-4 h-[72px] transition-transform duration-500 w-full',
             {
                 'translate-y-full': scrolling.down,
                 'translate-y-0': scrolling.up,
@@ -64,7 +64,7 @@ const changeLanguage = async (langVal) => {
             type="button"
             @click="sidebarState.isOpen = !sidebarState.isOpen"
             v-slot="{ iconSizeClasses }"
-            class="md:hidden justify-center"
+            class="flex items-center justify-center"
             srText="Search"
         >
             <Bars3BottomLeftIcon
@@ -81,7 +81,7 @@ const changeLanguage = async (langVal) => {
 
         <Link :href="route('dashboard')">
             <Logo />
-            <span class="sr-only">K UI</span>
+            <span class="sr-only">home</span>
         </Link>
         <div class="flex items-center gap-2 self-stretch justify-center">
             <Dropdown align="right">

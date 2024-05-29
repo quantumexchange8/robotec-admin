@@ -1,7 +1,8 @@
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head } from '@inertiajs/vue3';
-import NoData from '@/Components/NoData.vue';
+import EmptyHistory from '@/Components/EmptyHistory.vue';
+
 </script>
 
 <template>

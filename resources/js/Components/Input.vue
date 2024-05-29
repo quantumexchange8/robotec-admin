@@ -45,7 +45,7 @@ watch(isFocused, (newValue) => {
 <template>
     <input
         :class="[
-            'py-2.5 rounded-lg text-base font-normal shadow-xs border placeholder:text-gray-500 caret-primary-500',
+            'py-3 rounded-lg text-base font-normal shadow-xs border placeholder:text-gray-500 caret-primary-500',
             'disabled:bg-gray-200 disabled:cursor-not-allowed dark:disabled:bg-gray-800 disabled:text-gray-400 dark:disabled:text-gray-500',
             {
                 'px-4': !withIcon,
