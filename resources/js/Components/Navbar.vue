@@ -25,12 +25,8 @@ onUnmounted(() => {
 const currentLocale = ref(usePage().props.locale);
 const localeTextMap = {
     en: 'EN',
-    cn: '中文',
-    kr: '한국어',
-    vn: 'tiếng Việt',
-    ja: '日本語',
-    th: 'ไทย',
-    id: 'Bahasa Indonesia',
+    cn: '简体中文',
+    bm: 'Bahasa Melayu',
 };
 
 const currentLocaleText = computed(() => {
@@ -66,6 +62,7 @@ const changeLanguage = async (langVal) => {
             v-slot="{ iconSizeClasses }"
             class="flex items-center justify-center"
             srText="Search"
+            size="sm"
         >
             <Bars3BottomLeftIcon
                 v-show="!sidebarState.isOpen"
@@ -83,6 +80,7 @@ const changeLanguage = async (langVal) => {
             <Logo />
             <span class="sr-only">home</span>
         </Link>
+
         <div class="flex items-center gap-2 self-stretch justify-center">
             <Dropdown align="right">
                 <template #trigger>
@@ -93,6 +91,7 @@ const changeLanguage = async (langVal) => {
                         v-slot="{ iconSizeClasses }"
                         class="inline-flex"
                         srText="Toggle dark mode"
+                        size="sm"
                     >
                         <GlobeAltIcon
                             aria-hidden="true"
@@ -102,38 +101,18 @@ const changeLanguage = async (langVal) => {
                 </template>
                 <template #content>
                     <DropdownLink @click="changeLanguage('en')">
-                        <div class="inline-flex items-center gap-2">
+                        <div class="text-white inline-flex items-center gap-2">
                             English
                         </div>
                     </DropdownLink>
                     <DropdownLink @click="changeLanguage('cn')">
                         <div class="inline-flex items-center gap-2">
-                            中文
+                            简体中文
                         </div>
                     </DropdownLink>
-                    <DropdownLink @click="changeLanguage('kr')">
+                    <DropdownLink @click="changeLanguage('bm')">
                         <div class="inline-flex items-center gap-2">
-                            한국어
-                        </div>
-                    </DropdownLink>
-                    <DropdownLink @click="changeLanguage('vn')">
-                        <div class="inline-flex items-center gap-2">
-                            tiếng Việt
-                        </div>
-                    </DropdownLink>
-                    <DropdownLink @click="changeLanguage('ja')">
-                        <div class="inline-flex items-center gap-2">
-                            日本語
-                        </div>
-                    </DropdownLink>
-                    <DropdownLink @click="changeLanguage('th')">
-                        <div class="inline-flex items-center gap-2">
-                            ไทย
-                        </div>
-                    </DropdownLink>
-                    <DropdownLink @click="changeLanguage('id')">
-                        <div class="inline-flex items-center gap-2">
-                            Bahasa Indonesia
+                            Bahasa Melayu
                         </div>
                     </DropdownLink>
                 </template>

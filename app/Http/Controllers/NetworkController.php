@@ -11,7 +11,7 @@ class NetworkController extends Controller
     public function client_network(Request $request)
     {
         // Retrieve top-level users
-        $topLevelUsers = User::where('role', 'member')->whereNull('upline_id')->get();
+        $topLevelUsers = User::where('role', 'user')->whereNull('upline_id')->get();
     
         // Initialize an empty array to store the tree structure
         $tree = [];

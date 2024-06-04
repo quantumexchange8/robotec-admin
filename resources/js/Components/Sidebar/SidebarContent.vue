@@ -40,10 +40,10 @@ import { HomeIcon, UserCircleIcon, GlobeAltIcon, Users01Icon, CoinsHandIcon, Spe
             </template>
         </SidebarLink>
 
-        <!-- <SidebarLink
+        <SidebarLink
             :title="$t('public.sidebar.client_listing')"
-            :href="route('profile.edit')"
-            :active="route().current('profile.edit')"
+            :href="route('member.client_listing')"
+            :active="route().current('member.client_listing')"
         >
             <template #icon>
                 <Users01Icon
@@ -51,12 +51,12 @@ import { HomeIcon, UserCircleIcon, GlobeAltIcon, Users01Icon, CoinsHandIcon, Spe
                     aria-hidden="true"
                 />
             </template>
-        </SidebarLink> -->
+        </SidebarLink>
 
-        <!-- <SidebarLink
+        <SidebarLink
             :title="$t('public.sidebar.commission_payout')"
-            :href="route('profile.edit')"
-            :active="route().current('profile.edit')"
+            :href="route('commission.commission_payout')"
+            :active="route().current('commission.commission_payout')"
         >
             <template #icon>
                 <CoinsHandIcon
@@ -64,12 +64,12 @@ import { HomeIcon, UserCircleIcon, GlobeAltIcon, Users01Icon, CoinsHandIcon, Spe
                     aria-hidden="true"
                 />
             </template>
-        </SidebarLink> -->
+        </SidebarLink>
 
-        <!-- <SidebarLink
+        <SidebarLink
             :title="$t('public.sidebar.pamm_return')"
-            :href="route('profile.edit')"
-            :active="route().current('profile.edit')"
+            :href="route('pamm.pamm_return')"
+            :active="route().current('pamm.pamm_return')"
         >
             <template #icon>
                 <Speedometer04
@@ -77,7 +77,7 @@ import { HomeIcon, UserCircleIcon, GlobeAltIcon, Users01Icon, CoinsHandIcon, Spe
                     aria-hidden="true"
                 />
             </template>
-        </SidebarLink> -->
+        </SidebarLink>
 
         <!-- <SidebarLink
             :title="$t('public.sidebar.wallet_adjustment')"

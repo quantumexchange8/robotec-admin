@@ -7,6 +7,7 @@ import NoClient from "@/Components/NoClient.vue";
 import Button from '@/Components/Button.vue';
 import { PlusCircleIcon, Users01Icon } from '@/Components/Icons/outline';
 import ClientChild from '@/Pages/Network/ClientChild.vue'
+import AddNewClient from "@/Pages/ClientListing/Partials/AddNewClient.vue";
 
 const user = usePage().props.auth.user;
 const profile_photo = usePage().props.auth.user.profile_photo;
@@ -15,7 +16,6 @@ const level = 1;
 const props = defineProps({
     clients: Object,
 });
-console.log(props.clients);
 
 const toggleClient = (client) => {
     if (client.children && client.children.length > 0) {
@@ -46,7 +46,7 @@ const getActiveChildren = () => {
             <img class="w-8 h-8 rounded-full" :src="profile_photo || 'https://via.placeholder.com/32x32'" alt="User profile picture"/>
             <div class="flex-col justify-start items-start inline-flex">
                 <div class="text-white text-sm font-semibold font-sans leading-tight">{{ user.name }}</div>
-                <div class="text-gray-400 text-xs font-normal font-sans leading-[18px]">ID: {{ user.id }}</div>
+                <div class="text-gray-300 text-xs font-normal font-sans leading-[18px]">ID: {{ user.id }}</div>
             </div>
         </div>
 
@@ -57,12 +57,16 @@ const getActiveChildren = () => {
         </div>
 
         <div v-if="props.clients.length === 0">
-            <div class="px-4 py-5 flex items-center justify-center">
-                <NoClient class="w-40 h-[120px]" />
-            </div>
-
-            <div class="flex justify-center mt-8">
-                <Button variant="primary" class="px-3 py-2"><PlusCircleIcon class="w-5 h-5 mr-2 relative" /> New Client</Button>
+            <div class="px-4 py-5 flex flex-col items-center justify-center">
+                <div class="flex flex-col items-center">
+                    <NoClient class="w-40 h-[120px]" />
+                    <div class="w-[328px] text-center text-gray-300 text-sm font-normal font-sans leading-tight mt-3">
+                        Looks like the network is empty right now because no clients have been created yet. Let's create some to get things rolling! 🚀
+                    </div>
+                </div>
+                <div class="mt-8">
+                    <AddNewClient />
+                </div>
             </div>
         </div>
 
@@ -71,7 +75,7 @@ const getActiveChildren = () => {
             <div v-for="(client, index) in props.clients" :key="index" class="flex items-center justify-center relative">
                 <div 
                     class="w-full px-2 pt-4 pb-3 bg-gray-800 rounded-2xl flex-col justify-center items-center gap-2 inline-flex relative"
-                    :class="{ 'border border-primary-500': client.children && client.children.length > 0 && client.isActive }"
+                    :class="{ 'shadow-inner border border-primary-500': client.children && client.children.length > 0 && client.isActive }"
                     @click="toggleClient(client)"
                 >
                     <img class="w-7 h-7 rounded-full" :src="client.profile_photo_url || 'https://via.placeholder.com/28x28'" />

@@ -34,6 +34,7 @@ const props = defineProps({
         type: Boolean,
         default: false,
     },
+    invalid: String,
 });
 
 const field = inject("field", props);
@@ -178,11 +179,11 @@ function clearSelection() {
     >
         <ComboboxButton
             :class="{
-                'border-primary-500 bg-transparent': open && !field.error,
-                'border-error-500': !open && field.error,
-                'border-gray-300': !open && !field.error,
+                'border-primary-500 bg-transparent': open && !field.error && !props.invalid,
+                'border-error-500': !open && (field.error || props.invalid),
+                'border-gray-600': !open && !field.error && !props.invalid,
               }"
-            class="min-h-[2.5rem] relative flex w-full flex-wrap items-center gap-1 overflow-hidden rounded-lg border bg-transparent py-1 pl-3 pr-14 border-gray-600 focus-within:border-primary-400 hover:border-primary-400 focus:ring-0"
+            class="min-h-[2.5rem] relative flex w-full flex-wrap items-center gap-1 overflow-hidden rounded-lg border bg-transparent py-1.5 pl-3 pr-14 focus-within:border-primary-500 hover:border-primary-500 focus:ring-0"
         >
             <template v-if="props.multiple">
                 <div
@@ -209,7 +210,10 @@ function clearSelection() {
                         ? props.placeholder
                         : ''
                 "
-                class="-mx-1 min-w-0 flex-grow cursor-pointer disabled:cursor-not-allowed border-none bg-transparent py-1.5 px-2 placeholder-gray-400 focus:ring-0 text-white"
+                :class="{
+                    '-mx-1 min-w-0 flex-grow cursor-pointer disabled:cursor-not-allowed border-none bg-transparent py-1.5 px-2 focus:ring-0 placeholder-white text-white': !open,
+                    '-mx-1 min-w-0 flex-grow cursor-pointer disabled:cursor-not-allowed border-none bg-transparent py-1.5 px-2 focus:ring-0 placeholder-gray-300 text-white': open
+                }"
                 size="1"
                 @change="query = $event.target.value"
                 @keydown.delete="props.multiple ? handleQueryDelete : undefined"
@@ -217,12 +221,12 @@ function clearSelection() {
 
             <div class="absolute inset-y-0 right-1 flex items-center">
                 <button
-                    v-if="
-            Array.isArray(props.modelValue)
-              ? props.modelValue.length
-              : props.modelValue
-          "
-                    class="inline-flex h-full w-6 items-center justify-center text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 focus:text-gray-700 focus:outline-none"
+                    v-if="!props.isPhoneCode && (
+                        Array.isArray(props.modelValue)
+                            ? props.modelValue.length
+                            : props.modelValue
+                    )"
+                    class="inline-flex h-full w-6 items-center justify-center text-gray-600 hover:text-gray-300 focus:text-gray-700 focus:outline-none"
                     @click.prevent="clearSelection"
                 >
                     <XCircleIcon
@@ -239,7 +243,7 @@ function clearSelection() {
         </ComboboxButton>
 
         <TransitionRoot
-            class="absolute z-50 mt-1 max-h-60 w-full overflow-auto rounded-lg bg-gray-900 border border-gray-600 ring-1 ring-opacity-5 ring-gray-600 py-1 text-base shadow-md focus:outline-none"
+            class="absolute z-50 mt-1 max-h-60 w-full overflow-auto rounded-lg bg-gray-900 border border-gray-600 ring-1 ring-opacity-5 ring-gray-600 py-1 text-base shadow-md focus:outline-none p-2"
             leave="transition ease-in duration-100"
             leaveFrom="opacity-100"
             leaveTo="opacity-0"
@@ -248,14 +252,14 @@ function clearSelection() {
             <ComboboxOptions class="min-w-fit">
                 <li
                     v-if="!filteredOptions.length && !isLoadingOptions && !queryOption"
-                    class="relative cursor-default select-none py-2 px-3 text-sm text-gray-700"
+                    class="relative cursor-default select-none py-2 px-3 text-sm text-white"
                 >
                     No options...
                 </li>
 
                 <li
                     v-if="isLoadingOptions || isCreatingOption"
-                    class="relative cursor-default select-none py-2 px-3 text-sm text-gray-700"
+                    class="relative cursor-default select-none py-2 px-3 text-sm text-white"
                 >
                     Loading...
                 </li>
@@ -267,12 +271,11 @@ function clearSelection() {
                         :value="queryOption"
                         as="template"
                     >
-                        <li
+                    <li
                             :class="{
-                                'bg-gray-200 shadow-[inset_2px_0px_0px] shadow-primary-500':
-                                  active,
-                              }"
-                            class="relative cursor-default select-none whitespace-pre py-2 px-3 text-sm active:bg-gray-300"
+                                'bg-gray-200 shadow-[inset_2px_0px_0px] shadow-primary-500': active,
+                            }"
+                            class="relative cursor-default select-none whitespace-pre p-3 rounded-lg text-sm active:bg-gray-300"
                         >
                             Create "{{ queryOption.label }}"
                         </li>
@@ -280,7 +283,7 @@ function clearSelection() {
 
                     <ComboboxOption
                         v-for="option in filteredOptions"
-                        :key="option.value"
+                        :key="option.id"
                         v-slot="{selected, active}"
                         :value="option"
                         as="template"
@@ -290,14 +293,14 @@ function clearSelection() {
                                 'bg-primary-900': selected,
                                 'bg-primary-900': active,
                               }"
-                            class="relative inline-flex items-center gap-2 w-full cursor-default select-none whitespace-pre py-2 px-3 text-sm active:bg-gray-300 dark:bg-gray-800"
+                            class="relative inline-flex items-center gap-2 w-full cursor-default select-none whitespace-pre p-3 rounded-lg text-sm"
                         >
                             <img v-if="image" :src="option.img ? option.img : 'https://img.freepik.com/free-icon/user_318-159711.jpg'" class="w-8 h-8 rounded-full" alt="">
                             <span class="block truncate text-white" :class="{ 'font-medium': selected, 'font-normal': !selected }">
                                     {{ option.label }}
                             </span>
                             <span class="block truncate text-gray-300" :class="{ 'font-medium': selected, 'font-normal': !selected }">
-                                {{ option.value }}
+                                {{ props.isPhoneCode ? option.value : '' }}
                             </span>
 
                         </li>

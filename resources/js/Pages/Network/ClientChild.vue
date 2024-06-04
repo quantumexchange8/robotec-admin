@@ -4,20 +4,13 @@ import { Users01Icon } from '@/Components/Icons/outline';
 
 // Define props
 const props = defineProps({
-    clients: Object,
+    clients: Array, // Adjusted type to Array for clients
     level: Number,
 });
 
 // Function to toggle client and its children at the next level
 const toggleClient = (client) => {
-    if (client.children && client.children.length > 0 && client.level === props.level) {
-        client.isActive = !client.isActive;
-    } else {
-        client.isActive = true; // Make sure children with active children are always expandable
-    }
-
-    // If the client was already active, toggle it back to inactive
-    if (client.isActive && client.level === props.level) {
+    if (client.children && client.children.length > 0) {
         client.isActive = !client.isActive;
     }
 };
@@ -36,7 +29,7 @@ const getActiveChildren = (clients) => {
 
 <template>
     <!-- Level {{ level }} -->
-    <div>
+    <div class="my-5">
         <div class="w-full py-1 my-3 justify-start items-center gap-1 inline-flex">
             <div class="text-gray-300 text-xs font-normal font-sans leading-[18px]">Level {{ level }}</div>
             <div class="grow shrink basis-0 h-px bg-gray-600 rounded-[10px]"></div>
@@ -44,15 +37,13 @@ const getActiveChildren = (clients) => {
         <div class="grid grid-cols-3 gap-4">
             <div v-for="(child, index) in props.clients" :key="index" class="flex items-center justify-center relative">
                 <div class="w-full px-2 pt-4 pb-3 bg-gray-800 rounded-2xl flex-col justify-center items-center gap-2 inline-flex relative"
-                    :class="{ 'border border-primary-500': child.children && child.children.length > 0 && child.isActive }"
+                    :class="{ 'shadow-inner border border-primary-500': child.children && child.children.length > 0 && child.isActive }"
                     @click="toggleClient(child)">
                     <img class="w-7 h-7 rounded-full"
                         :src="child.profile_photo_url || 'https://via.placeholder.com/28x28'" />
                     <div class="self-stretch h-[34px] flex-col justify-start items-center flex">
-                        <div class="self-stretch text-center text-white text-xs font-medium font-sans leading-[18px]">{{
-                child.name }}</div>
-                        <div class="text-center text-gray-300 text-xxs font-normal font-sans leading-none">ID: {{
-                child.id }}</div>
+                        <div class="self-stretch text-center text-white text-xs font-medium font-sans leading-[18px]">{{ child.name }}</div>
+                        <div class="text-center text-gray-300 text-xxs font-normal font-sans leading-none">ID: {{ child.id }}</div>
                     </div>
                 </div>
                 <!-- Conditional rendering for children -->

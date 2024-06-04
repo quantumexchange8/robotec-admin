@@ -30,7 +30,7 @@ function remove(index) {
         enter-active-class="duration-500"
         leave-active-class="duration-500"
         leave-to-class="translate-x-full opacity-0"
-        class="fixed top-4 middle z-50 w-full max-w-sm space-y-4">
+        class="fixed top-4 middle z-50 w-[360px] max-w-sm space-y-4">
         <ToastListItem
             v-for="(item, index) in toast.items"
             :key="item.key"

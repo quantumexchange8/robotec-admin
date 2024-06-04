@@ -1,0 +1,225 @@
+<script setup>
+import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
+import { Head } from '@inertiajs/vue3';
+import { ref, defineProps, watchEffect } from "vue";
+import { usePage, useForm } from "@inertiajs/vue3";
+import BaseListbox from "@/Components/BaseListbox.vue"
+import Combobox from '@/Components/Combobox.vue';
+import InputError from '@/Components/InputError.vue';
+import Label from '@/Components/Label.vue';
+import Button from '@/Components/Button.vue';
+import Input from '@/Components/Input.vue';
+import InputIconWrapper from '@/Components/InputIconWrapper.vue'
+import { SearchIcon, FilterIcon } from '@/Components/Icons/outline'
+import ClientTable from '@/Pages/ClientListing/ClientTable.vue';
+import Modal from "@/Components/Modal.vue";
+import AddNewClient from "@/Pages/ClientListing/Partials/AddNewClient.vue";
+
+const user = usePage().props.auth.user;
+const profile_photo = usePage().props.auth.user.profile_photo;
+
+// Initialize the form with default values
+const form = useForm({
+    upline: null,
+});
+
+const sortTypes = [
+    { value: 'desc', label: 'Sort by latest' },
+    { value: 'asc', label: 'Sort by oldest' },
+    { value: 'nameasc', label: 'Name (A to Z)' },
+    { value: 'namedesc', label: 'Name (Z to A)' },
+    { value: 'commissionasc', label: 'Commission (Low to High)' },
+    { value: 'commissiondesc', label: 'Commission (High to Low)' }
+];
+
+const search = ref('');
+const sortType = ref(sortTypes[0].value);
+
+const parseSortField = (sortTypeValue) => {
+    if (sortTypeValue.startsWith('name')) {
+        return 'name';
+    } else if (sortTypeValue.startsWith('commission')) {
+        return 'commission';
+    }
+    return '';
+};
+
+const parseSortDirection = (sortTypeValue) => {
+    if (sortTypeValue.endsWith('asc')) {
+        return 'asc';
+    } else if (sortTypeValue.endsWith('desc')) {
+        return 'desc';
+    }
+    return 'desc';
+};
+
+const filterModal = ref(false);
+
+const openFilterModal = () => {
+    filterModal.value = true;
+};
+
+const closeFilterModal = () => {
+    filterModal.value = false;
+};
+const selectedUpline = ref(null);
+const selectedPurchasedEA = ref(null);
+const selectedFundedPAMM = ref(null);
+
+// Temporary variables to hold selected filter values
+const tempUpline = ref(null);
+const tempSelectedPurchasedEA = ref(null);
+const tempSelectedFundedPAMM = ref(null);
+
+const applyFilters = () => {
+    selectedUpline.value = tempUpline.value;
+    selectedPurchasedEA.value = tempSelectedPurchasedEA.value;
+    selectedFundedPAMM.value = tempSelectedFundedPAMM.value;
+    closeFilterModal(); // Close the modal after applying filters
+};
+
+function loadUpline(query, setOptions) {
+    fetch('/member/getAllUplines?query=' + query)
+        .then(response => response.json())
+        .then(results => {
+            setOptions(
+                results.map(user => {
+                    return {
+                        value: user.id,
+                        label: user.name,
+                        img: user.profile_photo
+                    }
+                })
+            )
+        });
+}
+
+const clearFilters = () => {
+    tempUpline.value = null;
+    tempSelectedPurchasedEA.value = null;
+    tempSelectedFundedPAMM.value = null;
+    sortType.value = sortTypes[0].value;
+};
+
+// Calculate the count of applied filters
+const filterCount = ref(0);
+
+// Watch for changes in filter variables and update the count
+watchEffect(() => {
+    filterCount.value = 0;
+    if (selectedUpline.value !== null) filterCount.value++;
+    if (selectedPurchasedEA.value !== null) filterCount.value++;
+    if (selectedFundedPAMM.value !== null) filterCount.value++;
+});
+
+</script>
+
+<template>
+    <Head title="Client Listing" />
+    <AuthenticatedLayout>
+        <template #header>
+            <h2 class="font-semibold text-xxl text-white leading-loose">Client Listing</h2>
+        </template>
+
+        <div class="pb-3">
+            <InputIconWrapper class="col-span-2">
+                <template #icon>
+                    <SearchIcon aria-hidden="true" class="w-5 h-5 text-white" />
+                </template>
+                <Input withIcon id="search" variant="search" type="text" class="block w-full rounded-lg" placeholder="Search" v-model="search" />
+            </InputIconWrapper>
+        </div>
+        <div class="pb-3 grid grid-cols-3 gap-3">
+            <Button variant="transparent" class="relative w-full border border-gray-600 focus:border-primary-500" @click="openFilterModal()">
+                <span class="inline-flex items-center">
+                    <span class="mr-2">
+                        <FilterIcon aria-hidden="true" class="w-5 h-5" />
+                    </span>
+                    <span>Filter</span>
+                    <span v-if="filterCount > 0" class="absolute -top-1 -right-1">
+                        <div class="w-5 h-5 px-1 bg-error-500 rounded-full border border-gray-900 flex items-center justify-center">
+                            <div class="text-white text-xs font-medium">{{ filterCount }}</div>
+                        </div>
+                    </span>
+                </span>
+        </Button>
+            <BaseListbox class="w-full col-span-2" :options="sortTypes" v-model="sortType" />
+        </div>
+        <div class="pb-3 flex items-center justify-between">
+            <div class="text-white">Result</div>
+            <AddNewClient />
+        </div>
+
+        <ClientTable
+            :search="search"
+            :sort-field="parseSortField(sortType)"
+            :sort-direction="parseSortDirection(sortType)"
+            :upline="selectedUpline"
+            :purchasedEA="selectedPurchasedEA" 
+            :fundedPAMM="selectedFundedPAMM"
+        />
+
+        <Modal :show="filterModal" title="Filter" @close="closeFilterModal" max-width="sm">
+            <div class="w-full">
+                <div class="text-white text-base font-semibold font-sans leading-normal mb-3 mt-5">Upline</div>
+                <div class="flex flex-col mb-1.5">
+                    <Combobox
+                        :load-options="loadUpline"
+                        v-model="tempUpline"
+                        placeholder="Upline"
+                        image
+                    />
+                </div>
+                <div class="text-gray-300 text-xs font-normal font-sans leading-[18px]">Select client by searching name or ID</div>
+            </div>
+
+            <div class="w-full h-px bg-gray-700 my-5"></div>
+
+            <div class="w-full flex flex-col">
+                <div class="text-white text-base font-semibold font-sans leading-normal">Purchased EA</div>
+                <div class="flex gap-3">
+                    <Label class="text-white py-3 grow shrink self-stretch">
+                        <input type="radio" value="yes" v-model="tempSelectedPurchasedEA" class="mr-3"/>
+                        Yes
+                    </Label>
+                    <Label class="text-white py-3 grow shrink self-stretch">
+                        <input type="radio" value="no" v-model="tempSelectedPurchasedEA" class="mr-3"/>
+                        No
+                    </Label>
+                    <Label class="text-white py-3 grow shrink self-stretch">
+                        <input type="radio" value="" v-model="tempSelectedPurchasedEA" class="mr-3"/>
+                        Both
+                    </Label>
+                </div>
+            </div>
+
+            <div class="w-full h-px bg-gray-700 my-5"></div>
+
+            <div class="w-full flex flex-col mb-5">
+                <div class="text-white text-base font-semibold font-sans leading-normal">Funded PAMM</div>
+                <div class="flex gap-3">
+                    <Label class="text-white py-3 grow shrink self-stretch">
+                        <input type="radio" value="yes" v-model="tempSelectedFundedPAMM" class="mr-3"/>
+                        Yes
+                    </Label>
+                    <Label class="text-white py-3 grow shrink self-stretch">
+                        <input type="radio" value="no" v-model="tempSelectedFundedPAMM" class="mr-3"/>
+                        No
+                    </Label>
+                    <Label class="text-white py-3 grow shrink self-stretch">
+                        <input type="radio" value="" v-model="tempSelectedFundedPAMM" class="mr-3"/>
+                        Both
+                    </Label>
+                </div>
+            </div>
+
+            <div class="flex flex-col h-[350px] justify-end mt-5">
+                <div class="flex gap-3 pt-8">
+                    <Button variant="gray" class="w-full" @click="clearFilters">Clear All</Button>
+                    <Button variant="primary" class="w-full" @click="applyFilters">Apply</Button>
+                </div>
+            </div>
+        </Modal>
+
+    </AuthenticatedLayout>
+</template>

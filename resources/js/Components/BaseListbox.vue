@@ -74,21 +74,21 @@ const labelWithValue = computed(() => labelWithImg.value.map(item => item.value)
             class="relative rounded-lg border focus:ring-1 focus:outline-none"
             :class="[
                 {
-                      'border-error-300 focus-within:ring-error-300 hover:border-error-300 focus-within:border-error-300 focus-within:shadow-error-light dark:border-error-600 dark:focus-within:ring-error-600 dark:hover:border-error-600 dark:focus-within:border-error-600 dark:focus-within:shadow-error-dark': error,
-                      'border-gray-300 dark:border-gray-800 focus:ring-primary-400 hover:border-primary-400 focus-within:border-primary-400 focus-within:shadow-primary-light dark:focus-within:ring-primary-500 dark:hover:border-primary-500 dark:focus-within:border-primary-500 dark:focus-within:shadow-primary-dark': !error,
+                      'border-error-300 focus-within:ring-error-300 hover:border-error-300 focus-within:border-error-300 focus-within:shadow-error-light': error,
+                      'border-gray-800 focus:ring-primary-500 hover:border-primary-500 focus-within:border-primary-500 focus-within:shadow-primary-light': !error,
                 }
             ]"
         >
             <ListboxButton
-                class="relative w-full cursor-default rounded-lg shadow-xs bg-white dark:bg-gray-800 py-2.5 pl-4 pr-10 text-left focus:ring-1 focus:outline-none"
+                class="relative w-full cursor-default rounded-lg shadow-xs bg-gray-800 py-4 px-3 text-left focus:ring-1 focus:outline-none"
                 :class="[
                     {
-                        'border-transparent focus-within:ring-error-300 focus:border-error-300 focus:shadow-error-light dark:border-transparent dark:focus:ring-error-600 dark:focus:border-error-600 dark:focus:shadow-error-dark': error,
-                        'border-transparent dark:border-transparent focus-within:ring-primary-400 focus-within:border-primary-400 focus-within:shadow-primary-light dark:focus-within:ring-primary-500 dark:focus-within:border-primary-500 dark:focus-within:shadow-primary-dark': !error
+                        'border-transparent focus-within:ring-error-300 focus:border-error-300 focus:shadow-error-light': error,
+                        'border-transparent focus-within:ring-primary-500 focus-within:border-primary-500 focus-within:shadow-primary-light': !error
                     }
                 ]"
             >
-                <div class="flex gap-2 text-gray-900 dark:text-gray-50 items-center">
+                <div class="flex gap-2 text-gray-50 items-center">
                     <template v-if="shouldShowLabelWithImg && withImg && isPhoneCode">
                         <img v-for="item in labelWithImg" :key="item.label" :src="item.imgUrl" width="24" alt="img">
                         <span class="block truncate">{{ labelWithValue }}</span>
@@ -101,14 +101,14 @@ const labelWithValue = computed(() => labelWithImg.value.map(item => item.value)
                         <span class="block truncate">{{ label }}</span>
                     </template>
                     <template v-else>
-                        <span class="block truncate text-gray-500 dark:text-gray-400">{{ props.placeholder }}</span>
+                        <span class="block truncate text-gray-300">{{ props.placeholder }}</span>
                     </template>
                 </div>
                 <span
                     class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2"
                 >
                     <ChevronDownIcon
-                        class="h-5 w-5 text-gray-400"
+                        class="h-5 w-5 text-white"
                         aria-hidden="true"
                     />
                 </span>
@@ -119,7 +119,7 @@ const labelWithValue = computed(() => labelWithImg.value.map(item => item.value)
                 leave-to-class="opacity-0"
             >
                 <ListboxOptions
-                    class="z-10 absolute border border-gray-300 dark:border-gray-800 mt-2 max-h-52 w-full overflow-auto rounded-lg bg-white dark:bg-gray-800 py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm"
+                    class="z-10 absolute border border-gray-800 mt-2 max-h-52 w-full overflow-auto rounded-lg bg-gray-800 p-2 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm"
                     :style="{ width: isPhoneCode ? '360px' : '' }"
                 >
                     <ListboxOption
@@ -131,9 +131,9 @@ const labelWithValue = computed(() => labelWithImg.value.map(item => item.value)
                     >
                         <li
                             :class="[
-                                active ? 'bg-gray-100 dark:bg-dark-eval-3 text-gray-900 dark:text-gray-50' : 'text-gray-900 dark:text-gray-50',
-                                selected ? 'bg-gray-100 dark:bg-dark-eval-3' : '',
-                                'relative cursor-default select-none py-2.5 px-4',
+                                active ? 'bg-primary-900 text-gray-50' : 'text-gray-50',
+                                selected ? 'bg-primary-900' : '',
+                                'relative cursor-default select-none p-3 rounded-lg',
                             ]"
                         >
                             <template v-if="withImg">
@@ -152,15 +152,15 @@ const labelWithValue = computed(() => labelWithImg.value.map(item => item.value)
                               ]"
                                  >{{ option.label }}</span>
                             </template>
-                            <span
+                            <!-- <span
                                 v-if="selected"
-                                class="absolute inset-y-0 right-0 flex items-center pr-3 dark:text-white"
+                                class="absolute inset-y-0 right-0 flex items-center pr-3 text-white"
                             >
-                                <CheckIcon class="h-5 w-5 text-gray-600 dark:text-gray-400" aria-hidden="true"/>
-                            </span>
+                                <CheckIcon class="h-5 w-5 text-gray-300" aria-hidden="true"/>
+                            </span> -->
                         </li>
                     </ListboxOption>
-                    <li v-if="props.options.length === 0" class="text-gray-900 dark:text-gray-50 py-2.5 px-4">
+                    <li v-if="props.options.length === 0" class="text-gray-50 py-2.5 px-4">
                         {{ optionMessage }}
                     </li>
                 </ListboxOptions>
