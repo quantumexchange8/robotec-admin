@@ -1,5 +1,4 @@
 <script setup>
-import Loading from "@/Components/Loading.vue";
 import { TailwindPagination } from "laravel-vue-pagination";
 import { computed, ref, watch, watchEffect } from "vue";
 import debounce from "lodash/debounce.js";
@@ -132,7 +131,7 @@ const openEditModal = (clientDetails) => {
     editModal.value = true;
     form.name = clientDetails.name;
     form.email = clientDetails.email;
-    form.wallet_address = clientDetails.wallet_address;
+    form.wallet_address = clientDetails.cash_wallet.wallet_address;
 
     // Find the country object with the matching dial code
     const country = CountryLists.find(country => country.value  === clientDetails.dial_code);
@@ -275,7 +274,10 @@ const updateClient = (clientDetails) => {
             </div>
             <div class="grid grid-cols-2 items-center">
                 <div class="col-span-1 text-gray-300 text-xs font-normal font-sans leading-[18px]">Upline</div>
-                <div class="col-span-1 text-white text-xs font-normal font-sans leading-tight">{{ clientDetails.email }}</div>
+                <div class="col-span-1 flex items-center">
+                    <img class="w-5 h-5 rounded-full mr-2" :src="clientDetails.upline.profile_photo || 'https://via.placeholder.com/32x32'" alt="Client upline profile picture"/>
+                    <div class="text-white text-xs font-normal font-sans leading-tight">{{ clientDetails.upline.name }}</div>
+                </div>
             </div>
 
             <div class="w-full h-px bg-gray-700 my-4"></div>
@@ -290,7 +292,7 @@ const updateClient = (clientDetails) => {
             </div>
             <div class="grid grid-cols-2 items-center mb-2">
                 <div class="col-span-1 text-gray-300 text-xs font-normal font-sans leading-[18px]">Referee</div>
-                <div class="col-span-1 text-white text-xs font-normal font-sans leading-tight">{{ clientDetails.phone }}</div>
+                <div class="col-span-1 text-white text-xs font-normal font-sans leading-tight">{{ clientDetails.referee }}</div>
             </div>
             <div class="grid grid-cols-2 items-center mb-2">
                 <div class="col-span-1 text-gray-300 text-xs font-normal font-sans leading-[18px]">Total Commission</div>
@@ -305,7 +307,7 @@ const updateClient = (clientDetails) => {
 
             <div class="items-center mb-5">
                 <div class="text-gray-300 text-xs font-normal font-sans leading-[18px] mb-1">USDT Address</div>
-                <div class="text-white text-xs font-normal font-sans leading-tight">{{ clientDetails.email }}</div>
+                <div class="text-white text-xs font-normal font-sans leading-tight">{{ clientDetails.cash_wallet.wallet_address }}</div>
             </div>
 
             <div class="items-center pt-8 flex gap-3">

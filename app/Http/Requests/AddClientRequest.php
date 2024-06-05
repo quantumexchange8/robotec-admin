@@ -37,7 +37,7 @@ class AddClientRequest extends FormRequest
                     return $query->where('phone', $combinedPhoneNumber);
                 }),
             ],
-            'upline' => 'required',
+            // 'upline' => 'required',
         ];
     }
             
@@ -47,7 +47,7 @@ class AddClientRequest extends FormRequest
             'name' => 'Name',
             'email' => 'Email',
             'phone' => 'Phone Number',
-            'upline' => 'Upline',
+            // 'upline' => 'Upline',
         ];
     }
 

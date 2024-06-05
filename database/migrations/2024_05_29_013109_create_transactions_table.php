@@ -22,30 +22,20 @@ return new class extends Migration {
             $table->decimal('amount')->nullable();
             $table->decimal('transaction_charges', 13, 2)->nullable();
             $table->decimal('transaction_amount', 13, 2)->nullable();
+            $table->decimal('old_wallet_amount', 13,2)->nullable();
             $table->decimal('new_wallet_amount', 13,2)->nullable();
             $table->string('status')->nullable();
             $table->string('comment')->nullable();
             $table->text('remarks')->nullable();
+            $table->timestamp('approved_at')->nullable();
             $table->unsignedBigInteger('handle_by')->nullable();
             $table->softDeletes();
             $table->timestamps();
 
-            $table->foreign('user_id')
-                ->references('id')
-                ->on('users')
-                ->onUpdate('cascade');
-            $table->foreign('from_wallet_id')
-                ->references('id')
-                ->on('wallets')
-                ->onUpdate('cascade');
-            $table->foreign('to_wallet_id')
-                ->references('id')
-                ->on('wallets')
-                ->onUpdate('cascade');
-            $table->foreign('handle_by')
-                ->references('id')
-                ->on('users')
-                ->onUpdate('cascade');
+            $table->foreign('user_id')->references('id')->on('users')->onUpdate('cascade');
+            $table->foreign('from_wallet_id')->references('id')->on('wallets')->onUpdate('cascade');
+            $table->foreign('to_wallet_id')->references('id')->on('wallets')->onUpdate('cascade');
+            $table->foreign('handle_by')->references('id')->on('users')->onUpdate('cascade');
         });
     }
 

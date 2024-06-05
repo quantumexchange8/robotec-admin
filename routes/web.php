@@ -57,6 +57,8 @@ Route::middleware('auth')->group(function () {
      */
     Route::prefix('commission')->group(function () {
         Route::get('/commission_payout', [CommissionController::class, 'commission_payout'])->name('commission.commission_payout');
+        Route::get('/commission_request_data', [CommissionController::class, 'commission_request_data'])->name('commission.commission_request_data');
+        Route::post('/approve_commission', [CommissionController::class, 'approve_commission'])->name('commission.approve_commission');
     });
 
     /**

@@ -16,11 +16,11 @@ class UpdatePammRequest extends FormRequest
         return [
             'pamm' => [
                 'required',
-                'regex:/^[+-]\d*\.?\d+$/',
+                'regex:/^[+-]?\d*\.?\d+$/',
             ],
         ];
     }
-
+    
     public function attributes(): array
     {
         return [

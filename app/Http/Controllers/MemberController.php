@@ -4,9 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Inertia\Inertia;
+use App\Models\Wallet;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use App\Services\RunningNumberService;
 use App\Http\Requests\AddClientRequest;
 use App\Http\Requests\EditClientRequest;
 use App\Notifications\NewClientNotification;
@@ -72,22 +74,53 @@ class MemberController extends Controller
         // Add profile_photo to each user
         $clients->each(function ($user) {
             $user->profile_photo = $user->getFirstMediaUrl('profile_photo');
+            $user->upline = $user->upline()->first();
+            // Check if upline exists and set profile_photo if available
+            if ($user->upline) {
+                $user->upline->profile_photo = $user->upline->getFirstMediaUrl('profile_photo');
+            }
+
+            $user->cash_wallet = $user->wallets()->where('type', 'cash_wallet')->first();
+            $user->referee = $this->countDescendants($user);
+            
+            // Unset the 'children' attribute
+            unset($user->children);
         });
     
         // Return paginated results as JSON
         return response()->json($clients);
     }
-        public function addClient(AddClientRequest $request)
+
+    protected function countDescendants($user)
     {
-        $upline_id = $request->upline['value'];
-        $upline = User::find($upline_id);
-
-        if(empty($upline->hierarchyList)) {
-            $hierarchyList = "-" . $upline_id . "-";
-        } else {
-            $hierarchyList = $upline->hierarchyList . $upline_id . "-";
+        // Initialize the count with the direct children count
+        $count = $user->children()->count();
+    
+        // Recursively count descendants of children
+        foreach ($user->children as $child) {
+            $count += $this->countDescendants($child);
         }
-
+    
+        return $count;
+    }
+    
+    public function addClient(AddClientRequest $request)
+    {
+        $upline_id = null;
+        $hierarchyList = null;
+    
+        if ($request->upline !== null) 
+        {
+            $upline_id = $request->upline['value'];
+            $upline = User::find($upline_id);
+        
+            if(empty($upline->hierarchyList || $upline == null)) {
+                $hierarchyList = "-" . $upline_id . "-";
+            } else {
+                $hierarchyList = $upline->hierarchyList . $upline_id . "-";
+            }    
+        }
+        
         // Generate a random password with 8 characters
         $password = Str::random(8);
         
@@ -101,18 +134,34 @@ class MemberController extends Controller
             'hierarchyList' => $hierarchyList,
             'role' => 'user',
         ]);
-
+    
         $user->setReferralId();
+    
+        // Create cash wallet
+        Wallet::create([
+            'user_id' => $user->id,
+            'name' => 'Cash Wallet',
+            'type' => 'cash_wallet',
+            'wallet_address' => RunningNumberService::getID('cash_wallet'),
+        ]);
+
+        // Create commission wallet
+        Wallet::create([
+            'user_id' => $user->id,
+            'name' => 'Commission Wallet',
+            'type' => 'commission_wallet',
+            'wallet_address' => RunningNumberService::getID('commission_wallet'),
+        ]);
 
         // Send a notification to the user with their password
         $user->notify(new NewClientNotification($password));
-
+    
         return redirect()->back()->with('toast', [
             'title' => 'New Client Added Successfully!',
             'type' => 'success'
         ]);
-        
     }
+    
 
     public function update_client(EditClientRequest $request)
     {
@@ -132,6 +181,15 @@ class MemberController extends Controller
             'phone' => $request->dial_code['value'] . $request->phone,
         ]);
 
+        // Update cash wallet address
+        $cashWallet = Wallet::where('user_id', $client->id)->where('type', 'cash_wallet')->first();
+
+        if ($cashWallet) {
+            $cashWallet->update([
+                'wallet_address' => $request->wallet_address,
+            ]);
+        }
+
         return redirect()->back()->with('toast', [
             'title' => 'Client Details Updated!',
             'type' => 'success'
@@ -146,20 +204,22 @@ class MemberController extends Controller
         $request->validate([
             'id' => 'required|exists:users,id',
         ]);
-
+    
         // Find the client by id
         $client = User::findOrFail($request->id);
-
+    
+        // Delete the client's wallets
+        $client->wallets()->delete();
+    
         // Delete the client
         $client->delete();
-
+    
         return redirect()->back()->with('toast', [
             'title' => 'Client Has Been Deleted!',
             'type' => 'success'
         ]);
-
     }
-
+    
     public function getAllUplines(Request $request)
     {
         $users = User::query()

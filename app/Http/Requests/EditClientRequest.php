@@ -37,6 +37,12 @@ class EditClientRequest extends FormRequest
                     return $query->where('phone', $combinedPhoneNumber);
                 })->ignore($userId),
             ],
+            'wallet_address' => [
+                'string',
+                'min:8',
+                'max:255',
+                // 'regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/',
+            ],
         ];
     }
             
@@ -46,6 +52,7 @@ class EditClientRequest extends FormRequest
             'name' => 'Name',
             'email' => 'Email',
             'phone' => 'Phone Number',
+            'wallet_address' => 'Wallet Address',
         ];
     }
 

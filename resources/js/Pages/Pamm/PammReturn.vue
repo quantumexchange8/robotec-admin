@@ -107,7 +107,7 @@ const updatePamm = () => {
                         </div>
                     </div>
                     <div class="text-center text-white text-xxl font-semibold font-sans leading-[42px]">
-                        <span v-if="props.pamm.value > 0">+</span> {{ formatAmount(props.pamm.value) }} %
+                        <span v-if="props.pamm.value > 0">+</span>{{ formatAmount(props.pamm.value) }} %
                     </div>
                 </div>
                 <Button variant="primary" class="w-full" @click="openModal">Update PAMM Return</Button>

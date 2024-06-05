@@ -28,11 +28,13 @@ class Transaction extends Model implements HasMedia
         'amount',
         'transaction_charges',
         'transaction_amount',
+        'old_wallet_amount',
         'new_wallet_amount',
         'status',
         'comment',
         'remarks',
         'handle_by',
+        'approved_date',
     ];
 
     public function user(): \Illuminate\Database\Eloquent\Relations\BelongsTo
