@@ -150,7 +150,7 @@ const updatePamm = () => {
                         <td class="py-2 flex justify-between items-center">
                             <div>
                                 <div class="text-gray-300 text-xs font-normal font-sans leading-[18px] gap-3">
-                                    {{ formatDateTime(history.updated_at) }}
+                                    {{ formatDateTime(history.created_at) }}
                                 </div>
                             </div>
                             <div class="text-right">
@@ -182,7 +182,7 @@ const updatePamm = () => {
                     <Label for="pamm" value="Pamm Return" class="text-gray-300" :invalid="form.errors.pamm" />
                     <Input
                         id="pamm"
-                        class="block w-full my-1.5"
+                        class="block w-full my-1.5 bg-transparent text-white"
                         :invalid="form.errors.pamm"
                         v-model="form.pamm"
                         placeholder="0.00%"

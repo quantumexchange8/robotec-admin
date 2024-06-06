@@ -55,7 +55,7 @@ const submit = () => {
                 <Input
                     id="email"
                     type="email"
-                    class="mt-1 block w-full"
+                    class="mt-1 block w-full bg-transparent text-white"
                     :invalid="form.errors.email"
                     v-model="form.email"
                     required
@@ -72,7 +72,7 @@ const submit = () => {
                 <Input
                     id="password"
                     type="password"
-                    class="mt-1 block w-full"
+                    class="mt-1 block w-full bg-transparent text-white"
                     v-model="form.password"
                     :invalid="form.errors.password"
                     required

@@ -324,8 +324,7 @@ const updateClient = (clientDetails) => {
                 <Label for="name" value="Client Name" class="text-gray-300 mb-1.5" :invalid="form.errors.name" important />
                 <Input
                     id="name"
-                    type="name"
-                    class="block w-full mb-5"
+                    class="block w-full mb-5 bg-transparent text-white"
                     :invalid="form.errors.name"
                     v-model="form.name"
                     required
@@ -340,7 +339,7 @@ const updateClient = (clientDetails) => {
                 <Input
                     id="email"
                     type="email"
-                    class="block w-full mb-5"
+                    class="block w-full mb-5 bg-transparent text-white"
                     :invalid="form.errors.email"
                     v-model="form.email"
                     required
@@ -369,7 +368,7 @@ const updateClient = (clientDetails) => {
                     <div class="col-span-3">
                         <Input
                             id="phone"
-                            class="block w-full"
+                            class="block w-full bg-transparent text-white"
                             :invalid="form.errors.phone"
                             placeholder="Phone Number"
                             v-model="form.phone"
@@ -385,8 +384,7 @@ const updateClient = (clientDetails) => {
 
                 <Input
                     id="wallet_address"
-                    type="wallet_address"
-                    class="block w-full"
+                    class="block w-full bg-transparent text-white"
                     :invalid="form.errors.wallet_address"
                     v-model="form.wallet_address"
                     required

@@ -220,7 +220,7 @@ class MemberController extends Controller
         ]);
     }
     
-    public function getAllUplines(Request $request)
+    public function getAllClients(Request $request)
     {
         $users = User::query()
             ->where('role', 'user')

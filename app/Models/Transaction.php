@@ -34,7 +34,7 @@ class Transaction extends Model implements HasMedia
         'comment',
         'remarks',
         'handle_by',
-        'approved_date',
+        'approved_at',
     ];
 
     public function user(): \Illuminate\Database\Eloquent\Relations\BelongsTo

@@ -80,7 +80,7 @@ class CommissionController extends Controller
         }
     
         return redirect()->back()->with('toast', [
-            'title' => 'Commission Payout(s) Approved!',
+            'title' => 'Commission Payout Approved!',
             'type' => 'success'
         ]);
     }

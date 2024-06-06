@@ -79,10 +79,10 @@ import { HomeIcon, UserCircleIcon, GlobeAltIcon, Users01Icon, CoinsHandIcon, Spe
             </template>
         </SidebarLink>
 
-        <!-- <SidebarLink
+        <SidebarLink
             :title="$t('public.sidebar.wallet_adjustment')"
-            :href="route('profile.edit')"
-            :active="route().current('profile.edit')"
+            :href="route('transaction.wallet_adjustment')"
+            :active="route().current('transaction.wallet_adjustment')"
         >
             <template #icon>
                 <CreditCardEditIcon
@@ -90,7 +90,7 @@ import { HomeIcon, UserCircleIcon, GlobeAltIcon, Users01Icon, CoinsHandIcon, Spe
                     aria-hidden="true"
                 />
             </template>
-        </SidebarLink> -->
+        </SidebarLink>
 
         <!-- <SidebarLink
             :title="$t('public.sidebar.withdrawal_request')"

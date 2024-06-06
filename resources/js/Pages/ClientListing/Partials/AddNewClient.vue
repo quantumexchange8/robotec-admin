@@ -44,7 +44,7 @@ watch(() => form.data(), () => {
 });
 
 function loadUpline(query, setOptions) {
-    fetch('/member/getAllUplines?query=' + query)
+    fetch('/member/getAllClients?query=' + query)
         .then(response => response.json())
         .then(results => {
             setOptions(
@@ -87,7 +87,7 @@ const addClient = () => {
   
             <Input
               id="name"
-              class="block w-full"
+              class="block w-full bg-transparent text-white"
               :invalid="form.errors.name"
               placeholder="Name as per NRIC"
               v-model="form.name"
@@ -103,7 +103,7 @@ const addClient = () => {
             <Input
               id="email"
               type="email"
-              class="block w-full"
+              class="block w-full bg-transparent text-white"
               :invalid="form.errors.email"
               placeholder="you@example.com"
               v-model="form.email"
@@ -134,7 +134,7 @@ const addClient = () => {
                 <div class="col-span-3">
                     <Input
                         id="phone"
-                        class="block w-full"
+                        class="block w-full bg-transparent text-white"
                         :invalid="form.errors.phone"
                         placeholder="Phone Number"
                         v-model="form.phone"

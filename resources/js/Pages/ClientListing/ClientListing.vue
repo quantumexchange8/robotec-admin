@@ -79,7 +79,7 @@ const applyFilters = () => {
 };
 
 function loadUpline(query, setOptions) {
-    fetch('/member/getAllUplines?query=' + query)
+    fetch('/member/getAllClients?query=' + query)
         .then(response => response.json())
         .then(results => {
             setOptions(
@@ -166,7 +166,7 @@ watchEffect(() => {
                     <Combobox
                         :load-options="loadUpline"
                         v-model="tempUpline"
-                        placeholder="Upline"
+                        placeholder="Select Client"
                         image
                     />
                 </div>

@@ -8,7 +8,7 @@ import InputError from '@/Components/InputError.vue';
 import Label from '@/Components/Label.vue';
 import Input from '@/Components/Input.vue';
 import Modal from "@/Components/Modal.vue";
-import NoClient from '@/Components/NoClient.vue';
+import NoRequest from '@/Components/NoRequest.vue';
 import Button from "@/Components/Button.vue";
 import Checkbox from "@/Components/Checkbox.vue";
 
@@ -179,7 +179,7 @@ const approveCommission = () => {
     <div v-if="commissions.data.length == 0" >
         <div class="w-full h-[360px] p-3 bg-gray-800 rounded-xl flex-col justify-center items-center inline-flex">
             <div class="self-stretch h-[212px] py-5 flex-col justify-start items-center gap-3 flex">
-                <NoHistory class="w-40 h-[120px] relative" />
+                <NoRequest class="w-40 h-[120px] relative" />
                 <div class="self-stretch text-center text-gray-300 text-sm font-normal font-sans leading-tight">
                     It seems there are no commission payouts available at the moment.
                 </div>

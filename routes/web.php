@@ -47,7 +47,7 @@ Route::middleware('auth')->group(function () {
         Route::post('/addClient', [MemberController::class, 'addClient'])->name('member.addClient');
         Route::post('/update_client', [MemberController::class, 'update_client'])->name('member.update_client');
         Route::delete('/delete_client', [MemberController::class, 'delete_client'])->name('member.delete_client');
-        Route::get('/getAllUplines', [MemberController::class, 'getAllUplines'])->name('member.getAllUplines');
+        Route::get('/getAllClients', [MemberController::class, 'getAllClients'])->name('member.getAllClients');
     });
 
     /**
@@ -70,6 +70,19 @@ Route::middleware('auth')->group(function () {
         Route::get('/pamm_return', [PammController::class, 'pamm_return'])->name('pamm.pamm_return');
         Route::get('/pamm_history', [PammController::class, 'pamm_history'])->name('pamm.pamm_history');
         Route::post('/update_pamm', [PammController::class, 'update_pamm'])->name('pamm.update_pamm');
+    });
+
+    /**
+     * ==============================
+     *          Transaction
+     * ==============================
+     */
+    Route::prefix('transaction')->group(function () {
+        Route::get('/wallet_adjustment', [TransactionController::class, 'wallet_adjustment'])->name('transaction.wallet_adjustment');
+        Route::get('/wallet', [TransactionController::class, 'wallet'])->name('transaction.wallet');
+        Route::get('/adjustment_history', [TransactionController::class, 'adjustment_history'])->name('transaction.adjustment_history');
+        Route::post('/WalletAdjustment', [TransactionController::class, 'WalletAdjustment'])->name('transaction.WalletAdjustment');
+
     });
 
     /**
