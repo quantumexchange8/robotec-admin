@@ -142,7 +142,6 @@ const confirm = () => {
       console.error(errors);
     }
   });
-
 }
 
 const handlePageChange = (newPage) => {
@@ -240,56 +239,55 @@ const toggleExpanded = (history) => {
 </div>
 
 <Modal :show="WalletAdjustmentModal" :title="isDeduction ? 'Wallet Adjustment - Deduction' : 'Wallet Adjustment - Addition'" @close="closeModal" max-width="sm">
-    <div>
-    <div class="w-full flex-col justify-start items-start gap-1.5 mb-5 inline-flex">
-        <Label for="amount" value="Adjustment Amount" class="text-gray-300 text-xs font-medium font-sans leading-[18px]" :invalid="form.errors.amount" />
+    <form>
+        <div class="w-full flex-col justify-start items-start gap-1.5 mb-5 inline-flex">
+            <Label for="amount" value="Adjustment Amount" class="text-gray-300 text-xs font-medium font-sans leading-[18px]" :invalid="form.errors.amount" />
 
-        <InputIconWrapper class="col-span-2">
-        <template #icon>
-            <span class='text-white'>{{ isDeduction ? '-$' : '+$' }}</span>
-        </template>
+            <InputIconWrapper class="col-span-2">
+            <template #icon>
+                <span class='text-white'>{{ isDeduction ? '-$' : '+$' }}</span>
+            </template>
 
-        <Input
-            withIcon
-            id="amount"
-            class="block w-full py-3 px-4 bg-transparent text-white"
-            :invalid="form.errors.amount"
-            v-model="form.amount"
-            required
-        />
-        </InputIconWrapper>
+            <Input
+                withIcon
+                id="amount"
+                class="block w-full py-3 px-4 bg-transparent text-white"
+                :invalid="form.errors.amount"
+                v-model="form.amount"
+                required
+            />
+            </InputIconWrapper>
 
-        <InputError class="mt-2" :message="form.errors.amount" />
-    </div>
-
-    <div class="grid grid-cols-2 items-center mb-2">
-        <div class="col-span-1 text-gray-300 text-xs font-normal font-sans leading-[18px]">Client</div>
-        <div class="col-span-1 flex items-center">
-        <img class="w-5 h-5 rounded-full mr-2" :src="client ? client.img || 'https://via.placeholder.com/32x32' : 'https://via.placeholder.com/32x32'" alt="Client upline profile picture" />
-        <div class="text-white text-xs font-normal font-sans leading-tight">{{ client ? client.label : '' }}</div>
+            <InputError class="mt-2" :message="form.errors.amount" />
         </div>
-    </div>
-    <div class="grid grid-cols-2 items-center mb-2">
-        <div class="col-span-1 text-gray-300 text-xs font-normal font-sans leading-[18px]">Wallet</div>
-        <div class="col-span-1 text-white text-xs font-normal font-sans leading-tight">{{ wallet ? wallet.name : '' }}</div>
-    </div>
 
-    <div class="grid grid-cols-2 items-center mb-2">
-        <div class="col-span-1 text-gray-300 text-xs font-normal font-sans leading-[18px]">Current Balance</div>
-        <div class="col-span-1 text-white text-xs font-normal font-sans leading-tight">{{ formatAmount(wallet ? wallet.balance : 0) }}</div>
-    </div>
+        <div class="grid grid-cols-2 items-center mb-2">
+            <div class="col-span-1 text-gray-300 text-xs font-normal font-sans leading-[18px]">Client</div>
+            <div class="col-span-1 flex items-center">
+            <img class="w-5 h-5 rounded-full mr-2" :src="client ? client.img || 'https://via.placeholder.com/32x32' : 'https://via.placeholder.com/32x32'" alt="Client upline profile picture" />
+            <div class="text-white text-xs font-normal font-sans leading-tight">{{ client ? client.label : '' }}</div>
+            </div>
+        </div>
+        <div class="grid grid-cols-2 items-center mb-2">
+            <div class="col-span-1 text-gray-300 text-xs font-normal font-sans leading-[18px]">Wallet</div>
+            <div class="col-span-1 text-white text-xs font-normal font-sans leading-tight">{{ wallet ? wallet.name : '' }}</div>
+        </div>
 
-    <div class="grid grid-cols-2 items-center mb-5">
-        <div class="col-span-1 text-gray-300 text-xs font-normal font-sans leading-[18px]">After Adjustment</div>
-        <div class="col-span-1 text-white text-xs font-normal font-sans leading-tight">{{ formatAmount(adjustedBalance) }}</div>
-    </div>
+        <div class="grid grid-cols-2 items-center mb-2">
+            <div class="col-span-1 text-gray-300 text-xs font-normal font-sans leading-[18px]">Current Balance</div>
+            <div class="col-span-1 text-white text-xs font-normal font-sans leading-tight">{{ formatAmount(wallet ? wallet.balance : 0) }}</div>
+        </div>
 
-    <div class="items-center pt-8 flex gap-3">
-        <Button variant="outline" class="w-full" @click="closeModal">Close</Button>
-        <Button variant="primary" class="w-full" @click="confirm">Confirm</Button>
-    </div>
+        <div class="grid grid-cols-2 items-center mb-5">
+            <div class="col-span-1 text-gray-300 text-xs font-normal font-sans leading-[18px]">After Adjustment</div>
+            <div class="col-span-1 text-white text-xs font-normal font-sans leading-tight">{{ formatAmount(adjustedBalance) }}</div>
+        </div>
 
-    </div>
+        <div class="items-center pt-8 flex gap-3">
+            <Button variant="outline" class="w-full" @click="closeModal">Close</Button>
+            <Button variant="primary" class="w-full" :disabled="form.processing" @click="confirm">Confirm</Button>
+        </div>
+    </form>
 </Modal>
 
 </template>

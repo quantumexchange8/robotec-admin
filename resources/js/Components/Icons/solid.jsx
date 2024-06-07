@@ -151,3 +151,15 @@ export const WarningIcon = defineComponent({
         )
     },
 })
+
+export const Users01Icon = defineComponent({
+    setup() {
+        return () => (
+            <svg width="60" height="60" viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect width="60" height="60" rx="30" fill="white" fill-opacity="0.05" />
+                <path fill-rule="evenodd" clip-rule="evenodd" d="M40.7038 40.5122C39.1798 35.6927 35.0848 32.9312 29.4643 32.9312H29.4238C23.7883 32.8997 19.6723 35.6807 18.1453 40.5122L17.9683 41.0732L18.4693 41.3792C21.4063 43.1702 25.0693 44.0777 29.3533 44.0777C29.4013 44.0777 29.4493 44.0777 29.4958 44.0777C33.8398 44.0777 37.4008 43.1942 40.3798 41.3792L40.8808 41.0732L40.7038 40.5122Z" fill="white" />
+                <path fill-rule="evenodd" clip-rule="evenodd" d="M29.4245 29.5889C33.509 29.5889 36.833 26.2664 36.833 22.1819C36.833 18.0959 33.509 14.7734 29.4245 14.7734C25.34 14.7734 22.0175 18.0959 22.0175 22.1819C22.0175 26.2664 25.34 29.5889 29.4245 29.5889Z" fill="white" />
+            </svg>
+        )
+    },
+})

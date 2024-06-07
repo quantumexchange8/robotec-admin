@@ -311,105 +311,109 @@ const updateClient = (clientDetails) => {
             </div>
 
             <div class="items-center pt-8 flex gap-3">
-                <Button variant="gray" class="w-full" @click="openEditModal(clientDetails)">Edit</Button>
-                <Button variant="danger" class="w-full" @click="openDeleteModal(clientDetails)">Delete</Button>
+                <Button variant="gray" class="w-full" @click.prevent="openEditModal(clientDetails)">Edit</Button>
+                <Button variant="danger" class="w-full" @click.prevent="openDeleteModal(clientDetails)">Delete</Button>
             </div>
 
         </div>
     </Modal>
 
     <Modal :show="editModal" title="Edit Client" @close="closeEditModal" max-width="sm">
-        <form class="my-5 px-1">
-            <div>
-                <Label for="name" value="Client Name" class="text-gray-300 mb-1.5" :invalid="form.errors.name" important />
-                <Input
-                    id="name"
-                    class="block w-full mb-5 bg-transparent text-white"
-                    :invalid="form.errors.name"
-                    v-model="form.name"
-                    required
-                />
+        <form>
+            <div class="my-5 px-1">
+                <div>
+                    <Label for="name" value="Client Name" class="text-gray-300 mb-1.5" :invalid="form.errors.name" important />
+                    <Input
+                        id="name"
+                        class="block w-full mb-5 bg-transparent text-white"
+                        :invalid="form.errors.name"
+                        v-model="form.name"
+                        required
+                    />
 
-                <InputError class="mt-2" :message="form.errors.name" />
-            </div>
+                    <InputError class="mt-2" :message="form.errors.name" />
+                </div>
 
-            <div>
-                <Label for="email" value="Email" class="text-gray-300 mb-1.5" :invalid="form.errors.email" important />
+                <div>
+                    <Label for="email" value="Email" class="text-gray-300 mb-1.5" :invalid="form.errors.email" important />
 
-                <Input
-                    id="email"
-                    type="email"
-                    class="block w-full mb-5 bg-transparent text-white"
-                    :invalid="form.errors.email"
-                    v-model="form.email"
-                    required
-                />
+                    <Input
+                        id="email"
+                        type="email"
+                        class="block w-full mb-5 bg-transparent text-white"
+                        :invalid="form.errors.email"
+                        v-model="form.email"
+                        required
+                    />
 
-                <InputError class="mt-2" :message="form.errors.email" />
-            </div>
-            <div>
-                <Label for="phone_number" value="Phone Number" class="text-gray-300 mb-1.5" :invalid="form.errors.phone || form.errors.dial_code" important />
-                        
-                <div class="grid grid-cols-5">
-                    <div class="col-span-2">
-                        <div class="mr-1.5">
-                            <Combobox 
-                                :options="CountryLists"
-                                id="dial_code"
-                                class="block w-full"
+                    <InputError class="mt-2" :message="form.errors.email" />
+                </div>
+                <div>
+                    <Label for="phone_number" value="Phone Number" class="text-gray-300 mb-1.5" :invalid="form.errors.phone || form.errors.dial_code" important />
+                            
+                    <div class="grid grid-cols-5">
+                        <div class="col-span-2">
+                            <div class="mr-1.5">
+                                <Combobox 
+                                    :options="CountryLists"
+                                    id="dial_code"
+                                    class="block w-full"
+                                    :invalid="form.errors.phone"
+                                    v-model="form.dial_code"
+                                    required
+                                    isPhoneCode
+                                />
+                            </div>
+                        </div>
+
+                        <div class="col-span-3">
+                            <Input
+                                id="phone"
+                                class="block w-full bg-transparent text-white"
                                 :invalid="form.errors.phone"
-                                v-model="form.dial_code"
+                                placeholder="Phone Number"
+                                v-model="form.phone"
                                 required
-                                isPhoneCode
                             />
                         </div>
                     </div>
 
-                    <div class="col-span-3">
-                        <Input
-                            id="phone"
-                            class="block w-full bg-transparent text-white"
-                            :invalid="form.errors.phone"
-                            placeholder="Phone Number"
-                            v-model="form.phone"
-                            required
-                        />
-                    </div>
+                <InputError class="mt-2" :message="form.errors.phone" />
                 </div>
+                <div>
+                    <Label for="wallet_address" value="USDT Address" class="text-gray-300 mb-1.5" :invalid="form.errors.wallet_address" />
 
-            <InputError class="mt-2" :message="form.errors.phone" />
+                    <Input
+                        id="wallet_address"
+                        class="block w-full bg-transparent text-white"
+                        :invalid="form.errors.wallet_address"
+                        v-model="form.wallet_address"
+                        required
+                    />
+
+                    <InputError class="mt-2" :message="form.errors.wallet_address" />
+                </div>
             </div>
-            <div>
-                <Label for="wallet_address" value="USDT Address" class="text-gray-300 mb-1.5" :invalid="form.errors.wallet_address" />
-
-                <Input
-                    id="wallet_address"
-                    class="block w-full bg-transparent text-white"
-                    :invalid="form.errors.wallet_address"
-                    v-model="form.wallet_address"
-                    required
-                />
-
-                <InputError class="mt-2" :message="form.errors.wallet_address" />
+            <div class="w-full flex justify-end pt-8 gap-3">
+                <Button variant="transparent" class="w-full border border-gray-600" @click.prevent="closeEditModal">Cancel</Button>
+                <Button variant="primary" class="w-full" :disabled="form.processing" @click.prevent="updateClient(clientDetails)">Save Changes</Button>
             </div>
         </form>
-        <div class="w-full flex justify-end gap-3">
-            <Button variant="transparent" class="w-full border border-gray-600" @click="closeEditModal">Cancel</Button>
-            <Button variant="primary" class="w-full" @click="updateClient(clientDetails)">Save Changes</Button>
-        </div>
     </Modal>
 
     <Modal :show="deleteModal" @close="closeDeleteModal" max-width="sm">
-        <div class="items-center flex justify-center">
-            <WarningIcon  class="w-12 h-12" />
-        </div>
-        <div class="my-8">
-            <div class="mb-1 text-center text-white text-sm font-semibold font-sans leading-tight ">Are you sure you want to delete this client?</div>
-            <div class="text-center text-gray-300 text-xs font-normal font-sans leading-[18px] ">This action cannot be undone and the deleted item will be removed permanently.</div>
-        </div>
-        <div class="w-full flex justify-center gap-3">
-            <Button variant="transparent" class="w-full border border-gray-600" @click="closeDeleteModal">Cancel</Button>
-            <Button variant="danger" class="w-full" @click="deleteClient(clientDetails)">Delete</Button>
-        </div>
+        <form>
+            <div class="items-center flex justify-center">
+                <WarningIcon  class="w-12 h-12" />
+            </div>
+            <div class="my-8">
+                <div class="mb-1 text-center text-white text-sm font-semibold font-sans leading-tight ">Are you sure you want to delete this client?</div>
+                <div class="text-center text-gray-300 text-xs font-normal font-sans leading-[18px] ">This action cannot be undone and the deleted item will be removed permanently.</div>
+            </div>
+            <div class="w-full flex justify-center gap-3">
+                <Button variant="transparent" class="w-full border border-gray-600" @click.prevent="closeDeleteModal">Cancel</Button>
+                <Button variant="danger" class="w-full" :disabled="form.processing" @click.prevent="deleteClient(clientDetails)">Delete</Button>
+            </div>
+        </form>
     </Modal>
 </template>

@@ -24,20 +24,10 @@ class AddClientRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required|string|max:255',
-            'email' => 'required|email|max:255|unique:users',
-            'phone' => [
-                'required',
-                'numeric',
-                // Rule to ensure the phone number is unique
-                Rule::unique('users', 'phone')->where(function ($query) {
-                    $dialCode = $this->input('dial_code')['value'];
-                    $phone = $this->input('phone');
-                    $combinedPhoneNumber = (string)$dialCode . (string)$phone; // Ensure both values are strings
-                    return $query->where('phone', $combinedPhoneNumber);
-                }),
-            ],
-            // 'upline' => 'required',
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'email', Rule::unique(User::class)],
+            'phone' => ['required'],
+            'upline' => ['required'],
         ];
     }
             
@@ -47,7 +37,7 @@ class AddClientRequest extends FormRequest
             'name' => 'Name',
             'email' => 'Email',
             'phone' => 'Phone Number',
-            // 'upline' => 'Upline',
+            'upline' => 'Upline',
         ];
     }
 

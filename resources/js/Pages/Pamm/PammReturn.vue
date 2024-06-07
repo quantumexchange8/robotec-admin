@@ -192,11 +192,11 @@ const updatePamm = () => {
                     <div class="text-gray-300 text-xs font-normal font-sans leading-[18px] ">Enter a positive or negative percentage (e.g., +10% or -5%)</div>
                     <InputError :message="form.errors.pamm" />
                 </div>
+                <div class="w-full flex justify-end pt-8 gap-3">
+                    <Button variant="transparent" class="w-full border border-gray-600" @click="closeModal">Cancel</Button>
+                    <Button variant="primary" class="w-full" :disabled="form.processing" @click="updatePamm">Update</Button>
+                </div>
             </form>
-            <div class="w-full flex justify-end gap-3">
-                <Button variant="transparent" class="w-full border border-gray-600" @click="closeModal">Cancel</Button>
-                <Button variant="primary" class="w-full" @click="updatePamm">Update</Button>
-            </div>
         </Modal>
 
     </AuthenticatedLayout>

@@ -1,0 +1,331 @@
+<script setup>
+import { TailwindPagination } from "laravel-vue-pagination";
+import { computed, defineProps, ref, watch, watchEffect } from "vue";
+import debounce from "lodash/debounce.js";
+import { transactionFormat } from "@/Composables/index.js";
+import { usePage, useForm } from "@inertiajs/vue3";
+import Modal from "@/Components/Modal.vue";
+import Input from '@/Components/Input.vue';
+import InputError from '@/Components/InputError.vue';
+import Label from '@/Components/Label.vue';
+import Button from '@/Components/Button.vue';
+import NoRequest from "@/Components/NoRequest.vue";
+import { DuplicateIcon } from "@/Components/Icons/outline";
+import Tooltip from "@/Components/Tooltip.vue";
+
+const props = defineProps({
+    search: String,
+    date: String,
+});
+
+const form = useForm({
+    id: '',
+    wallet_address: '',
+    transaction_number: '',
+    remarks: '',
+});
+
+const { formatDateTime, formatAmount } = transactionFormat();
+
+const requests = ref({ data: [] });
+const totalAmount = ref(0);
+const currentPage = ref(1);
+const withdrawalRequestModal = ref(false);
+const approveRequestModal = ref(false);
+const rejectRequestModal = ref(false);
+const requestDetails = ref(null);
+const tooltipContent = ref('copy');
+
+function copyTestingCode(walletAddress) {
+    const textField = document.createElement('textarea');
+    textField.innerText = walletAddress;
+    document.body.appendChild(textField);
+    textField.select();
+
+    try {
+        const successful = document.execCommand('copy');
+        if (successful) {
+            tooltipContent.value = 'copied';
+            setTimeout(() => {
+                tooltipContent.value = 'copy'; // Reset tooltip content to 'Copy' after 2 seconds
+            }, 1000);
+        } else {
+            tooltipContent.value = 'try_again_later';
+        }
+    } catch (err) {
+        console.error('Copy error:', err);
+        alert('Copy error. Please try again.');
+    }
+
+    document.body.removeChild(textField);
+}
+
+watch(
+    [() => props.search, () => props.date],
+    debounce(([searchValue, dateValue]) => {
+        getResults(currentPage.value, searchValue, dateValue);
+    }, 300)
+);
+
+const getResults = async (page = 1, search = '', date = '') => {
+    try {
+        let url = `/transaction/withdrawal_request_data?page=${page}`;
+
+        if (search) {
+            url += `&search=${search}`;
+        }
+
+        if (date) {
+            url += `&date=${date}`;
+        }
+
+        const response = await axios.get(url);
+        requests.value = response.data.transactions;
+        totalAmount.value = response.data.totalAmount;
+    } catch (error) {
+        console.error(error);
+    }
+};
+
+getResults(1, props.search, props.date);
+
+const handlePageChange = (newPage) => {
+    if (newPage >= 1) {
+        currentPage.value = newPage;
+        getResults(currentPage.value, props.search, props.date);
+    }
+};
+
+const paginationClass = [
+    'bg-transparent border-0 text-white'
+];
+
+const paginationActiveClass = [
+    'border-0 bg-primary-500 rounded-full text-white'
+];
+
+const openModal = (request) => {
+    withdrawalRequestModal.value = true;
+    requestDetails.value = request;
+};
+
+const closeModal = () => {
+    withdrawalRequestModal.value = false;
+};
+
+const openApproveModal = (request) => {
+    approveRequestModal.value = true;
+    requestDetails.value = request;
+};
+
+const closeApproveModal = () => {
+    approveRequestModal.value = false;
+};
+
+const openRejectModal = (request) => {
+    rejectRequestModal.value = true;
+    requestDetails.value = request;
+};
+
+const closeRejectModal = () => {
+    rejectRequestModal.value = false;
+};
+
+const approveRequest = (requestDetails) => {
+    form.id = requestDetails.id;
+    form.post(route('transaction.approve_withdrawal_request'), {
+        onSuccess: () => {
+            closeApproveModal();
+            closeModal();
+            getResults(1, props.search, props.date);
+        },
+        onError: (errors) => {
+        // Handle any errors
+        console.error(errors);
+        }
+    });
+}
+
+const rejectRequest = (requestDetails) => {
+    form.id = requestDetails.id;
+    form.post(route('transaction.reject_withdrawal_request'), {
+        onSuccess: () => {
+            closeRejectModal();
+            closeModal();
+            getResults(1, props.search, props.date);
+        },
+        onError: (errors) => {
+        // Handle any errors
+        console.error(errors);
+        }
+    });
+}
+
+</script>
+
+<template>
+    <div class="w-full py-3 justify-between items-center inline-flex">
+        <div class="text-white text-base font-semibold font-sans leading-normal">Total: $ {{ formatAmount(totalAmount) }}</div>
+    </div>
+
+    <div v-if="requests.data.length == 0" >
+        <div class="w-full h-[360px] p-3 bg-gray-800 rounded-xl flex-col justify-center items-center inline-flex">
+            <div class="self-stretch h-[212px] py-5 flex-col justify-start items-center gap-3 flex">
+                <NoRequest class="w-40 h-[120px] relative" />
+                <div class="self-stretch text-center text-gray-300 text-sm font-normal font-sans leading-tight">
+                    It looks like there are no withdrawal requests at the moment.
+                </div>
+            </div>
+        </div>
+        <div class="px-4 py-5 flex items-center justify-center">
+            <div class="rounded-full bg-primary-500 w-9 h-9 flex items-center justify-center">
+                <div class="text-center text-white text-sm font-medium font-sans leading-tight">1</div>
+            </div>
+        </div>
+    </div>
+
+
+    <div v-else>
+        <div class="w-full px-4 py-3 bg-gray-800 rounded-xl flex-col justify-start items-start inline-flex">
+            <table class="w-full text-sm text-left text-gray-500">
+                <tbody>
+                    <tr v-for="request in requests.data" :key="request.id" class="bg-gray-800 text-xs font-normal border-b border-gray-700" @click="openModal(request)">
+                        <td>
+                            <div class="text-gray-300 text-xs font-normal font-sans leading-[24px]">{{ formatDateTime(request.created_at) }}</div>
+                            <div class="text-white text-sm font-medium font-sans leading-tight">{{ request.user.name }}</div>
+                        </td>
+                        <td class="text-white flex items-center justify-center">$ {{ request.transaction_amount }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="flex justify-center mt-4">
+            <TailwindPagination
+                :item-classes="paginationClass"
+                :active-classes="paginationActiveClass"
+                :data="requests"
+                :limit="10"
+                @pagination-change-page="handlePageChange"
+            />
+        </div>
+    </div>
+
+    <Modal :show="withdrawalRequestModal" title="Withdrawal Request" @close="closeModal" max-width="sm">
+        <div v-if="requestDetails">
+            <div class="w-full justify-start items-center gap-3 my-5 pb-3 border-b border-gray-700 inline-flex">
+                <img class="w-9 h-9 rounded-full" :src="requestDetails.user.profile_photo || 'https://via.placeholder.com/32x32'" alt="Client profile picture"/>
+                <div class="w-full flex-col justify-start items-start inline-flex">
+                    <div class="self-stretch text-white text-base font-medium font-sans leading-normal">{{ requestDetails.user.name }}</div>
+                    <div class="text-gray-300 text-xs font-normal font-sans leading-[18px]">ID: {{ requestDetails.user.id }}</div>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-2 items-center mb-2">
+                <div class="col-span-1 text-gray-300 text-xs font-normal font-sans leading-[18px]">Transaction ID</div>
+                <div class="col-span-1 text-white text-xs font-normal font-sans leading-tight">{{ requestDetails.transaction_number }}</div>
+            </div>
+            <div class="grid grid-cols-2 items-center mb-2">
+                <div class="col-span-1 text-gray-300 text-xs font-normal font-sans leading-[18px]">Requested Date</div>
+                <div class="col-span-1 text-white text-xs font-normal font-sans leading-tight">{{ formatDateTime(requestDetails.created_at) }}</div>
+            </div>
+
+            <div class="grid grid-cols-2 items-center mb-2">
+                <div class="col-span-1 text-gray-300 text-xs font-normal font-sans leading-[18px]">Withdrawal Amount</div>
+                <div class="col-span-1 text-white text-xs font-normal font-sans leading-tight">{{ formatAmount(requestDetails.transaction_amount) }}</div>
+            </div>
+
+            <div class="grid grid-cols-2 items-center mb-5">
+                <div class="col-span-1 text-gray-300 text-xs font-normal font-sans leading-[18px]">USDT Address</div>
+                <div class="col-span-1 text-white text-xs font-normal font-sans leading-tight">{{ requestDetails.from_wallet.wallet_address }}
+                    <Tooltip :content="$t('public.' + tooltipContent)" placement="bottom">
+                        <DuplicateIcon aria-hidden="true" :class="['w-4 h-4 text-gray-200']" @click.stop.prevent="copyTestingCode(requestDetails.from_wallet.wallet_address)" style="cursor: pointer" />
+                    </Tooltip>
+                </div>
+            </div>
+
+            <div class="items-center pt-8 flex gap-3">
+                <Button variant="danger" class="w-full" @click.prevent="openRejectModal(requestDetails)">Reject</Button>
+                <Button variant="success" class="w-full" @click.prevent="openApproveModal(requestDetails)">Approve</Button>
+            </div>
+        </div>
+    </Modal>
+
+    <Modal :show="approveRequestModal" title="Approve Withdrawal Request" @close="closeApproveModal" max-width="sm">
+        <form>
+            <div class="my-5 px-1">
+                <div>
+                    <Label for="wallet_address" value="USDT Address" class="text-gray-300 mb-1.5" :invalid="form.errors.wallet_address" important />
+                    <Input
+                        id="wallet_address"
+                        class="block w-full mb-5 bg-transparent text-white"
+                        :invalid="form.errors.wallet_address"
+                        v-model="form.wallet_address"
+                        required
+                    />
+
+                    <InputError class="mt-2" :message="form.errors.wallet_address" />
+                </div>
+
+                <div>
+                    <Label for="transaction_number" value="TXID" class="text-gray-300 mb-1.5" :invalid="form.errors.transaction_number" important />
+
+                    <Input
+                        id="transaction_number"
+                        class="block w-full mb-5 bg-transparent text-white"
+                        :invalid="form.errors.transaction_number"
+                        v-model="form.transaction_number"
+                        required
+                    />
+
+                    <InputError class="mt-2" :message="form.errors.transaction_number" />
+                </div>
+
+                <div>
+                    <Label for="remarks" value="Description (optional)" class="text-gray-300 mb-1.5" :invalid="form.errors.remarks" />
+
+                    <Input
+                        id="remarks"
+                        class="block w-full bg-transparent text-white"
+                        :invalid="form.errors.remarks"
+                        v-model="form.remarks"
+                        :placeholder="'Provide a brief description...'"
+                    />
+
+                    <InputError class="mt-2" :message="form.errors.remarks" />
+                </div>
+            </div>
+            <InputError :message="form.errors.transaction_amount" />
+
+            <div class="w-full flex justify-end pt-8 gap-3">
+                <Button variant="outline" class="w-full border border-gray-600" @click.prevent="closeApproveModal">Cancel</Button>
+                <Button variant="success" class="w-full" :disabled="form.processing" @click.prevent="approveRequest(requestDetails)">Approve</Button>
+            </div>
+        </form>
+    </Modal>
+
+    <Modal :show="rejectRequestModal" title="Approve Withdrawal Request" @close="closeRejectModal" max-width="sm">
+        <form>
+            <div class="my-5 px-1">
+                <div>
+                    <Label for="remarks" value="Description (optional)" class="text-gray-300 mb-1.5" :invalid="form.errors.remarks" />
+
+                    <Input
+                        id="remarks"
+                        class="block w-full bg-transparent text-white"
+                        :invalid="form.errors.remarks"
+                        v-model="form.remarks"
+                        :placeholder="'Provide a brief description...'"
+                    />
+
+                    <InputError class="mt-2" :message="form.errors.remarks" />
+                </div>
+            </div>
+
+            <div class="w-full flex justify-end pt-8 gap-3">
+                <Button variant="outline" class="w-full border border-gray-600" @click.prevent="closeRejectModal">Cancel</Button>
+                <Button variant="danger" class="w-full" :disabled="form.processing" @click.prevent="rejectRequest(requestDetails)">Reject</Button>
+            </div>
+        </form>
+    </Modal>
+
+</template>

@@ -158,11 +158,12 @@ const addClient = () => {
                 <InputError class="mt-2" :message="form.errors.upline" />
 
             </div>
+
+            <div class="w-full flex justify-end gap-3 pt-8">
+                <Button variant="transparent" class="w-full border border-gray-600" @click="closeModal">Cancel</Button>
+                <Button variant="primary" class="w-full" :disabled="!isFormValid || form.processing" @click="addClient">Add</Button>
+            </div>
         </form>
-        <div class="w-full flex justify-end gap-3 pt-8">
-            <Button variant="transparent" class="w-full border border-gray-600" @click="closeModal">Cancel</Button>
-            <Button variant="primary" class="w-full" :disabled="!isFormValid || form.processing" @click="addClient">Add</Button>
-        </div>
       </Modal>
     </div>
   </template>

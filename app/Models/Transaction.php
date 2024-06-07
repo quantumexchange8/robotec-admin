@@ -23,6 +23,7 @@ class Transaction extends Model implements HasMedia
         'from_meta_login',
         'to_meta_login',
         'transaction_number',
+        'from_wallet_address',
         'to_wallet_address',
         'txn_hash',
         'amount',

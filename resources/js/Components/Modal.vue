@@ -94,7 +94,7 @@ const maxWidthClass = computed(() => {
                     >
                         <div
                             v-if="show"
-                            class="p-4 bg-gray-900 max-h-[calc(100vh-2rem)] rounded-lg overflow-hidden shadow-xl transform transition-all w-full mx-auto"
+                            class="px-4 pt-4 pb-8 bg-gray-900 max-h-[calc(100vh-2rem)] rounded-lg overflow-hidden shadow-xl transform transition-all w-full mx-auto"
                             :class="maxWidthClass"
                         >
                             <div class="flex justify-between items-center pb-3">

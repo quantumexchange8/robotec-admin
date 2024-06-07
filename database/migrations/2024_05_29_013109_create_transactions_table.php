@@ -17,6 +17,7 @@ return new class extends Migration {
             $table->unsignedBigInteger('from_meta_login')->nullable();
             $table->unsignedBigInteger('to_meta_login')->nullable();
             $table->string('transaction_number')->nullable();
+            $table->string('from_wallet_address')->nullable();
             $table->string('to_wallet_address')->nullable();
             $table->string('txn_hash')->nullable();
             $table->decimal('amount')->nullable();

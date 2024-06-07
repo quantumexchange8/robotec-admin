@@ -49,7 +49,8 @@ const getResults = async (page = 1, search = '', date = '', type = '') => {
         }
 
         const response = await axios.get(url);
-        commissions.value = response.data;
+        commissions.value = response.data.transactions;
+        totalAmount.value = response.data.totalAmount;
     } catch (error) {
         console.error(error);
     }

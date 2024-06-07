@@ -18,7 +18,7 @@ class CommissionController extends Controller
     public function commission_request_data(Request $request)
     {
         // Start building the query
-        $query = Transaction::query()->with('user')->where('transaction_type', 'commission_payout');
+        $query = Transaction::query()->with('user')->where('transaction_type', 'commission');
     
         // Apply type filter
         $query->when($request->type == 'Pending', function ($query) {
@@ -46,16 +46,21 @@ class CommissionController extends Controller
         });
         
         // Fetch the transactions
-        $transactions = $query->paginate(10);
+        $transactions = $query->latest()->paginate(10);
     
+        // Calculate total amount
+        $totalAmount = $transactions->sum('transaction_amount');
+
         // Transform each transaction to include profile_photo for user and upline
         $transactions->getCollection()->transform(function ($transaction) {
             $transaction->user->profile_photo = $transaction->user->getFirstMediaUrl('profile_photo');
             return $transaction;
         });
     
-        // Return the paginated results
-        return response()->json($transactions);
+        return response()->json([
+            'transactions' => $transactions,
+            'totalAmount' => $totalAmount
+        ]);
     }
 
     public function approve_commission(Request $request)

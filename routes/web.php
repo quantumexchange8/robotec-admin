@@ -74,7 +74,7 @@ Route::middleware('auth')->group(function () {
 
     /**
      * ==============================
-     *          Transaction
+     *      Wallet Adjustment
      * ==============================
      */
     Route::prefix('transaction')->group(function () {
@@ -87,6 +87,18 @@ Route::middleware('auth')->group(function () {
 
     /**
      * ==============================
+     *      Withdrawal Request
+     * ==============================
+     */
+    Route::prefix('transaction')->group(function () {
+        Route::get('/withdrawal_request', [TransactionController::class, 'withdrawal_request'])->name('transaction.withdrawal_request');
+        Route::get('/withdrawal_request_data', [TransactionController::class, 'withdrawal_request_data'])->name('transaction.withdrawal_request_data');
+        Route::post('/approve_withdrawal_request', [TransactionController::class, 'approve_withdrawal_request'])->name('transaction.approve_withdrawal_request');
+        Route::post('/reject_withdrawal_request', [TransactionController::class, 'reject_withdrawal_request'])->name('transaction.reject_withdrawal_request');
+    });
+
+    /**
+     * ==============================
      *           Profile
      * ==============================
      */
@@ -94,6 +106,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
         Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
         Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+        Route::post('/upload_profile_photo', [ProfileController::class, 'upload_profile_photo'])->name('profile.upload_profile_photo');
     });
 });
 

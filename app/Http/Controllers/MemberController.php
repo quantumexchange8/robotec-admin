@@ -7,12 +7,14 @@ use Inertia\Inertia;
 use App\Models\Wallet;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Services\RunningNumberService;
 use App\Http\Requests\AddClientRequest;
 use App\Http\Requests\EditClientRequest;
 use App\Notifications\NewClientNotification;
 use Illuminate\Support\Facades\Notification;
+use Illuminate\Validation\ValidationException;
 
 class MemberController extends Controller
 {
@@ -121,6 +123,33 @@ class MemberController extends Controller
             }    
         }
         
+        $user = Auth::user();
+        $dial_code = $request->dial_code['value'];
+        $phone = $request->phone;
+
+        // Remove leading '+' from dial code if present
+        $dial_code = ltrim($dial_code, '+');
+
+        // Remove leading '+' from phone number if present
+        $phone = ltrim($phone, '+');
+
+        // Check if phone number already starts with dial code
+        if (!str_starts_with($phone, $dial_code)) {
+            // Concatenate dial code and phone number
+            $phone_number = '+' . $dial_code . $phone;
+        } else {
+            // If phone number already starts with dial code, use the phone number directly
+            $phone_number = '+' . $phone;
+        }
+
+        $users = User::where('dial_code', $request->dial_code['value'])->get();
+        
+        foreach ($users as $user) {
+            if ($user->phone == $phone_number) {
+                throw ValidationException::withMessages(['phone' => trans('public.invalid_mobile_phone')]);
+            }
+        }
+
         // Generate a random password with 8 characters
         $password = Str::random(8);
         
@@ -129,7 +158,7 @@ class MemberController extends Controller
             'email' => $request->email,
             'password' => Hash::make($password),
             'dial_code' => $request->dial_code['value'],
-            'phone' => $request->dial_code['value'] . $request->phone,
+            'phone' => $phone_number,
             'upline_id' => $upline_id,
             'hierarchyList' => $hierarchyList,
             'role' => 'user',
@@ -172,13 +201,40 @@ class MemberController extends Controller
 
         // Find the client by id
         $client = User::findOrFail($request->id);
+        $dial_code = $request->dial_code['value'];
+        $phone = $request->phone;
+
+        // Remove leading '+' from dial code if present
+        $dial_code = ltrim($dial_code, '+');
+
+        // Remove leading '+' from phone number if present
+        $phone = ltrim($phone, '+');
+
+        // Check if phone number already starts with dial code
+        if (!str_starts_with($phone, $dial_code)) {
+            // Concatenate dial code and phone number
+            $phone_number = '+' . $dial_code . $phone;
+        } else {
+            // If phone number already starts with dial code, use the phone number directly
+            $phone_number = '+' . $phone;
+        }
+
+        $users = User::where('dial_code', $request->dial_code['value'])
+            ->whereNot('id', $client->id)
+            ->get();
+
+        foreach ($users as $user) {
+            if ($user->phone == $phone_number) {
+                throw ValidationException::withMessages(['phone' => trans('public.invalid_mobile_phone')]);
+            }
+        }
 
         // Validate and update client information
         $client->update([
             'name' => $request->name,
             'email' => $request->email,
             'dial_code' => $request->dial_code['value'],
-            'phone' => $request->dial_code['value'] . $request->phone,
+            'phone' => $phone_number,
         ]);
 
         // Update cash wallet address

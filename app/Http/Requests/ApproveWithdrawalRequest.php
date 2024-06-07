@@ -2,11 +2,10 @@
 
 namespace App\Http\Requests;
 
-use App\Models\User;
 use Illuminate\Validation\Rule;
 use Illuminate\Foundation\Http\FormRequest;
 
-class EditClientRequest extends FormRequest
+class ApproveWithdrawalRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -23,26 +22,19 @@ class EditClientRequest extends FormRequest
      */
     public function rules()
     {
-        $userID = $this->id;
-
         return [
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'email', Rule::unique(User::class)->ignore($userID)],
-            'dial_code' => ['required'],
-            'phone' => ['required'],
-            'wallet_address' => ['string','min:8','max:255'],
+            'wallet_address' => ['required','string','max:255',Rule::exists('wallets', 'wallet_address'),],
+            'transaction_number' => ['required','string','max:255',Rule::exists('transactions', 'transaction_number'),],
+            'remarks' => ['nullable', 'string', 'max:255'],
         ];
     }
-                
+            
     public function attributes(): array
     {
         return [
-            'name' => 'Name',
-            'email' => 'Email',
-            'dial_code' => 'Dial Code',
-            'phone' => 'Phone Number',
             'wallet_address' => 'Wallet Address',
+            'transaction_number' => 'Transaction Number',
+            'remarks' => 'Remarks',
         ];
     }
-
 }

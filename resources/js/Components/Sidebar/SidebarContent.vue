@@ -92,10 +92,10 @@ import { HomeIcon, UserCircleIcon, GlobeAltIcon, Users01Icon, CoinsHandIcon, Spe
             </template>
         </SidebarLink>
 
-        <!-- <SidebarLink
+        <SidebarLink
             :title="$t('public.sidebar.withdrawal_request')"
-            :href="route('.withdrawal_request')"
-            :active="route().current('.withdrawal_request')"
+            :href="route('transaction.withdrawal_request')"
+            :active="route().current('transaction.withdrawal_request')"
         >
             <template #icon>
                 <CreditCardDownloadIcon
@@ -103,7 +103,7 @@ import { HomeIcon, UserCircleIcon, GlobeAltIcon, Users01Icon, CoinsHandIcon, Spe
                     aria-hidden="true"
                 />
             </template>
-        </SidebarLink> -->
+        </SidebarLink>
 
         <SidebarLink
             :title="$t('public.sidebar.my_profile')"
