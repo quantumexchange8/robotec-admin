@@ -243,7 +243,7 @@ function clearSelection() {
         </ComboboxButton>
 
         <TransitionRoot
-            class="absolute z-50 mt-1 max-h-60 w-full overflow-auto rounded-lg bg-gray-900 border border-gray-600 ring-1 ring-opacity-5 ring-gray-600 py-1 text-base shadow-md focus:outline-none p-2"
+            class="absolute z-50 mt-1 max-h-60 w-auto overflow-auto rounded-lg bg-gray-900 border border-gray-600 ring-1 ring-opacity-5 ring-gray-600 py-1 text-base shadow-md focus:outline-none p-2"
             leave="transition ease-in duration-100"
             leaveFrom="opacity-100"
             leaveTo="opacity-0"
