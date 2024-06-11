@@ -76,7 +76,7 @@ const changeLanguage = async (langVal) => {
             />
         </Button>
 
-        <Link :href="route('dashboard')">
+        <Link :href="route('dashboard.index')">
             <Logo />
             <span class="sr-only">home</span>
         </Link>

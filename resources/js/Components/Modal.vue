@@ -67,7 +67,7 @@ const maxWidthClass = computed(() => {
         <Transition leave-active-class="duration-200">
             <div
                 v-show="show"
-                class="fixed inset-0"
+                class="fixed inset-0 z-10"
                 scroll-region
             >
                 <div class="flex items-center min-h-[calc(100vh-5rem)] justify-center p-4">

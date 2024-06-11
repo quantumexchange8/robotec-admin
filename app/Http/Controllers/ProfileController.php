@@ -21,6 +21,7 @@ class ProfileController extends Controller
         return Inertia::render('Profile/Edit', [
             'mustVerifyEmail' => $request->user() instanceof MustVerifyEmail,
             'status' => session('status'),
+            'profileImg' => Auth::user()->getFirstMediaUrl('profile_photo'),
         ]);
     }
 
@@ -59,5 +60,23 @@ class ProfileController extends Controller
         $request->session()->regenerateToken();
 
         return Redirect::to('/');
+    }
+
+    public function upload_profile_photo(Request $request)
+    {
+        $request->validate([
+            'profile_photo' => ['nullable', 'image', 'max:2048'],
+        ]);
+
+        $user = $request->user();
+        if ($request->hasFile('profile_photo')) {
+            $user->clearMediaCollection('profile_photo');
+            $user->addMedia($request->profile_photo)->toMediaCollection('profile_photo');
+        }
+
+        return redirect()->back()->with('toast', [
+            'title' => 'Upload Profile Photo Success!',
+            'type' => 'success'
+        ]);
     }
 }

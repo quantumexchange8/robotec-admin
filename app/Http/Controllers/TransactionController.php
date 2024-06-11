@@ -62,7 +62,7 @@ class TransactionController extends Controller
             'user_id' => $clientId,
             'category' => 'wallet',
             'transaction_type' => 'adjustment',
-            'transaction_number' => RunningNumberService::getID('adjustment'),
+            'txn_hash' => RunningNumberService::getID('adjustment'),
             'amount' => abs($amount),
             'transaction_amount' => abs($amount),
             'old_wallet_amount' => $wallet->balance,
@@ -180,8 +180,8 @@ class TransactionController extends Controller
             throw ValidationException::withMessages(['wallet_address' => 'The wallet address is not for this withdrawal request']);
         }
 
-        if ($request->transaction_number !== $withdrawalRequest->transaction_number) {
-            throw ValidationException::withMessages(['transaction_number' => 'The transaction number is not for this withdrawal request']);
+        if ($request->txn_hash !== $withdrawalRequest->txn_hash) {
+            throw ValidationException::withMessages(['txn_hash' => 'The transaction hash is not for this withdrawal request']);
         }
 
         // Check if the transaction amount exceeds the wallet balance
@@ -236,4 +236,53 @@ class TransactionController extends Controller
             'type' => 'success'
         ]);
     }
+
+    public function transasction_data(Request $request)
+    {
+        // Start building the query
+        $query = Transaction::query()
+            ->with('user','from_wallet','to_wallet')
+            ->where('transaction_type', $request->transaction_type)
+            ->whereNot('status', 'Pending');
+    
+        
+        // Apply search filter if provided
+        $query->when($request->search, function ($query) use ($request) {
+            $query->where(function($q) use ($request) {
+                $q->whereHas('user', function ($query) use ($request) {
+                    $query->where('name', 'like', '%'.$request->search.'%');
+                })->orWhere('transaction_amount', 'like', '%'.$request->search.'%');
+            });
+        });
+    
+        // Apply date range filter if provided
+        $query->when($request->filled('date'), function ($query) use ($request) {
+            [$start_date, $end_date] = explode(' - ', $request->input('date'));
+            $query->whereBetween('created_at', [
+                Carbon::createFromFormat('Y-m-d', $start_date)->startOfDay(),
+                Carbon::createFromFormat('Y-m-d', $end_date)->endOfDay()
+            ]);
+        });
+
+        // Fetch the transactions
+        $transactions = $query->latest()->paginate(10);
+
+        // Calculate total amount
+        $totalAmount = $transactions->sum('transaction_amount');
+
+        // Transform each transaction to include profile_photo for user and upline
+        $transactions->getCollection()->transform(function ($transaction) {
+            $transaction->user->profile_photo = $transaction->user->getFirstMediaUrl('profile_photo');
+            return $transaction;
+        });
+    
+        // Return the paginated results along with total amount
+        return response()->json([
+            'transactions' => $transactions,
+            'totalAmount' => $totalAmount
+        ]);
+        
+    }
+
+
 }

@@ -25,8 +25,14 @@ Route::get('/', function () {
 });
 
 Route::middleware('auth')->group(function () {
-    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
-
+    Route::prefix('dashboard')->group(function () {
+        Route::get('/', [DashboardController::class, 'index'])->name('dashboard.index');
+        Route::get('/deposit_transactions', [DashboardController::class, 'deposit_transactions'])->name('dashboard.deposit_transactions');
+        Route::get('/withdrawal_transactions', [DashboardController::class, 'withdrawal_transactions'])->name('dashboard.withdrawal_transactions');
+        Route::get('/robotec_purchase', [DashboardController::class, 'robotec_purchase'])->name('dashboard.robotec_purchase');
+        Route::get('/pamm_transactions', [DashboardController::class, 'pamm_transactions'])->name('dashboard.pamm_transactions');
+    });
+    
     /**
      * ==============================
      *           Network
@@ -95,6 +101,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/withdrawal_request_data', [TransactionController::class, 'withdrawal_request_data'])->name('transaction.withdrawal_request_data');
         Route::post('/approve_withdrawal_request', [TransactionController::class, 'approve_withdrawal_request'])->name('transaction.approve_withdrawal_request');
         Route::post('/reject_withdrawal_request', [TransactionController::class, 'reject_withdrawal_request'])->name('transaction.reject_withdrawal_request');
+        Route::get('/transasction_data', [TransactionController::class, 'transasction_data'])->name('transaction.transasction_data');
     });
 
     /**

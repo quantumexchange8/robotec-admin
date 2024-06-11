@@ -11,35 +11,23 @@ use App\Models\Transaction;
 use App\Models\User;
 
 class SidebarService {
-    public function getPendingTransactionCount(): int
+    public function getPendingCommissionCount(): int
     {
         $authUser = \Auth::user();
 
         $query = Transaction::query()
             ->where('category', 'wallet')
-            ->where('status', 'Processing');
-
-        if (!empty($authUser) && $authUser->hasRole('admin') && $authUser->leader_status == 1) {
-            $childrenIds = $authUser->getChildrenIds();
-            $childrenIds[] = $authUser->id;
-            $query->whereIn('user_id', $childrenIds);
-        } elseif (!empty($authUser) && $authUser->hasRole('super-admin')) {
-            // Super-admin logic, no need to apply whereIn
-        } elseif (!empty($authUser) && !empty($authUser->getFirstLeader()) && $authUser->getFirstLeader()->hasRole('admin')) {
-            $childrenIds = $authUser->getFirstLeader()->getChildrenIds();
-            $query->whereIn('user_id', $childrenIds);
-        } else {
-            // No applicable conditions, set whereIn to empty array
-            $query->whereIn('user_id', []);
-        }
+            ->where('transaction_type', 'commission')
+            ->where('status', 'Pending');
 
         return $query->count();
     }
 
-    public function getPendingKycCount(): int
+    public function getPendingWithdrawalCount(): int
     {
-        return User::where('role', 'user')
-            ->where('kyc_approval', 'Pending')
+        return Transaction::where('category', 'wallet')
+            ->where('transaction_type', 'withdrawal')
+            ->where('status', 'Pending')
             ->count();
     }
 

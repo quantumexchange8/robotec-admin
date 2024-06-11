@@ -34,6 +34,7 @@ const sortTypes = [
 
 const search = ref('');
 const sortType = ref(sortTypes[0].value);
+const totalClient = ref(0);
 
 const parseSortField = (sortTypeValue) => {
     if (sortTypeValue.startsWith('name')) {
@@ -121,32 +122,34 @@ watchEffect(() => {
             <h2 class="font-semibold text-xxl text-white leading-loose">Client Listing</h2>
         </template>
 
-        <div class="pb-3">
-            <InputIconWrapper class="col-span-2">
-                <template #icon>
-                    <SearchIcon aria-hidden="true" class="w-5 h-5 text-white" />
-                </template>
-                <Input withIcon id="search" variant="search" type="text" class="block w-full rounded-lg" placeholder="Search" v-model="search" />
-            </InputIconWrapper>
-        </div>
-        <div class="pb-3 grid grid-cols-3 gap-3">
-            <Button variant="transparent" class="relative w-full border border-gray-600 focus:border-primary-500" @click="openFilterModal()">
-                <span class="inline-flex items-center">
-                    <span class="mr-2">
-                        <FilterIcon aria-hidden="true" class="w-5 h-5" />
+        <div class="sticky top-2 bg-gray-900 z-[5]">
+            <div class="pb-3">
+                <InputIconWrapper class="col-span-2">
+                    <template #icon>
+                        <SearchIcon aria-hidden="true" class="w-5 h-5 text-white" />
+                    </template>
+                    <Input withIcon id="search" variant="search" type="text" class="block w-full rounded-lg" placeholder="Search" v-model="search" />
+                </InputIconWrapper>
+            </div>
+            <div class="pb-3 grid grid-cols-3 gap-3">
+                <Button variant="transparent" class="relative w-full border border-gray-600 focus:border-primary-500" @click="openFilterModal()">
+                    <span class="inline-flex items-center">
+                        <span class="mr-2">
+                            <FilterIcon aria-hidden="true" class="w-5 h-5" />
+                        </span>
+                        <span>Filter</span>
+                        <span v-if="filterCount > 0" class="absolute -top-1 -right-1">
+                            <div class="w-5 h-5 px-1 bg-error-500 rounded-full border border-gray-900 flex items-center justify-center">
+                                <div class="text-white text-xs font-medium">{{ filterCount }}</div>
+                            </div>
+                        </span>
                     </span>
-                    <span>Filter</span>
-                    <span v-if="filterCount > 0" class="absolute -top-1 -right-1">
-                        <div class="w-5 h-5 px-1 bg-error-500 rounded-full border border-gray-900 flex items-center justify-center">
-                            <div class="text-white text-xs font-medium">{{ filterCount }}</div>
-                        </div>
-                    </span>
-                </span>
-        </Button>
-            <BaseListbox class="w-full col-span-2" :options="sortTypes" v-model="sortType" />
+            </Button>
+                <BaseListbox class="w-full col-span-2" :options="sortTypes" v-model="sortType" />
+            </div>
         </div>
         <div class="pb-3 flex items-center justify-between">
-            <div class="text-white">Result</div>
+            <div class="text-white">{{totalClient}} results</div>
             <AddNewClient />
         </div>
 
@@ -157,6 +160,7 @@ watchEffect(() => {
             :upline="selectedUpline"
             :purchasedEA="selectedPurchasedEA" 
             :fundedPAMM="selectedFundedPAMM"
+            @update:totalClient="totalClient = $event"
         />
 
         <Modal :show="filterModal" title="Filter" @close="closeFilterModal" max-width="sm">
@@ -175,7 +179,7 @@ watchEffect(() => {
 
             <div class="w-full h-px bg-gray-700 my-5"></div>
 
-            <div class="w-full flex flex-col">
+            <div class="w-full flex flex-col px-1">
                 <div class="text-white text-base font-semibold font-sans leading-normal">Purchased EA</div>
                 <div class="flex gap-3">
                     <Label class="text-white py-3 grow shrink self-stretch">
@@ -195,7 +199,7 @@ watchEffect(() => {
 
             <div class="w-full h-px bg-gray-700 my-5"></div>
 
-            <div class="w-full flex flex-col mb-5">
+            <div class="w-full flex flex-col mb-5 px-1">
                 <div class="text-white text-base font-semibold font-sans leading-normal">Funded PAMM</div>
                 <div class="flex gap-3">
                     <Label class="text-white py-3 grow shrink self-stretch">
@@ -213,7 +217,7 @@ watchEffect(() => {
                 </div>
             </div>
 
-            <div class="flex flex-col h-[350px] justify-end mt-5">
+            <div class="flex flex-col h-[300px] justify-end mt-5">
                 <div class="flex gap-3 pt-8">
                     <Button variant="gray" class="w-full" @click="clearFilters">Clear All</Button>
                     <Button variant="primary" class="w-full" @click="applyFilters">Apply</Button>

@@ -225,7 +225,7 @@ const approveCommission = () => {
                             <div class="text-gray-300 text-xs font-normal font-sans leading-[24px]">{{ formatDateTime(commission.created_at) }}</div>
                             <div class="text-white text-sm font-medium font-sans leading-tight">{{ commission.user.name }}</div>
                         </td>
-                        <td class="text-white flex items-center justify-center">$ {{ commission.transaction_amount }}</td>
+                        <td class="text-white text-md flex items-center justify-center py-3">$ {{ commission.transaction_amount }}</td> <!-- Adjusted with py-2 -->
                     </tr>
                 </tbody>
             </table>

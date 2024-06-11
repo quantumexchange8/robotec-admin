@@ -39,7 +39,7 @@ const updateCommissionType = (commission_type) => {
         <div class="rounded-md shadow-md mb-3">
             <div class="w-full">
                 <TabGroup>
-                    <TabList class="max-w-md flex mb-3">
+                    <TabList class="max-w-md flex mb-3 sticky top-2 bg-gray-900 z-[5]">
                         <Tab
                             as="template"
                             v-slot="{ selected }"
@@ -77,7 +77,7 @@ const updateCommissionType = (commission_type) => {
                             </button>
                         </Tab>
                     </TabList>
-                    <div class="mb-3">
+                    <div class="mb-3 sticky top-16 bg-gray-900 z-[5]">
                         <div>
                             <InputIconWrapper>
                                 <template #icon>
@@ -88,7 +88,7 @@ const updateCommissionType = (commission_type) => {
                         </div>
                     </div>
 
-                    <div class="mb-3">
+                    <div class="mb-3 sticky top-32 bg-gray-900 z-[5]">
                         <vue-tailwind-datepicker
                             :placeholder="$t('public.date_placeholder')"
                             :formatter="formatter"

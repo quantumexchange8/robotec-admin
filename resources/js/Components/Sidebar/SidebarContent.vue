@@ -1,11 +1,16 @@
 <script setup>
 import PerfectScrollbar from '@/Components/PerfectScrollbar.vue'
 import SidebarLink from '@/Components/Sidebar/SidebarLink.vue'
-// import { DashboardIcon, CoinsHandIcon, ReportIcon, Wallet01Icon } from '@/Components/Icons/outline'
 import SidebarCollapsible from '@/Components/Sidebar/SidebarCollapsible.vue'
 import SidebarCollapsibleItem from '@/Components/Sidebar/SidebarCollapsibleItem.vue'
-// import { TemplateIcon, ViewGridIcon, SwitchHorizontalIcon, UserGroupIcon, UserIcon } from '@heroicons/vue/outline'
 import { HomeIcon, UserCircleIcon, GlobeAltIcon, Users01Icon, CoinsHandIcon, Speedometer04, CreditCardEditIcon, CreditCardDownloadIcon } from '@/Components/Icons/outline'
+import {usePage} from "@inertiajs/vue3";
+import {ref} from "vue";
+
+const page = usePage();
+const pendingCommissionCount = ref(page.props.pendingCommissionCount);
+const pendingWithdrawalCount = ref(page.props.pendingWithdrawalCount);
+
 </script>
 
 <template>
@@ -16,8 +21,8 @@ import { HomeIcon, UserCircleIcon, GlobeAltIcon, Users01Icon, CoinsHandIcon, Spe
     >
         <SidebarLink
             :title="$t('public.sidebar.dashboard')"
-            :href="route('dashboard')"
-            :active="route().current('dashboard')"
+            :href="route('dashboard.index')"
+            :active="route().current('dashboard.*')"
         >
             <template #icon>
                 <HomeIcon
@@ -57,6 +62,7 @@ import { HomeIcon, UserCircleIcon, GlobeAltIcon, Users01Icon, CoinsHandIcon, Spe
             :title="$t('public.sidebar.commission_payout')"
             :href="route('commission.commission_payout')"
             :active="route().current('commission.commission_payout')"
+            :pending-counts="pendingCommissionCount"
         >
             <template #icon>
                 <CoinsHandIcon
@@ -96,6 +102,7 @@ import { HomeIcon, UserCircleIcon, GlobeAltIcon, Users01Icon, CoinsHandIcon, Spe
             :title="$t('public.sidebar.withdrawal_request')"
             :href="route('transaction.withdrawal_request')"
             :active="route().current('transaction.withdrawal_request')"
+            :pending-counts="pendingWithdrawalCount"
         >
             <template #icon>
                 <CreditCardDownloadIcon

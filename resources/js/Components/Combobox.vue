@@ -163,6 +163,19 @@ function clearSelection() {
     emit("update:modelValue", props.multiple ? [] : null);
     inputRef.value?.$el?.focus();
 }
+
+const dropdownWidthClass = computed(() => {
+    if (props.isPhoneCode) {
+        if (window.innerWidth < 400) {
+            return 'w-auto max-w-[315px]';
+        } else {
+            return 'w-auto max-w-[350px]';
+        }
+    } else {
+        return 'w-full';
+    }
+});
+
 </script>
 
 <template>
@@ -243,7 +256,8 @@ function clearSelection() {
         </ComboboxButton>
 
         <TransitionRoot
-            class="absolute z-50 mt-1 max-h-60 w-auto overflow-auto rounded-lg bg-gray-900 border border-gray-600 ring-1 ring-opacity-5 ring-gray-600 py-1 text-base shadow-md focus:outline-none p-2"
+            class="absolute z-50 mt-1 max-h-60 overflow-auto rounded-lg bg-gray-900 border border-gray-600 ring-1 ring-opacity-5 ring-gray-600 py-1 text-base shadow-md focus:outline-none p-2"
+            :class="[dropdownWidthClass]"
             leave="transition ease-in duration-100"
             leaveFrom="opacity-100"
             leaveTo="opacity-0"

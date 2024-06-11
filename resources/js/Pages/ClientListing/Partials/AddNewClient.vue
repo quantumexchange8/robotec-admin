@@ -38,7 +38,7 @@ const closeModal = () => {
 };
 
 // Watch for changes in the form fields
-watch(() => form.data(), () => {
+watch(() => form.data().upline, () => {
     // Check if all form fields are filled
     isFormValid.value = Object.values(form.data()).every(value => value !== '');
 });

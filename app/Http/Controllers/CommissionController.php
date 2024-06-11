@@ -73,7 +73,7 @@ class CommissionController extends Controller
     
             // Update the transaction's status and new_wallet_amount
             $transaction->update([
-                'status' => 'Success',
+                'status' => 'Approved',
                 'old_wallet_amount' => $commissionWallet->balance,
                 'new_wallet_amount' => $commissionWallet->balance + $transaction->amount,
                 'approved_at' => Carbon::now(),

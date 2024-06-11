@@ -20,6 +20,7 @@ const props = defineProps({
         type: Boolean,
         default: false,
     },
+    pendingCounts: Number
 })
 
 const Tag = !props.external ? Link : 'a'
@@ -42,12 +43,17 @@ const Tag = !props.external ? Link : 'a'
             <EmptyCircleIcon aria-hidden="true" class="flex-shrink-0 w-6 h-6 text-gray-300" />
         </slot>
 
-        <span
-            class="text-base font-medium text-white"
-            v-show="sidebarState.isOpen"
-        >
-            {{ title }}
-        </span>
+        <div class="flex items-center gap-2">
+            <span
+                class="text-base font-medium"
+                v-show="sidebarState.isOpen || sidebarState.isHovered"
+            >
+                {{ title }}
+            </span>
+            <div v-if="pendingCounts > 0" class="h-5 p-2 bg-error-500 text-white rounded-full flex-col justify-center items-center inline-flex">
+                <div class="text-right text-white text-xs font-medium font-sans leading-[18px]">{{ pendingCounts }}</div>
+            </div>
+        </div>
     </component>
 
     <button
@@ -65,12 +71,16 @@ const Tag = !props.external ? Link : 'a'
             <EmptyCircleIcon aria-hidden="true" class="flex-shrink-0 w-6 h-6 text-gray-300" />
         </slot>
 
-        <span
-            class="text-base font-medium text-white"
-            v-show="sidebarState.isOpen"
-        >
-            {{ title }}
-        </span>
-        <slot name="arrow" />
+        <div class="flex items-center gap-2">
+            <span
+                class="text-base font-medium"
+                v-show="sidebarState.isOpen || sidebarState.isHovered"
+            >
+                {{ title }}
+            </span>
+            <div v-if="pendingCounts > 0" class="h-5 p-2 bg-error-500 text-white rounded-full flex-col justify-center items-center inline-flex">
+                <div class="text-right text-white text-xs font-medium font-sans leading-[18px]">{{ pendingCounts }}</div>
+            </div>
+        </div>
     </button>
 </template>

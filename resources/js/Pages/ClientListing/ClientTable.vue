@@ -36,17 +36,20 @@ const form = useForm({
 });
 
 const members = ref({ data: [] });
+const totalClient = ref(0);
 const currentPage = ref(1);
 const isLoading = ref(props.isLoading);
-const emit = defineEmits(['update:loading', 'update:refresh', 'update:export']);
+const emit = defineEmits(['update:loading', 'update:refresh', 'update:export', 'update:totalClient']);
 const { formatAmount } = transactionFormat();
 const clientDetailModal = ref(false);
 const editModal = ref(false);
 const deleteModal = ref(false);
 const clientDetails = ref(null);
 
-const sortDescending = ref('desc');
-const types = ref('');
+watchEffect(() => {
+    // Emit the totalClient value whenever it changes
+    emit('update:totalClient', totalClient.value);
+});
 
 watch(
     [() => props.search, () => props.sortField, () => props.sortDirection, () => props.upline, () => props.purchasedEA, () => props.fundedPAMM],
@@ -85,7 +88,8 @@ const getResults = async (page = 1, search = props.search, sortField = props.sor
         }
 
         const response = await axios.get(url);
-        members.value = response.data;
+        members.value = response.data.clients;
+        totalClient.value = response.data.totalClient;
         // console.log(members);
     } catch (error) {
         console.error(error);
@@ -274,7 +278,7 @@ const updateClient = (clientDetails) => {
             </div>
             <div class="grid grid-cols-2 items-center">
                 <div class="col-span-1 text-gray-300 text-xs font-normal font-sans leading-[18px]">Upline</div>
-                <div class="col-span-1 flex items-center">
+                <div v-if="clientDetails.upline" class="col-span-1 flex items-center">
                     <img class="w-5 h-5 rounded-full mr-2" :src="clientDetails.upline.profile_photo || 'https://via.placeholder.com/32x32'" alt="Client upline profile picture"/>
                     <div class="text-white text-xs font-normal font-sans leading-tight">{{ clientDetails.upline.name }}</div>
                 </div>
@@ -284,11 +288,11 @@ const updateClient = (clientDetails) => {
 
             <div class="grid grid-cols-2 items-center mb-2">
                 <div class="col-span-1 text-gray-300 text-xs font-normal font-sans leading-[18px]">Total Deposit</div>
-                <div class="col-span-1 text-white text-xs font-normal font-sans leading-tight">{{ clientDetails.email }}</div>
+                <div class="col-span-1 text-white text-xs font-normal font-sans leading-tight">{{ clientDetails.totalDeposit }}</div>
             </div>
             <div class="grid grid-cols-2 items-center mb-2">
                 <div class="col-span-1 text-gray-300 text-xs font-normal font-sans leading-[18px]">Total Withdrawal</div>
-                <div class="col-span-1 text-white text-xs font-normal font-sans leading-tight">{{ clientDetails.phone }}</div>
+                <div class="col-span-1 text-white text-xs font-normal font-sans leading-tight">{{ clientDetails.totalWithdrawal }}</div>
             </div>
             <div class="grid grid-cols-2 items-center mb-2">
                 <div class="col-span-1 text-gray-300 text-xs font-normal font-sans leading-[18px]">Referee</div>
@@ -296,11 +300,11 @@ const updateClient = (clientDetails) => {
             </div>
             <div class="grid grid-cols-2 items-center mb-2">
                 <div class="col-span-1 text-gray-300 text-xs font-normal font-sans leading-[18px]">Total Commission</div>
-                <div class="col-span-1 text-white text-xs font-normal font-sans leading-tight">{{ clientDetails.phone }}</div>
+                <div class="col-span-1 text-white text-xs font-normal font-sans leading-tight">{{ clientDetails.totalCommission }}</div>
             </div>
             <div class="grid grid-cols-2 items-center">
                 <div class="col-span-1 text-gray-300 text-xs font-normal font-sans leading-[18px]">PAMM Fund In Amount</div>
-                <div class="col-span-1 text-white text-xs font-normal font-sans leading-tight">{{ clientDetails.email }}</div>
+                <div class="col-span-1 text-white text-xs font-normal font-sans leading-tight">{{ clientDetails.totalFundedPAMM }}</div>
             </div>
 
             <div class="w-full h-px bg-gray-700 my-4"></div>

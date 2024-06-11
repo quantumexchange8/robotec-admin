@@ -2,8 +2,9 @@
 
 namespace App\Http\Middleware;
 
-use Illuminate\Http\Request;
 use Inertia\Middleware;
+use Illuminate\Http\Request;
+use App\Services\SidebarService;
 
 class HandleInertiaRequests extends Middleware
 {
@@ -29,6 +30,8 @@ class HandleInertiaRequests extends Middleware
      */
     public function share(Request $request): array
     {
+        $sidebarService = new SidebarService();
+
         return [
             ...parent::share($request),
             'auth' => [
@@ -40,6 +43,8 @@ class HandleInertiaRequests extends Middleware
             'success' => session('success'),
             'warning' => session('warning'),
             'locale' => session('locale') ? session('locale') : app()->getLocale(),
+            'pendingCommissionCount' => $sidebarService->getPendingCommissionCount(),
+            'pendingWithdrawalCount' => $sidebarService->getPendingWithdrawalCount(),
         ];
     }
 }

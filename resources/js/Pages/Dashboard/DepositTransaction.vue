@@ -2,16 +2,11 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head } from '@inertiajs/vue3';
 import { ref, defineProps, watchEffect } from "vue";
-import { usePage, useForm } from "@inertiajs/vue3";
-import InputError from '@/Components/InputError.vue';
-import Label from '@/Components/Label.vue';
-import Button from '@/Components/Button.vue';
 import Input from '@/Components/Input.vue';
 import InputIconWrapper from '@/Components/InputIconWrapper.vue';
 import { SearchIcon } from '@/Components/Icons/outline';
-import Modal from "@/Components/Modal.vue";
 import VueTailwindDatepicker from "vue-tailwind-datepicker";
-import WithdrawalTable from "@/Pages/WithdrawalRequest/Partials/WithdrawalTable.vue"
+import DepositTable from "@/Pages/Dashboard/Partials/DepositTable.vue"
 
 const formatter = ref({
     date: 'YYYY-MM-DD',
@@ -24,13 +19,13 @@ const date = ref('');
 </script>
 
 <template>
-    <Head title="Withdrawal Request" />
+    <Head title="Deposit Transactions" />
     <AuthenticatedLayout>
         <template #header>
-            <h2 class="font-semibold text-xxl text-white leading-loose">Withdrawal Request</h2>
+            <h2 class="font-semibold text-xl text-white leading-loose">Deposit Transactions</h2>
         </template>
 
-        <div class="rounded-md shadow-md pb-3 sticky top-2 bg-gray-900 z-[5]">
+        <div class="rounded-md shadow-md pb- sticky top-2 bg-gray-900 z-[5]">
             <div class="w-full">
                 <div class="mb-3">
                     <div>
@@ -56,10 +51,11 @@ const date = ref('');
         </div>
 
         <div class="p-3">
-            <WithdrawalTable 
+            <DepositTable 
                 :search="search" 
                 :date="date" 
             />
         </div>
     </AuthenticatedLayout>
 </template>
+e

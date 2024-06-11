@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Inertia\Inertia;
 use App\Models\Wallet;
+use App\Models\Transaction;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -35,6 +36,12 @@ class MemberController extends Controller
     
         // Start building the query
         $query = User::where('role', 'user');
+        $query = $query->selectRaw('*, 
+                    (SELECT SUM(transaction_amount) 
+                    FROM transactions 
+                    WHERE user_id = users.id 
+                    AND transaction_type = "commission" 
+                    AND status = "Approved") AS totalCommission');
     
         // Apply search filter if provided
         if ($search) {
@@ -50,18 +57,46 @@ class MemberController extends Controller
         }
     
         if ($purchasedEA) {
-            // Assuming 'purchasedEA' is a boolean column
-            $query->where('purchasedEA', $purchasedEA);
+            $query->where(function ($q) use ($purchasedEA) {
+                if ($purchasedEA === 'yes') {
+                    $q->whereHas('transactions', function ($q) {
+                        $q->where('transaction_type', 'robotec_purchase')
+                            ->where('status', 'Success');
+                    });
+                } elseif ($purchasedEA === 'no') {
+                    $q->whereDoesntHave('transactions', function ($q) {
+                        $q->where('transaction_type', 'robotec_purchase')
+                            ->where('status', 'Success');
+                    });
+                }
+            });
         }
-    
+        
         if ($fundedPAMM) {
-            // Assuming 'fundedPAMM' is a boolean column
-            $query->where('fundedPAMM', $fundedPAMM);
+            $query->where(function ($q) use ($fundedPAMM) {
+                if ($fundedPAMM === 'yes') {
+                    $q->whereHas('transactions', function ($q) {
+                        $q->where('transaction_type', 'pamm_funding')
+                            ->where('status', 'Success');
+                    });
+                } elseif ($fundedPAMM === 'no') {
+                    $q->whereDoesntHave('transactions', function ($q) {
+                        $q->where('transaction_type', 'pamm_funding')
+                            ->where('status', 'Success');
+                    });
+                }
+            });
         }
-    
+            
         // Apply sorting if provided
         if ($sortField && $sortDirection) {
-            $query->orderBy($sortField, $sortDirection);
+            if ($sortField === 'commission') {
+                // Order by totalCommission
+                $query->orderBy('totalCommission', $sortDirection);
+            } else {
+                // Order by the specified field
+                $query->orderBy($sortField, $sortDirection);
+            }
         } elseif ($sortDirection) {
             if ($sortDirection === 'desc') {
                 $query->latest();
@@ -70,27 +105,52 @@ class MemberController extends Controller
             }
         }
     
-        // Paginate the results
+        // Paginate the initial query
         $clients = $query->paginate(10);
-    
-        // Add profile_photo to each user
-        $clients->each(function ($user) {
+
+        // Transform each paginated user
+        $clients->getCollection()->transform(function ($user) {
             $user->profile_photo = $user->getFirstMediaUrl('profile_photo');
             $user->upline = $user->upline()->first();
-            // Check if upline exists and set profile_photo if available
             if ($user->upline) {
                 $user->upline->profile_photo = $user->upline->getFirstMediaUrl('profile_photo');
             }
-
             $user->cash_wallet = $user->wallets()->where('type', 'cash_wallet')->first();
             $user->referee = $this->countDescendants($user);
-            
-            // Unset the 'children' attribute
-            unset($user->children);
+            unset($user->children); // Unset the 'children' attribute
+
+            // Calculate total deposit
+            $user->totalDeposit = Transaction::where('user_id', $user->id)
+                ->where('transaction_type', 'deposit')
+                ->where('status', 'Success')
+                ->sum('transaction_amount');
+
+            // Calculate total withdrawal
+            $user->totalWithdrawal = Transaction::where('user_id', $user->id)
+                ->where('transaction_type', 'withdrawal')
+                ->where('status', 'Approved')
+                ->sum('transaction_amount');
+
+            // // Calculate total commission
+            // $user->totalCommission = Transaction::where('to_wallet_id', $user->wallets()->where('type', 'commission_wallet')->value('id'))
+            //     ->where('transaction_type', 'commission')
+            //     ->where('status', 'Approved')
+            //     ->sum('transaction_amount');
+
+            // Calculate total funded PAMM
+            $user->totalFundedPAMM = Transaction::where('user_id', $user->id)
+                ->where('transaction_type', 'pamm_funding')
+                ->where('status', 'Success')
+                ->sum('transaction_amount');
+
+            return $user;
         });
-    
+
         // Return paginated results as JSON
-        return response()->json($clients);
+        return response()->json([
+            'clients' => $clients,
+            'totalClient' => $clients->total(),
+        ]);
     }
 
     protected function countDescendants($user)

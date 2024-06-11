@@ -24,7 +24,7 @@ class ApproveWithdrawalRequest extends FormRequest
     {
         return [
             'wallet_address' => ['required','string','max:255',Rule::exists('wallets', 'wallet_address'),],
-            'transaction_number' => ['required','string','max:255',Rule::exists('transactions', 'transaction_number'),],
+            'txn_hash' => ['required','string','max:255',Rule::exists('transactions', 'txn_hash'),],
             'remarks' => ['nullable', 'string', 'max:255'],
         ];
     }
@@ -33,7 +33,7 @@ class ApproveWithdrawalRequest extends FormRequest
     {
         return [
             'wallet_address' => 'Wallet Address',
-            'transaction_number' => 'Transaction Number',
+            'txn_hash' => 'Transaction Hash',
             'remarks' => 'Remarks',
         ];
     }

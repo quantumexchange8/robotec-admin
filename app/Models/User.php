@@ -112,4 +112,10 @@ class User extends Authenticatable implements HasMedia
     {
         return $this->hasOne(SettingRank::class, 'id', 'setting_rank_id');
     }
+
+    public function transactions(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(Transaction::class, 'user_id', 'id');
+    }
+
 }

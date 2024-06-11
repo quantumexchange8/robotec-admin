@@ -21,7 +21,7 @@ const props = defineProps({
 const form = useForm({
     id: '',
     wallet_address: '',
-    transaction_number: '',
+    txn_hash: '',
     remarks: '',
 });
 
@@ -189,12 +189,16 @@ const rejectRequest = (requestDetails) => {
         <div class="w-full px-4 py-3 bg-gray-800 rounded-xl flex-col justify-start items-start inline-flex">
             <table class="w-full text-sm text-left text-gray-500">
                 <tbody>
-                    <tr v-for="request in requests.data" :key="request.id" class="bg-gray-800 text-xs font-normal border-b border-gray-700" @click="openModal(request)">
+                    <tr v-for="request in requests.data" :key="request.id" class="py-2 bg-gray-800 text-xs font-normal border-b border-gray-700" @click="openModal(request)">
                         <td>
-                            <div class="text-gray-300 text-xs font-normal font-sans leading-[24px]">{{ formatDateTime(request.created_at) }}</div>
-                            <div class="text-white text-sm font-medium font-sans leading-tight">{{ request.user.name }}</div>
+                            <div class="flex justify-between items-center gap-3">
+                                <div>
+                                    <div class="text-gray-300 text-xs font-normal font-sans leading-[24px]">{{ formatDateTime(request.created_at) }}</div>
+                                    <div class="text-white text-sm font-medium font-sans leading-tight">{{ request.user.name }}</div>
+                                </div>
+                                <div class="text-white text-right text-md font-medium font-sans leading-normal">$ {{ request.transaction_amount }}</div>
+                            </div>
                         </td>
-                        <td class="text-white flex items-center justify-center">$ {{ request.transaction_amount }}</td>
                     </tr>
                 </tbody>
             </table>
@@ -267,17 +271,17 @@ const rejectRequest = (requestDetails) => {
                 </div>
 
                 <div>
-                    <Label for="transaction_number" value="TXID" class="text-gray-300 mb-1.5" :invalid="form.errors.transaction_number" important />
+                    <Label for="txn_hash" value="TXID" class="text-gray-300 mb-1.5" :invalid="form.errors.txn_hash" important />
 
                     <Input
-                        id="transaction_number"
+                        id="txn_hash"
                         class="block w-full mb-5 bg-transparent text-white"
-                        :invalid="form.errors.transaction_number"
-                        v-model="form.transaction_number"
+                        :invalid="form.errors.txn_hash"
+                        v-model="form.txn_hash"
                         required
                     />
 
-                    <InputError class="mt-2" :message="form.errors.transaction_number" />
+                    <InputError class="mt-2" :message="form.errors.txn_hash" />
                 </div>
 
                 <div>
