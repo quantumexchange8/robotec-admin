@@ -31,6 +31,13 @@ const totalAmount = ref(0);
 const currentPage = ref(1);
 const commissionModal = ref(false);
 const commissionDetails = ref(null);
+const totalCommission = ref();
+const emit = defineEmits(['update:totalCommissionRequest']);
+
+watchEffect(() => {
+    // Emit the totalCommissionRequest value whenever it changes
+    emit('update:totalCommissionRequest', totalCommission.value);
+});
 
 watch(
     [() => props.search, () => props.date, () => props.type],
@@ -57,6 +64,7 @@ const getResults = async (page = 1, search = '', date = '', type = '') => {
 
         const response = await axios.get(url);
         commissions.value = response.data.transactions;
+        totalCommission.value = response.data.totalCommission;
     } catch (error) {
         console.error(error);
     }
@@ -212,7 +220,7 @@ const approveCommission = () => {
                 </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="commission in commissions.data" :key="commission.id" class="bg-gray-800 text-xs font-normal border-b border-gray-700" @click="openModal(commission)">
+                    <tr v-for="commission in commissions.data" :key="commission.id" class="bg-gray-800 text-xs font-normal border-b border-gray-700" @click.prevent="openModal(commission)">
                         <td class="py-2">
                             <Checkbox
                                 :checked="isAllSelected || isItemSelected(commission.id, commission.transaction_amount)"
@@ -270,8 +278,8 @@ const approveCommission = () => {
                 </div>
 
                 <div class="items-center pt-8 flex gap-3">
-                    <Button variant="outline" class="w-full" @click="closeModal">Close</Button>
-                    <Button variant="success" class="w-full" :disabled="form.processing" @click="approveCommission">Approve</Button>
+                    <Button variant="outline" class="w-full" @click.prevent="closeModal">Close</Button>
+                    <Button variant="success" class="w-full" :disabled="form.processing" @click.prevent="approveCommission">Approve</Button>
                 </div>
             </form>
         </div>

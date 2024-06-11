@@ -15,11 +15,18 @@ import { Tab, TabGroup, TabList, TabPanel, TabPanels } from "@headlessui/vue";
 import PendingRequest from "@/Pages/CommissionPayout/PendingRequest.vue";
 import CommissionHistory from "@/Pages/CommissionPayout/CommissionHistory.vue"
 
+const props = defineProps({
+    totalCommissionRequest: [String, Number],
+    totalCommissionHistory: [String, Number],
+});
+
 const formatter = ref({
     date: 'YYYY-MM-DD',
     month: 'MM'
 });
 
+const totalCommissionRequest = ref(props.totalCommissionRequest);
+const totalCommissionHistory = ref(props.totalCommissionHistory);
 const search = ref('');
 const date = ref('');
 const type = ref('Pending');
@@ -55,7 +62,7 @@ const updateCommissionType = (commission_type) => {
                                         : 'border-b border-gray-700',
                                 ]"
                             >
-                                Pending Request
+                                Pending Request ({{ totalCommissionRequest ?? 0 }})
                             </button>
                         </Tab>
                         <Tab
@@ -73,7 +80,7 @@ const updateCommissionType = (commission_type) => {
                                         : 'border-b border-gray-700',
                                 ]"
                             >
-                                History
+                                History ({{ totalCommissionHistory ?? 0 }})
                             </button>
                         </Tab>
                     </TabList>
@@ -104,6 +111,7 @@ const updateCommissionType = (commission_type) => {
                                 :search="search" 
                                 :date="date" 
                                 :type="type" 
+                                @update:totalCommissionRequest="totalCommissionRequest = $event"
                             />
                         </TabPanel>
                         <TabPanel>
@@ -111,6 +119,7 @@ const updateCommissionType = (commission_type) => {
                                 :search="search" 
                                 :date="date" 
                                 :type="type" 
+                                @update:totalCommissionHistory="totalCommissionHistory = $event"
                             />
                         </TabPanel>
                     </TabPanels>

@@ -180,8 +180,8 @@ class TransactionController extends Controller
             throw ValidationException::withMessages(['wallet_address' => 'The wallet address is not for this withdrawal request']);
         }
 
-        if ($request->txn_hash !== $withdrawalRequest->txn_hash) {
-            throw ValidationException::withMessages(['txn_hash' => 'The transaction hash is not for this withdrawal request']);
+        if ($request->transaction_number !== $withdrawalRequest->transaction_number) {
+            throw ValidationException::withMessages(['transaction_number' => 'The transaction hash is not for this withdrawal request']);
         }
 
         // Check if the transaction amount exceeds the wallet balance
@@ -243,9 +243,13 @@ class TransactionController extends Controller
         $query = Transaction::query()
             ->with('user','from_wallet','to_wallet')
             ->where('transaction_type', $request->transaction_type)
-            ->whereNot('status', 'Pending');
-    
-        
+            ->where('status', '!=', 'Pending');
+
+        // If 'status' is provided in the request, add it to the query
+        if ($request->has('status')) {
+            $query->where('status', $request->status);
+        }
+
         // Apply search filter if provided
         $query->when($request->search, function ($query) use ($request) {
             $query->where(function($q) use ($request) {
@@ -279,7 +283,8 @@ class TransactionController extends Controller
         // Return the paginated results along with total amount
         return response()->json([
             'transactions' => $transactions,
-            'totalAmount' => $totalAmount
+            'totalAmount' => $totalAmount,
+            'totalResult' => $transactions->total(),
         ]);
         
     }

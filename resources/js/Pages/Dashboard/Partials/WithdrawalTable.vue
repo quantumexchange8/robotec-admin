@@ -16,6 +16,7 @@ import Tooltip from "@/Components/Tooltip.vue";
 const props = defineProps({
     search: String,
     date: String,
+    status: String,
 });
 
 const { formatDateTime, formatAmount } = transactionFormat();
@@ -23,10 +24,17 @@ const { formatDateTime, formatAmount } = transactionFormat();
 const transactions = ref({ data: [] });
 const transaction_type = 'withdrawal'
 const totalAmount = ref(0);
+const totalResult = ref();
 const currentPage = ref(1);
 const transactionModal = ref(false);
 const transactionDetails = ref(null);
 const tooltipContent = ref('copy');
+const emit = defineEmits(['update:totalResult']);
+
+watchEffect(() => {
+    // Emit the totalResult value whenever it changes
+    emit('update:totalResult', totalResult.value);
+});
 
 function copyTestingCode(walletAddress) {
     const textField = document.createElement('textarea');
@@ -53,15 +61,15 @@ function copyTestingCode(walletAddress) {
 }
 
 watch(
-    [() => props.search, () => props.date],
-    debounce(([searchValue, dateValue]) => {
-        getResults(currentPage.value, searchValue, dateValue);
+    [() => props.search, () => props.date, () => props.status],
+    debounce(([searchValue, dateValue, statusValue]) => {
+        getResults(currentPage.value, searchValue, dateValue, statusValue);
     }, 300)
 );
 
-const getResults = async (page = 1, search = '', date = '') => {
+const getResults = async (page = 1, search = '', date = '', status = '') => {
     try {
-        let url = `/transaction/transasction_data?page=${page}&transaction_type=${transaction_type}`;
+        let url = `/transaction/transasction_data?page=${page}&transaction_type=${transaction_type}&status=${status}`;
 
         if (search) {
             url += `&search=${search}`;
@@ -74,17 +82,18 @@ const getResults = async (page = 1, search = '', date = '') => {
         const response = await axios.get(url);
         transactions.value = response.data.transactions;
         totalAmount.value = response.data.totalAmount;
+        totalResult.value = response.data.totalResult;
     } catch (error) {
         console.error(error);
     }
 };
 
-getResults(1, props.search, props.date);
+getResults(1, props.search, props.date, props.status);
 
 const handlePageChange = (newPage) => {
     if (newPage >= 1) {
         currentPage.value = newPage;
-        getResults(currentPage.value, props.search, props.date);
+        getResults(currentPage.value, props.search, props.date, props.status);
     }
 };
 

@@ -21,7 +21,7 @@ const props = defineProps({
 const form = useForm({
     id: '',
     wallet_address: '',
-    txn_hash: '',
+    transaction_number: '',
     remarks: '',
 });
 
@@ -271,17 +271,17 @@ const rejectRequest = (requestDetails) => {
                 </div>
 
                 <div>
-                    <Label for="txn_hash" value="TXID" class="text-gray-300 mb-1.5" :invalid="form.errors.txn_hash" important />
+                    <Label for="transaction_number" value="TXID" class="text-gray-300 mb-1.5" :invalid="form.errors.transaction_number" important />
 
                     <Input
-                        id="txn_hash"
+                        id="transaction_number"
                         class="block w-full mb-5 bg-transparent text-white"
-                        :invalid="form.errors.txn_hash"
-                        v-model="form.txn_hash"
+                        :invalid="form.errors.transaction_number"
+                        v-model="form.transaction_number"
                         required
                     />
 
-                    <InputError class="mt-2" :message="form.errors.txn_hash" />
+                    <InputError class="mt-2" :message="form.errors.transaction_number" />
                 </div>
 
                 <div>

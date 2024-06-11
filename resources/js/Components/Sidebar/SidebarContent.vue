@@ -20,7 +20,7 @@ const pendingWithdrawalCount = ref(page.props.pendingWithdrawalCount);
         class="relative flex flex-col flex-1 max-h-full gap-4 px-3"
     >
         <SidebarLink
-            :title="$t('public.sidebar.dashboard')"
+            :title="$t('public.dashboard')"
             :href="route('dashboard.index')"
             :active="route().current('dashboard.*')"
         >
@@ -33,7 +33,7 @@ const pendingWithdrawalCount = ref(page.props.pendingWithdrawalCount);
         </SidebarLink>
 
         <SidebarLink
-            :title="$t('public.sidebar.network')"
+            :title="$t('public.network')"
             :href="route('network.client_network')"
             :active="route().current('network.client_network')"
         >
@@ -46,7 +46,7 @@ const pendingWithdrawalCount = ref(page.props.pendingWithdrawalCount);
         </SidebarLink>
 
         <SidebarLink
-            :title="$t('public.sidebar.client_listing')"
+            :title="$t('public.client_listing')"
             :href="route('member.client_listing')"
             :active="route().current('member.client_listing')"
         >
@@ -59,7 +59,7 @@ const pendingWithdrawalCount = ref(page.props.pendingWithdrawalCount);
         </SidebarLink>
 
         <SidebarLink
-            :title="$t('public.sidebar.commission_payout')"
+            :title="$t('public.commission_payout')"
             :href="route('commission.commission_payout')"
             :active="route().current('commission.commission_payout')"
             :pending-counts="pendingCommissionCount"
@@ -73,7 +73,7 @@ const pendingWithdrawalCount = ref(page.props.pendingWithdrawalCount);
         </SidebarLink>
 
         <SidebarLink
-            :title="$t('public.sidebar.pamm_return')"
+            :title="$t('public.pamm_return')"
             :href="route('pamm.pamm_return')"
             :active="route().current('pamm.pamm_return')"
         >
@@ -86,7 +86,7 @@ const pendingWithdrawalCount = ref(page.props.pendingWithdrawalCount);
         </SidebarLink>
 
         <SidebarLink
-            :title="$t('public.sidebar.wallet_adjustment')"
+            :title="$t('public.wallet_adjustment')"
             :href="route('transaction.wallet_adjustment')"
             :active="route().current('transaction.wallet_adjustment')"
         >
@@ -99,7 +99,7 @@ const pendingWithdrawalCount = ref(page.props.pendingWithdrawalCount);
         </SidebarLink>
 
         <SidebarLink
-            :title="$t('public.sidebar.withdrawal_request')"
+            :title="$t('public.withdrawal_request')"
             :href="route('transaction.withdrawal_request')"
             :active="route().current('transaction.withdrawal_request')"
             :pending-counts="pendingWithdrawalCount"
@@ -113,7 +113,7 @@ const pendingWithdrawalCount = ref(page.props.pendingWithdrawalCount);
         </SidebarLink>
 
         <SidebarLink
-            :title="$t('public.sidebar.my_profile')"
+            :title="$t('public.my_profile')"
             :href="route('profile.edit')"
             :active="route().current('profile.edit')"
         >

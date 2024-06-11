@@ -149,7 +149,7 @@ watchEffect(() => {
             </div>
         </div>
         <div class="pb-3 flex items-center justify-between">
-            <div class="text-white">{{totalClient}} results</div>
+            <div class="text-white">{{ totalClient }} results</div>
             <AddNewClient />
         </div>
 

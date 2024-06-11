@@ -24,6 +24,13 @@ const totalAmount = ref(0);
 const currentPage = ref(1);
 const commissionModal = ref(false);
 const commissionDetails = ref(null);
+const totalCommission = ref();
+const emit = defineEmits(['update:totalCommissionHistory']);
+
+watchEffect(() => {
+    // Emit the totalCommissionHistory value whenever it changes
+    emit('update:totalCommissionHistory', totalCommission.value);
+});
 
 watch(
     [() => props.search, () => props.date, () => props.type],
@@ -51,6 +58,7 @@ const getResults = async (page = 1, search = '', date = '', type = '') => {
         const response = await axios.get(url);
         commissions.value = response.data.transactions;
         totalAmount.value = response.data.totalAmount;
+        totalCommission.value = response.data.totalCommission;
     } catch (error) {
         console.error(error);
     }

@@ -33,7 +33,13 @@ class DashboardController extends Controller
 
     public function withdrawal_transactions()
     {
-        return Inertia::render('Dashboard/WithdrawalTransaction');
+        $totalApprovedResult = Transaction::where('transaction_type', 'withdrawal')->where('status', 'Approved')->count();
+        $totalRejectedResult = Transaction::where('transaction_type', 'withdrawal')->where('status', 'Rejected')->count();
+
+        return Inertia::render('Dashboard/WithdrawalTransaction', [
+            'totalApprovedResult' => $totalApprovedResult,
+            'totalRejectedResult' => $totalRejectedResult,
+        ]);
     }
 
     public function robotec_purchase()

@@ -12,7 +12,13 @@ class CommissionController extends Controller
 {
     public function commission_payout()
     {
-        return Inertia::render('CommissionPayout/CommissionPayout');
+        $totalCommissionRequest = Transaction::where('transaction_type', 'commission')->where('status', 'Pending')->count();
+        $totalCommissionHistory = Transaction::where('transaction_type', 'commission')->where('status', '!=', 'Pending')->count();
+
+        return Inertia::render('CommissionPayout/CommissionPayout', [
+            'totalCommissionRequest' => $totalCommissionRequest,
+            'totalCommissionHistory' => $totalCommissionHistory,
+        ]);
     }
 
     public function commission_request_data(Request $request)
@@ -59,7 +65,8 @@ class CommissionController extends Controller
     
         return response()->json([
             'transactions' => $transactions,
-            'totalAmount' => $totalAmount
+            'totalAmount' => $totalAmount,
+            'totalCommission' => $transactions->total(),
         ]);
     }
 
