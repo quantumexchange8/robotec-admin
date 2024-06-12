@@ -18,7 +18,7 @@ class UserSeeder extends Seeder
             'password' =>  Hash::make('testtest'),
             'remember_token' => Str::random(10),
             'dial_code' => '+60',
-            'phone' => '123456789',
+            'phone' => '+60123456789',
             'referral_code' => 'RBTx666666',
             'role' => 'admin',
         ]);
