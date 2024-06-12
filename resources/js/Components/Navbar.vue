@@ -23,7 +23,6 @@ onUnmounted(() => {
 })
 
 const currentLocale = ref(usePage().props.locale);
-console.log(currentLocale)
 const localeTextMap = {
     en: 'EN',
     cn: '简体中文',
