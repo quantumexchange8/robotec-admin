@@ -16,7 +16,13 @@ return new class extends Migration
             $table->unsignedBigInteger('user_id')->nullable();
             $table->unsignedInteger('meta_login')->unique();
             $table->unsignedBigInteger('account_type')->default(1);
-            $table->double('balance')->nullable();
+            $table->integer('margin_leverage')->nullable();
+            $table->integer('currency_digits')->nullable();
+            $table->decimal('balance', 13)->nullable();
+            $table->decimal('credit', 13)->nullable();
+            $table->decimal('bonus', 13)->nullable();
+            $table->decimal('floating', 13)->nullable();
+            $table->decimal('equity', 13)->nullable();
             $table->softDeletes();
             $table->timestamps();
 

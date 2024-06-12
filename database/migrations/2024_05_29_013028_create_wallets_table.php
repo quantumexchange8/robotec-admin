@@ -17,7 +17,6 @@ return new class extends Migration
             $table->string('name');
             $table->string('type');
             $table->decimal('balance', 13, 2)->default(0);
-            $table->string('wallet_address')->nullable();
             $table->softDeletes();
             $table->timestamps();
         });
