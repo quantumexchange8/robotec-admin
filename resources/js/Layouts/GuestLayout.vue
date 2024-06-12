@@ -7,7 +7,7 @@ import Button from '@/Components/Button.vue';
 import Label from '@/Components/Label.vue';
 import {Head, usePage} from '@inertiajs/vue3'
 import ToastList from "@/Components/ToastList.vue";
-import {ref} from "vue";
+import { ref, computed } from "vue";
 import {Inertia} from "@inertiajs/inertia";
 import Alert from "@/Components/Alert.vue";
 import {loadLanguageAsync} from "laravel-vue-i18n";
@@ -24,6 +24,15 @@ const changeLanguage = async (langVal) => {
         console.error('Error changing locale:', error);
     }
 };
+const localeTextMap = {
+    en: 'EN',
+    cn: '简体中文',
+    bm: 'Bahasa Melayu',
+};
+
+const currentLocaleText = computed(() => {
+    return localeTextMap[currentLocale.value];
+});
 
 const page = usePage();
 const showAlert = ref(false);
@@ -80,29 +89,9 @@ let removeFinishEventListener = Inertia.on("finish", () => {
                             中文
                         </div>
                     </DropdownLink>
-                    <DropdownLink @click="changeLanguage('kr')" class="bg-gray-900 hover:bg-primary-900 focus:bg-primary-900">
+                    <DropdownLink @click="changeLanguage('bm')" class="bg-gray-900 hover:bg-primary-900 focus:bg-primary-900">
                         <div class="inline-flex items-center gap-2 text-white">
-                            한국어
-                        </div>
-                    </DropdownLink>
-                    <DropdownLink @click="changeLanguage('vn')" class="bg-gray-900 hover:bg-primary-900 focus:bg-primary-900">
-                        <div class="inline-flex items-center gap-2 text-white">
-                            tiếng Việt
-                        </div>
-                    </DropdownLink>
-                    <DropdownLink @click="changeLanguage('ja')" class="bg-gray-900 hover:bg-primary-900 focus:bg-primary-900">
-                        <div class="inline-flex items-center gap-2 text-white">
-                            日本語
-                        </div>
-                    </DropdownLink>
-                    <DropdownLink @click="changeLanguage('th')" class="bg-gray-900 hover:bg-primary-900 focus:bg-primary-900">
-                        <div class="inline-flex items-center gap-2 text-white">
-                            ไทย
-                        </div>
-                    </DropdownLink>
-                    <DropdownLink @click="changeLanguage('id')" class="bg-gray-900 hover:bg-primary-900 focus:bg-primary-900">
-                        <div class="inline-flex items-center gap-2 text-white">
-                            Bahasa Indonesia
+                            Bahasa Melayu
                         </div>
                     </DropdownLink>
                 </template>

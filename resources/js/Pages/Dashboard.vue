@@ -36,15 +36,15 @@ const handleRedirectTo = (pending) => {
 </script>
 
 <template>
-    <Head title="Dashboard" />
+    <Head :title="$t('public.dashboard')" />
 
     <AuthenticatedLayout dashboard>
         <template #header>
-            <h2 class="font-semibold text-xl text-white leading-tight mb-3 px-4 py-2">Dashboard</h2>
+            <h2 class="font-semibold text-xl text-white leading-tight mb-3 px-4 py-2">{{ $t('public.dashboard') }}</h2>
         </template>
 
         <div class="mb-3 px-4">
-            <div class="text-gray-300 text-sm">Total Net Balance ($):</div>
+            <div class="text-gray-300 text-sm">{{ $t('public.total_net_balance') }} ($):</div>
             <div class="text-xl font-semibold text-white">0.00</div>
         </div>
 
@@ -57,7 +57,7 @@ const handleRedirectTo = (pending) => {
                     <ExpandIcon class="w-4 h-4 relative opacity-50 text-white" @click="handleRedirectTo('member')"/>
                 </div>
                 <div class="self-stretch justify-between items-center inline-flex">
-                    <div class="text-gray-100 text-xs font-medium font-sans leading-[18px]">Total Clients (pax)</div>
+                    <div class="text-gray-100 text-xs font-medium font-sans leading-[18px]">{{ $t('public.total_clients') }}</div>
                     <div class="text-white text-xl font-semibold font-sans leading-loose">{{ props.totalClient }}</div>
                 </div>
             </div>
@@ -69,7 +69,7 @@ const handleRedirectTo = (pending) => {
                     <ExpandIcon class="w-4 h-4 relative opacity-50 text-white" @click="handleRedirectTo('deposit')" />
                 </div>
                 <div class="self-stretch justify-between items-center inline-flex">
-                    <div class="text-gray-100 text-xs font-medium font-sans leading-[18px]">Total Deposit ($)</div>
+                    <div class="text-gray-100 text-xs font-medium font-sans leading-[18px]">{{ $t('public.total_deposit') }} ($)</div>
                     <div class="text-success-500 text-xl font-semibold font-sans leading-loose">{{ props.totalDeposit }}</div>
                 </div>
             </div>
@@ -81,7 +81,7 @@ const handleRedirectTo = (pending) => {
                     <ExpandIcon class="w-4 h-4 relative opacity-50 text-white" @click="handleRedirectTo('withdrawal')" />
                 </div>
                 <div class="self-stretch justify-between items-center inline-flex">
-                    <div class="text-gray-100 text-xs font-medium font-sans leading-[18px]">Total Withdrawal ($)</div>
+                    <div class="text-gray-100 text-xs font-medium font-sans leading-[18px]">{{ $t('public.total_withdrawal') }} ($)</div>
                     <div class="text-white text-xl font-semibold font-sans leading-loose">{{ props.totalWithdrawal }}</div>
                 </div>
             </div>
@@ -93,7 +93,7 @@ const handleRedirectTo = (pending) => {
                     <ExpandIcon class="w-4 h-4 relative opacity-50 text-white" @click="handleRedirectTo('robotec_purchase')" />
                 </div>
                 <div class="self-stretch justify-between items-center inline-flex">
-                    <div class="text-gray-100 text-xs font-medium font-sans leading-[18px]">Purchased EA ($)</div>
+                    <div class="text-gray-100 text-xs font-medium font-sans leading-[18px]">{{ $t('public.purchased_ea') }} ($)</div>
                     <div class="text-success-500 text-xl font-semibold font-sans leading-loose">{{ props.totalPurchasesEA }}</div>
                 </div>
             </div>
@@ -105,7 +105,7 @@ const handleRedirectTo = (pending) => {
                     <ExpandIcon class="w-4 h-4 relative opacity-50 text-white" @click="handleRedirectTo('pamm')" />
                 </div>
                 <div class="self-stretch justify-between items-center inline-flex">
-                    <div class="text-gray-100 text-xs font-medium font-sans leading-[18px]">PAMM Fund In ($)</div>
+                    <div class="text-gray-100 text-xs font-medium font-sans leading-[18px]">{{ $t('public.pamm_fund_in') }} ($)</div>
                     <div class="text-success-500 text-xl font-semibold font-sans leading-loose">{{ props.totalPammFundIn }}</div>
                 </div>
             </div>

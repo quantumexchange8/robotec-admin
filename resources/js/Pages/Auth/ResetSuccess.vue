@@ -12,7 +12,7 @@ const goToLoginPage = () => {
 
 <template>
     <GuestLayout>
-        <Head title="Reset Password Success" />
+        <Head :title="$t('public.reset_password_success')" />
 
         <div class="flex justify-center">
             <Success class="w-12 h-12 mb-3" />
@@ -20,17 +20,17 @@ const goToLoginPage = () => {
 
         <div class="text-center mb-10">
             <div class="mb-2 text-xl text-white font-semibold">
-                Success!
+                {{ $t('public.success_1') }}
             </div>
 
             <div class="text-sm text-gray-300">
-                Your password has been changed successfully.
+                {{ $t('public.password_changed_success_message') }}
             </div>
         </div>
 
         <div class="flex items-center justify-end mt-10">
             <Button variant="primary" class="w-full" @click="goToLoginPage">
-                Return to Login Page
+                {{ $t('public.return_login') }}
             </Button>
         </div>
     </GuestLayout>

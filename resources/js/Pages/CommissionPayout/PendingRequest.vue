@@ -11,6 +11,7 @@ import Modal from "@/Components/Modal.vue";
 import NoRequest from '@/Components/NoRequest.vue';
 import Button from "@/Components/Button.vue";
 import Checkbox from "@/Components/Checkbox.vue";
+import { trans } from "laravel-vue-i18n";
 
 const props = defineProps({
     search: String,
@@ -134,7 +135,7 @@ function isItemSelected(id, transaction_amount) {
     );
 }
 
-const selectAllLabel = computed(() => isAllSelected.value ? 'Deselect All' : 'Select All');
+const selectAllLabel = computed(() => isAllSelected.value ? trans('public.deselect_all') : trans('public.select_all'));
 const isAnyCheckboxChecked = computed(() => isChecked.value.length > 0);
 
 const openModal = (commission) => {
@@ -182,8 +183,8 @@ const approveCommission = () => {
 
 <template>
     <div class="w-full py-3 justify-between items-center inline-flex">
-        <div class="text-white text-base font-semibold font-sans leading-normal">Total: $ {{ formatAmount(totalAmount) }}</div>
-        <Button variant="success" :disabled="!isAnyCheckboxChecked || form.processing" @click="approveCommission">Approve</Button>
+        <div class="text-white text-base font-semibold font-sans leading-normal">{{ $t('public.total') }}: $ {{ formatAmount(totalAmount) }}</div>
+        <Button variant="success" :disabled="!isAnyCheckboxChecked || form.processing" @click="approveCommission">{{ $t('public.approve') }}</Button>
     </div>
 
     <div v-if="commissions.data.length == 0" >
@@ -191,7 +192,7 @@ const approveCommission = () => {
             <div class="self-stretch h-[212px] py-5 flex-col justify-start items-center gap-3 flex">
                 <NoRequest class="w-40 h-[120px] relative" />
                 <div class="self-stretch text-center text-gray-300 text-sm font-normal font-sans leading-tight">
-                    It seems there are no commission payouts available at the moment.
+                    {{ $t('public.no_commission_request_message') }}
                 </div>
             </div>
         </div>
@@ -233,7 +234,7 @@ const approveCommission = () => {
                             <div class="text-gray-300 text-xs font-normal font-sans leading-[24px]">{{ formatDateTime(commission.created_at) }}</div>
                             <div class="text-white text-sm font-medium font-sans leading-tight">{{ commission.user.name }}</div>
                         </td>
-                        <td class="text-white text-md flex items-center justify-center py-3">$ {{ commission.transaction_amount }}</td> <!-- Adjusted with py-2 -->
+                        <td class="text-white text-md flex items-center justify-center py-3">$ {{ commission.transaction_amount }}</td>
                     </tr>
                 </tbody>
             </table>
@@ -249,37 +250,37 @@ const approveCommission = () => {
         </div>
     </div>
 
-    <Modal :show="commissionModal" title="Commission Payout Details" @close="closeModal" max-width="sm">
+    <Modal :show="commissionModal" :title="$t('public.commission_payout_details')" @close="closeModal" max-width="sm">
         <div v-if="commissionDetails">
             <form>
                 <div class="w-full justify-start items-center gap-3 my-5 pb-3 border-b border-gray-700 inline-flex">
                     <img class="w-9 h-9 rounded-full" :src="commissionDetails.user.profile_photo || 'https://via.placeholder.com/32x32'" alt="Client profile picture"/>
                     <div class="w-full flex-col justify-start items-start inline-flex">
                         <div class="self-stretch text-white text-base font-medium font-sans leading-normal">{{ commissionDetails.user.name }}</div>
-                        <div class="text-gray-300 text-xs font-normal font-sans leading-[18px]">ID: {{ commissionDetails.user.id }}</div>
+                        <div class="text-gray-300 text-xs font-normal font-sans leading-[18px]">{{ $t('public.id') }}: {{ commissionDetails.user.id }}</div>
                     </div>
                 </div>
 
                 <div class="grid grid-cols-2 items-center mb-2">
-                    <div class="col-span-1 text-gray-300 text-xs font-normal font-sans leading-[18px]">Referee</div>
+                    <div class="col-span-1 text-gray-300 text-xs font-normal font-sans leading-[18px]">{{ $t('public.referee') }}</div>
                     <div class="col-span-1 flex items-center">
                         <!-- <img class="w-5 h-5 rounded-full mr-2" :src="commissionDetails.user.upline.profile_photo || 'https://via.placeholder.com/32x32'" alt="Client upline profile picture"/>
                         <div class="text-white text-xs font-normal font-sans leading-tight">{{ commissionDetails.user.upline.name }}</div> -->
                     </div>
                 </div>
                 <div class="grid grid-cols-2 items-center mb-2">
-                    <div class="col-span-1 text-gray-300 text-xs font-normal font-sans leading-[18px]">Requested Date</div>
+                    <div class="col-span-1 text-gray-300 text-xs font-normal font-sans leading-[18px]">{{ $t('public.requested_date') }}</div>
                     <div class="col-span-1 text-white text-xs font-normal font-sans leading-tight">{{ formatDateTime(commissionDetails.created_at) }}</div>
                 </div>
 
                 <div class="grid grid-cols-2 items-center mb-5">
-                    <div class="col-span-1 text-gray-300 text-xs font-normal font-sans leading-[18px]">Commission Amount</div>
+                    <div class="col-span-1 text-gray-300 text-xs font-normal font-sans leading-[18px]">{{ $t('public.commission_amount') }}</div>
                     <div class="col-span-1 text-white text-xs font-normal font-sans leading-tight">{{ commissionDetails.transaction_amount }}</div>
                 </div>
 
                 <div class="items-center pt-8 flex gap-3">
-                    <Button variant="outline" class="w-full" @click.prevent="closeModal">Close</Button>
-                    <Button variant="success" class="w-full" :disabled="form.processing" @click.prevent="approveCommission">Approve</Button>
+                    <Button variant="outline" class="w-full" @click.prevent="closeModal">{{ $t('public.close') }}</Button>
+                    <Button variant="success" class="w-full" :disabled="form.processing" @click.prevent="approveCommission">{{ $t('public.approve') }}</Button>
                 </div>
             </form>
         </div>

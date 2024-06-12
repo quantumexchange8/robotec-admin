@@ -32,15 +32,15 @@ const goToLoginPage = () => {
 
 <template>
     <GuestLayout>
-        <Head title="Forgot Password" />
+        <Head :title="$t('public.forgot_password')" />
 
         <div class="text-center mb-10">
             <div class="mb-2 text-xl text-white font-semibold">
-                Forgot password
+                {{ $t('public.forgot_password_1') }}
             </div>
 
             <div class="text-sm text-gray-300">
-                No worries, we'll send you reset instructions.
+                {{ $t('public.forgot_password_1_message') }}
             </div>
         </div>
 
@@ -50,16 +50,16 @@ const goToLoginPage = () => {
 
         <form>
             <div>
-                <Label for="email" value="Email" class="text-gray-300" :invalid="form.errors.email" />
+                <Label for="email" :invalid="form.errors.email">{{ $t('public.email') }}</Label>
 
                 <Input
                     id="email"
                     type="email"
                     class="mt-1 block w-full"
                     v-model="form.email"
+                    :placeholder="$t('public.email_placeholder')"
                     required
                     autocomplete="username"
-                    placeholder="Enter Email"
                 />
 
                 <InputError class="mt-2" :message="form.errors.email" />
@@ -69,12 +69,12 @@ const goToLoginPage = () => {
         <div class="grid grid-cols-6 gap-4 w-full mt-4">
                 <div class="col-span-6">
                     <Button :class="{ 'opacity-25': form.processing }" :disabled="form.processing" class="w-full" @click="submit">
-                        Send Email
+                        {{ $t('public.send_email') }}
                     </Button>
                 </div>
                 <div class="col-span-6">
                     <Button variant="transparent" :class="{ 'opacity-25': form.processing }" :disabled="form.processing" class="w-full" @click="goToLoginPage">
-                        <ArrowLeftIcon class="w-5 h-5 mr-2"/>Back to Log In
+                        <ArrowLeftIcon class="w-5 h-5 mr-2"/>{{ $t('public.back_to_login') }}
                     </Button>
                 </div>
             </div>

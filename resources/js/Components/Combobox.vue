@@ -8,7 +8,7 @@ import {
     ComboboxOptions,
     TransitionRoot,
 } from "@headlessui/vue";
-import { ChevronDownIcon, XCircleIcon, XMarkIcon } from '@/Components/Icons/solid';
+import {ChevronDownIcon, XCircleIcon, XMarkIcon} from '@/Components/Icons/solid';
 
 const emit = defineEmits(["update:modelValue"]);
 
@@ -167,9 +167,9 @@ function clearSelection() {
 const dropdownWidthClass = computed(() => {
     if (props.isPhoneCode) {
         if (window.innerWidth < 400) {
-            return 'w-auto max-w-[315px]';
+            return 'w-auto max-w-[328px]';
         } else {
-            return 'w-auto max-w-[350px]';
+            return 'w-auto max-w-[360px]';
         }
     } else {
         return 'w-full';
@@ -196,7 +196,7 @@ const dropdownWidthClass = computed(() => {
                 'border-error-500': !open && (field.error || props.invalid),
                 'border-gray-600': !open && !field.error && !props.invalid,
               }"
-            class="min-h-[2.5rem] relative flex w-full flex-wrap items-center gap-1 overflow-hidden rounded-lg border bg-transparent py-1.5 pl-3 pr-14 focus-within:border-primary-500 hover:border-primary-500 focus:ring-0"
+            class="min-h-[2.5rem] relative flex w-full flex-wrap items-center gap-1 overflow-hidden rounded-lg border bg-transparent py-1 pl-3 focus-within:border-primary-500 hover:border-primary-500 focus:ring-0"
         >
             <template v-if="props.multiple">
                 <div
@@ -209,7 +209,7 @@ const dropdownWidthClass = computed(() => {
                         class="-my-1.5 ml-1 -mr-1.5 self-stretch px-1 outline-0 hover:text-error-500"
                         @click.prevent="remove(option)"
                     >
-                        <XMarkIcon class="h-3.5 w-3.5" />
+                        <XMarkIcon class="h-3.5 w-3.5"/>
                     </button>
                 </div>
             </template>
@@ -285,7 +285,7 @@ const dropdownWidthClass = computed(() => {
                         :value="queryOption"
                         as="template"
                     >
-                    <li
+                        <li
                             :class="{
                                 'bg-gray-200 shadow-[inset_2px_0px_0px] shadow-primary-500': active,
                             }"
@@ -309,11 +309,15 @@ const dropdownWidthClass = computed(() => {
                               }"
                             class="relative inline-flex items-center gap-2 w-full cursor-default select-none whitespace-pre p-3 rounded-lg text-sm"
                         >
-                            <img v-if="image" :src="option.img ? option.img : 'https://img.freepik.com/free-icon/user_318-159711.jpg'" class="w-8 h-8 rounded-full" alt="">
-                            <span class="block truncate text-white" :class="{ 'font-medium': selected, 'font-normal': !selected }">
+                            <img v-if="image"
+                                 :src="option.img ? option.img : 'https://img.freepik.com/free-icon/user_318-159711.jpg'"
+                                 class="w-8 h-8 rounded-full" alt="">
+                            <span class="block truncate text-white"
+                                  :class="{ 'font-medium': selected, 'font-normal': !selected }">
                                     {{ option.label }}
                             </span>
-                            <span class="block truncate text-gray-300" :class="{ 'font-medium': selected, 'font-normal': !selected }">
+                            <span class="block truncate text-gray-300"
+                                  :class="{ 'font-medium': selected, 'font-normal': !selected }">
                                 {{ props.isPhoneCode ? option.value : '' }}
                             </span>
 

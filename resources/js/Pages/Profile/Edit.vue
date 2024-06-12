@@ -3,7 +3,6 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head } from '@inertiajs/vue3';
 import Button from '@/Components/Button.vue';
 import { Upload01Icon, PhotoLibrary, PhotoIcon, FolderIcon } from '@/Components/Icons/outline';
-import { Users01Icon } from '@/Components/Icons/solid';
 import { ref } from 'vue';
 import { usePage, useForm } from "@inertiajs/vue3";
 import Dropdown from '@/Components/Dropdown.vue';
@@ -53,18 +52,17 @@ function handleFileUpload(event) {
 </script>
 
 <template>
-    <Head title="Profile" />
+    <Head :title="$t('public.profile')" />
 
     <AuthenticatedLayout>
         <template #header>
-            <div class="flex-1 text-white text-xl">My Profile</div>
+            <div class="flex-1 text-white text-xl">{{ $t('public.my_profile') }}</div>
         </template>
 
         <div class="flex py-3 px-4 flex-col items-center gap-3">
             <div class="flex py-8 px-4 flex-col items-center gap-8 self-stretch rounded-2xl bg-gray-800">
                 <div class="flex flex-col items-center gap-3">
-                    <img v-if="profile_photo" :src="props.profileImg" class="w-14 h-14 rounded-full" alt="profile_picture" />
-                    <Users01Icon v-else class="w-14 h-14 rounded-full" />
+                    <img :src="props.profileImg || 'https://img.freepik.com/free-icon/user_318-159711.jpg' " class="w-14 h-14 rounded-full" alt="profile_picture" />
                     <Dropdown :contentClasses="'p-2 bg-[#252525]'">
                         <template #trigger>
                             <Button
@@ -74,7 +72,7 @@ function handleFileUpload(event) {
                                 @click="toggleDropdown"
                             >
                                 <Upload01Icon />
-                                Upload Profile Photo
+                                {{ $t('public.upload_profile_photo') }}
                             </Button>
                         </template>
                         <template #content>
@@ -84,7 +82,7 @@ function handleFileUpload(event) {
                             <DropdownLink @click="uploadFromPhotoLibrary">
                                 <div class="flex items-center justify-between gap-2">
                                     <div>
-                                        Photo Library
+                                        {{ $t('public.photo_library') }}
                                     </div>
                                     <PhotoLibrary />
                                 </div>
@@ -92,7 +90,7 @@ function handleFileUpload(event) {
                             <DropdownLink @click="uploadPhotoFromCamera">
                                 <div class="flex items-center justify-between gap-2">
                                     <div>
-                                        Take Photo
+                                        {{ $t('public.take_photo') }}
                                     </div>
                                     <PhotoIcon />
                                 </div>
@@ -100,7 +98,7 @@ function handleFileUpload(event) {
                             <DropdownLink @click="uploadFromFile">
                                 <div class="flex items-center justify-between gap-2">
                                     <div>
-                                        Choose File
+                                        {{ $t('public.choose_file') }}
                                     </div>
                                     <FolderIcon />
                                 </div>
@@ -111,11 +109,11 @@ function handleFileUpload(event) {
 
                 <div class="flex flex-col items-start gap-5 self-stretch">
                     <div class="flex flex-col items-start gap-1 self-stretch">
-                        <div class="text-neutral-500 text-sm font-medium">Name</div>
+                        <div class="text-neutral-500 text-sm font-medium">{{ $t('public.name') }}</div>
                         <div class="text-gray-100 font-semibold">{{ user.name }}</div>
                     </div>
                     <div class="flex flex-col items-start gap-1 self-stretch">
-                        <div class="text-neutral-500 text-sm font-medium">Email</div>
+                        <div class="text-neutral-500 text-sm font-medium">{{ $t('public.email') }}</div>
                         <div class="text-gray-100 font-semibold">{{ user.email }}</div>
                     </div>
                 </div>

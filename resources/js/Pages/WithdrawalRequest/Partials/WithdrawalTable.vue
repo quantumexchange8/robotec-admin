@@ -165,7 +165,7 @@ const rejectRequest = (requestDetails) => {
 
 <template>
     <div class="w-full py-3 justify-between items-center inline-flex">
-        <div class="text-white text-base font-semibold font-sans leading-normal">Total: $ {{ formatAmount(totalAmount) }}</div>
+        <div class="text-white text-base font-semibold font-sans leading-normal">{{ $t('public.total') }}: $ {{ formatAmount(totalAmount) }}</div>
     </div>
 
     <div v-if="requests.data.length == 0" >
@@ -173,7 +173,7 @@ const rejectRequest = (requestDetails) => {
             <div class="self-stretch h-[212px] py-5 flex-col justify-start items-center gap-3 flex">
                 <NoRequest class="w-40 h-[120px] relative" />
                 <div class="self-stretch text-center text-gray-300 text-sm font-normal font-sans leading-tight">
-                    It looks like there are no withdrawal requests at the moment.
+                    {{ $t('public.no_withdrawal_request_message') }}
                 </div>
             </div>
         </div>
@@ -214,32 +214,32 @@ const rejectRequest = (requestDetails) => {
         </div>
     </div>
 
-    <Modal :show="withdrawalRequestModal" title="Withdrawal Request" @close="closeModal" max-width="sm">
+    <Modal :show="withdrawalRequestModal" :title="$t('public.withdrawal_request')" @close="closeModal" max-width="sm">
         <div v-if="requestDetails">
             <div class="w-full justify-start items-center gap-3 my-5 pb-3 border-b border-gray-700 inline-flex">
                 <img class="w-9 h-9 rounded-full" :src="requestDetails.user.profile_photo || 'https://via.placeholder.com/32x32'" alt="Client profile picture"/>
                 <div class="w-full flex-col justify-start items-start inline-flex">
                     <div class="self-stretch text-white text-base font-medium font-sans leading-normal">{{ requestDetails.user.name }}</div>
-                    <div class="text-gray-300 text-xs font-normal font-sans leading-[18px]">ID: {{ requestDetails.user.id }}</div>
+                    <div class="text-gray-300 text-xs font-normal font-sans leading-[18px]">{{ $t('public.id') }}: {{ requestDetails.user.id }}</div>
                 </div>
             </div>
 
             <div class="grid grid-cols-2 items-center mb-2">
-                <div class="col-span-1 text-gray-300 text-xs font-normal font-sans leading-[18px]">Transaction ID</div>
+                <div class="col-span-1 text-gray-300 text-xs font-normal font-sans leading-[18px]">{{ $t('public.transaction_id') }}</div>
                 <div class="col-span-1 text-white text-xs font-normal font-sans leading-tight">{{ requestDetails.transaction_number }}</div>
             </div>
             <div class="grid grid-cols-2 items-center mb-2">
-                <div class="col-span-1 text-gray-300 text-xs font-normal font-sans leading-[18px]">Requested Date</div>
+                <div class="col-span-1 text-gray-300 text-xs font-normal font-sans leading-[18px]">{{ $t('public.requested_date') }}</div>
                 <div class="col-span-1 text-white text-xs font-normal font-sans leading-tight">{{ formatDateTime(requestDetails.created_at) }}</div>
             </div>
 
             <div class="grid grid-cols-2 items-center mb-2">
-                <div class="col-span-1 text-gray-300 text-xs font-normal font-sans leading-[18px]">Withdrawal Amount</div>
+                <div class="col-span-1 text-gray-300 text-xs font-normal font-sans leading-[18px]">{{ $t('public.withdrawal_amount') }}</div>
                 <div class="col-span-1 text-white text-xs font-normal font-sans leading-tight">{{ formatAmount(requestDetails.transaction_amount) }}</div>
             </div>
 
             <div class="grid grid-cols-2 items-center mb-5">
-                <div class="col-span-1 text-gray-300 text-xs font-normal font-sans leading-[18px]">USDT Address</div>
+                <div class="col-span-1 text-gray-300 text-xs font-normal font-sans leading-[18px]">{{ $t('public.usdt_address') }}</div>
                 <div class="col-span-1 text-white text-xs font-normal font-sans leading-tight">{{ requestDetails.from_wallet.wallet_address }}
                     <Tooltip :content="$t('public.' + tooltipContent)" placement="bottom">
                         <DuplicateIcon aria-hidden="true" :class="['w-4 h-4 text-gray-200']" @click.stop.prevent="copyTestingCode(requestDetails.from_wallet.wallet_address)" style="cursor: pointer" />
@@ -248,17 +248,17 @@ const rejectRequest = (requestDetails) => {
             </div>
 
             <div class="items-center pt-8 flex gap-3">
-                <Button variant="danger" class="w-full" @click.prevent="openRejectModal(requestDetails)">Reject</Button>
-                <Button variant="success" class="w-full" @click.prevent="openApproveModal(requestDetails)">Approve</Button>
+                <Button variant="danger" class="w-full" @click.prevent="openRejectModal(requestDetails)">{{ $t('public.reject') }}</Button>
+                <Button variant="success" class="w-full" @click.prevent="openApproveModal(requestDetails)">{{ $t('public.approve') }}</Button>
             </div>
         </div>
     </Modal>
 
-    <Modal :show="approveRequestModal" title="Approve Withdrawal Request" @close="closeApproveModal" max-width="sm">
+    <Modal :show="approveRequestModal" :title="$t('public.approve_withdrawal_request')" @close="closeApproveModal" max-width="sm">
         <form>
             <div class="my-5 px-1">
                 <div>
-                    <Label for="wallet_address" value="USDT Address" class="text-gray-300 mb-1.5" :invalid="form.errors.wallet_address" important />
+                    <Label for="wallet_address" :value="$t('public.usdt_address')" class="mb-1.5" :invalid="form.errors.wallet_address" />
                     <Input
                         id="wallet_address"
                         class="block w-full mb-5 bg-transparent text-white"
@@ -271,7 +271,7 @@ const rejectRequest = (requestDetails) => {
                 </div>
 
                 <div>
-                    <Label for="transaction_number" value="TXID" class="text-gray-300 mb-1.5" :invalid="form.errors.transaction_number" important />
+                    <Label for="transaction_number" :value="$t('public.txid')" class="mb-1.5" :invalid="form.errors.transaction_number" />
 
                     <Input
                         id="transaction_number"
@@ -285,14 +285,14 @@ const rejectRequest = (requestDetails) => {
                 </div>
 
                 <div>
-                    <Label for="remarks" value="Description (optional)" class="text-gray-300 mb-1.5" :invalid="form.errors.remarks" />
+                    <Label for="remarks" class="mb-1.5" :invalid="form.errors.remarks">{{ $t('public.description_optional') }}</Label>
 
                     <Input
                         id="remarks"
                         class="block w-full bg-transparent text-white"
                         :invalid="form.errors.remarks"
                         v-model="form.remarks"
-                        :placeholder="'Provide a brief description...'"
+                        :placeholder="$t('public.description_optional_placeholder')"
                     />
 
                     <InputError class="mt-2" :message="form.errors.remarks" />
@@ -307,18 +307,18 @@ const rejectRequest = (requestDetails) => {
         </form>
     </Modal>
 
-    <Modal :show="rejectRequestModal" title="Approve Withdrawal Request" @close="closeRejectModal" max-width="sm">
+    <Modal :show="rejectRequestModal" :title="$t('public.reject_withdrawal_request')" @close="closeRejectModal" max-width="sm">
         <form>
             <div class="my-5 px-1">
                 <div>
-                    <Label for="remarks" value="Description (optional)" class="text-gray-300 mb-1.5" :invalid="form.errors.remarks" />
+                    <Label for="remarks" class="mb-1.5" :invalid="form.errors.remarks">{{ $t('public.description_optional') }}</Label>
 
                     <Input
                         id="remarks"
                         class="block w-full bg-transparent text-white"
                         :invalid="form.errors.remarks"
                         v-model="form.remarks"
-                        :placeholder="'Provide a brief description...'"
+                        :placeholder="$t('public.description_optional_placeholder')"
                     />
 
                     <InputError class="mt-2" :message="form.errors.remarks" />
@@ -326,8 +326,8 @@ const rejectRequest = (requestDetails) => {
             </div>
 
             <div class="w-full flex justify-end pt-8 gap-3">
-                <Button variant="outline" class="w-full border border-gray-600" @click.prevent="closeRejectModal">Cancel</Button>
-                <Button variant="danger" class="w-full" :disabled="form.processing" @click.prevent="rejectRequest(requestDetails)">Reject</Button>
+                <Button variant="outline" class="w-full border border-gray-600" @click.prevent="closeRejectModal">{{ $t('public.cancel') }}</Button>
+                <Button variant="danger" class="w-full" :disabled="form.processing" @click.prevent="rejectRequest(requestDetails)">{{ $t('public.reject') }}</Button>
             </div>
         </form>
     </Modal>

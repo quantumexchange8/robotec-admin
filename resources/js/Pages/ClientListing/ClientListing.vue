@@ -99,6 +99,9 @@ const clearFilters = () => {
     tempUpline.value = null;
     tempSelectedPurchasedEA.value = null;
     tempSelectedFundedPAMM.value = null;
+    selectedUpline.value = null;
+    selectedPurchasedEA.value = null;
+    selectedFundedPAMM.value = null;
     sortType.value = sortTypes[0].value;
 };
 
@@ -116,10 +119,10 @@ watchEffect(() => {
 </script>
 
 <template>
-    <Head title="Client Listing" />
+    <Head :title="$t('public.client_listing')" />
     <AuthenticatedLayout>
         <template #header>
-            <h2 class="font-semibold text-xxl text-white leading-loose">Client Listing</h2>
+            <h2 class="font-semibold text-xxl text-white leading-loose">{{ $t('public.client_listing') }}</h2>
         </template>
 
         <div class="sticky top-2 bg-gray-900 z-[5]">
@@ -128,7 +131,7 @@ watchEffect(() => {
                     <template #icon>
                         <SearchIcon aria-hidden="true" class="w-5 h-5 text-white" />
                     </template>
-                    <Input withIcon id="search" variant="search" type="text" class="block w-full rounded-lg" placeholder="Search" v-model="search" />
+                    <Input withIcon id="search" variant="search" type="text" class="block w-full rounded-lg" :placeholder="$t('public.search')" v-model="search" />
                 </InputIconWrapper>
             </div>
             <div class="pb-3 grid grid-cols-3 gap-3">
@@ -137,7 +140,7 @@ watchEffect(() => {
                         <span class="mr-2">
                             <FilterIcon aria-hidden="true" class="w-5 h-5" />
                         </span>
-                        <span>Filter</span>
+                        <span>{{ $t('public.filter') }}</span>
                         <span v-if="filterCount > 0" class="absolute -top-1 -right-1">
                             <div class="w-5 h-5 px-1 bg-error-500 rounded-full border border-gray-900 flex items-center justify-center">
                                 <div class="text-white text-xs font-medium">{{ filterCount }}</div>
@@ -149,7 +152,7 @@ watchEffect(() => {
             </div>
         </div>
         <div class="pb-3 flex items-center justify-between">
-            <div class="text-white">{{ totalClient }} results</div>
+            <div class="text-white">{{ totalClient }} {{ $t('public.results') }} </div>
             <AddNewClient />
         </div>
 
@@ -163,36 +166,36 @@ watchEffect(() => {
             @update:totalClient="totalClient = $event"
         />
 
-        <Modal :show="filterModal" title="Filter" @close="closeFilterModal" max-width="sm">
+        <Modal :show="filterModal" :title="$t('public.filter')" @close="closeFilterModal" max-width="sm">
             <div class="w-full">
-                <div class="text-white text-base font-semibold font-sans leading-normal mb-3 mt-5">Upline</div>
+                <div class="text-white text-base font-semibold font-sans leading-normal mb-3 mt-5">{{ $t('public.upline') }}</div>
                 <div class="flex flex-col mb-1.5">
                     <Combobox
                         :load-options="loadUpline"
                         v-model="tempUpline"
-                        placeholder="Select Client"
+                        :placeholder="$t('public.select_client')"
                         image
                     />
                 </div>
-                <div class="text-gray-300 text-xs font-normal font-sans leading-[18px]">Select client by searching name or ID</div>
+                <div class="text-gray-300 text-xs font-normal font-sans leading-[18px]">{{ $t('public.select_client_message') }}</div>
             </div>
 
             <div class="w-full h-px bg-gray-700 my-5"></div>
 
             <div class="w-full flex flex-col px-1">
-                <div class="text-white text-base font-semibold font-sans leading-normal">Purchased EA</div>
+                <div class="text-white text-base font-semibold font-sans leading-normal">{{ $t('public.purchased_ea') }}</div>
                 <div class="flex gap-3">
                     <Label class="text-white py-3 grow shrink self-stretch">
                         <input type="radio" value="yes" v-model="tempSelectedPurchasedEA" class="mr-3"/>
-                        Yes
+                        {{ $t('public.yes') }}
                     </Label>
                     <Label class="text-white py-3 grow shrink self-stretch">
                         <input type="radio" value="no" v-model="tempSelectedPurchasedEA" class="mr-3"/>
-                        No
+                        {{ $t('public.no') }}
                     </Label>
                     <Label class="text-white py-3 grow shrink self-stretch">
                         <input type="radio" value="" v-model="tempSelectedPurchasedEA" class="mr-3"/>
-                        Both
+                        {{ $t('public.both') }}
                     </Label>
                 </div>
             </div>
@@ -200,27 +203,27 @@ watchEffect(() => {
             <div class="w-full h-px bg-gray-700 my-5"></div>
 
             <div class="w-full flex flex-col mb-5 px-1">
-                <div class="text-white text-base font-semibold font-sans leading-normal">Funded PAMM</div>
+                <div class="text-white text-base font-semibold font-sans leading-normal">{{ $t('public.funded_pamm') }}</div>
                 <div class="flex gap-3">
                     <Label class="text-white py-3 grow shrink self-stretch">
                         <input type="radio" value="yes" v-model="tempSelectedFundedPAMM" class="mr-3"/>
-                        Yes
+                        {{ $t('public.yes') }}
                     </Label>
                     <Label class="text-white py-3 grow shrink self-stretch">
                         <input type="radio" value="no" v-model="tempSelectedFundedPAMM" class="mr-3"/>
-                        No
+                        {{ $t('public.no') }}
                     </Label>
                     <Label class="text-white py-3 grow shrink self-stretch">
                         <input type="radio" value="" v-model="tempSelectedFundedPAMM" class="mr-3"/>
-                        Both
+                        {{ $t('public.both') }}
                     </Label>
                 </div>
             </div>
 
             <div class="flex flex-col h-[300px] justify-end mt-5">
                 <div class="flex gap-3 pt-8">
-                    <Button variant="gray" class="w-full" @click="clearFilters">Clear All</Button>
-                    <Button variant="primary" class="w-full" @click="applyFilters">Apply</Button>
+                    <Button variant="gray" class="w-full" @click="clearFilters">{{ $t('public.clear_all') }}</Button>
+                    <Button variant="primary" class="w-full" @click="applyFilters">{{ $t('public.apply') }}</Button>
                 </div>
             </div>
         </Modal>

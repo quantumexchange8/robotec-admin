@@ -90,7 +90,6 @@ const changeLanguage = async (langVal) => {
                         type="button"
                         v-slot="{ iconSizeClasses }"
                         class="inline-flex"
-                        srText="Toggle dark mode"
                         size="sm"
                     >
                         <GlobeAltIcon

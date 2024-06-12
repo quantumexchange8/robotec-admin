@@ -246,7 +246,7 @@ class MemberController extends Controller
         $user->notify(new NewClientNotification($password));
     
         return redirect()->back()->with('toast', [
-            'title' => 'New Client Added Successfully!',
+            'title' => trans('public.add_client_success_title'),
             'type' => 'success'
         ]);
     }
@@ -307,7 +307,7 @@ class MemberController extends Controller
         }
 
         return redirect()->back()->with('toast', [
-            'title' => 'Client Details Updated!',
+            'title' => trans('public.update_client_success_title'),
             'type' => 'success'
         ]);
 
@@ -331,7 +331,7 @@ class MemberController extends Controller
         $client->delete();
     
         return redirect()->back()->with('toast', [
-            'title' => 'Client Has Been Deleted!',
+            'title' => trans('public.delete_client_success_title'),
             'type' => 'success'
         ]);
     }

@@ -76,20 +76,20 @@ const addClient = () => {
     <div>
       <!-- Button to open the modal -->
         <Button variant="primary" class="px-3 py-2 justify-end" @click="openModal">
-          <PlusCircleIcon class="w-5 h-5 mr-2 relative" /> New Client
+          <PlusCircleIcon class="w-5 h-5 mr-2 relative" /> {{ $t('public.new_client') }}
         </Button>
       
       <!-- Modal for adding a new client -->
-      <Modal :show="addNewClientModal" title="Add New Client" @close="closeModal" max-width="sm">
+      <Modal :show="addNewClientModal" :title="$t('public.add_new_client')" @close="closeModal" max-width="sm">
         <form class="my-5 px-1">
           <div class="mb-5">
-            <Label for="name" value="Client Name" class="text-gray-300 mb-1.5" :invalid="form.errors.name" important />
+            <Label for="name" :value="$t('public.client_name')" class="mb-1.5" :invalid="form.errors.name" />
   
             <Input
               id="name"
               class="block w-full bg-transparent text-white"
               :invalid="form.errors.name"
-              placeholder="Name as per NRIC"
+              :placeholder="$t('public.client_name_placeholder')"
               v-model="form.name"
               required
             />
@@ -98,14 +98,14 @@ const addClient = () => {
           </div>
   
           <div class="mb-5">
-            <Label for="email" value="Email" class="text-gray-300 mb-1.5" :invalid="form.errors.email" important />
+            <Label for="email" :value="$t('public.email')" class="mb-1.5" :invalid="form.errors.email" />
   
             <Input
               id="email"
               type="email"
               class="block w-full bg-transparent text-white"
               :invalid="form.errors.email"
-              placeholder="you@example.com"
+              :placeholder="$t('public.email_placeholder_1')"
               v-model="form.email"
               required
             />
@@ -114,7 +114,7 @@ const addClient = () => {
           </div>
           
           <div class="mb-5">
-            <Label for="phone_number" value="Phone Number" class="text-gray-300 mb-1.5" :invalid="form.errors.phone || form.errors.dial_code" important />
+            <Label for="phone_number" :value="$t('public.phone_number')" class="mb-1.5" :invalid="form.errors.phone || form.errors.dial_code" />
                         
             <div class="grid grid-cols-5">
                 <div class="col-span-2">
@@ -136,7 +136,7 @@ const addClient = () => {
                         id="phone"
                         class="block w-full bg-transparent text-white"
                         :invalid="form.errors.phone"
-                        placeholder="Phone Number"
+                        :placeholder="$t('public.phone_number')"
                         v-model="form.phone"
                         required
                     />
@@ -146,12 +146,12 @@ const addClient = () => {
             <InputError class="mt-2" :message="form.errors.phone" />
         </div>
             <div>
-                <Label for="upline" value="Assign upline" class="text-gray-300 mb-1.5" :invalid="form.errors.upline" important />
+                <Label for="upline" :value="$t('public.assign_upline')" class="mb-1.5" :invalid="form.errors.upline" />
 
                 <Combobox
                     :load-options="loadUpline"
                     v-model="form.upline"
-                    placeholder="Upline"
+                    :placeholder="$t('public.upline')"
                     image
                 />
 
@@ -160,8 +160,8 @@ const addClient = () => {
             </div>
 
             <div class="w-full flex justify-end gap-3 pt-8">
-                <Button variant="transparent" class="w-full border border-gray-600" @click="closeModal">Cancel</Button>
-                <Button variant="primary" class="w-full" :disabled="!isFormValid || form.processing" @click="addClient">Add</Button>
+                <Button variant="transparent" class="w-full border border-gray-600" @click="closeModal">{{ $t('public.cancel') }}</Button>
+                <Button variant="primary" class="w-full" :disabled="!isFormValid || form.processing" @click="addClient">{{ $t('public.add') }}</Button>
             </div>
         </form>
       </Modal>

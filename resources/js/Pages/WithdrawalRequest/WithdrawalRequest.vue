@@ -19,15 +19,24 @@ const formatter = ref({
 });
 
 const search = ref('');
-const date = ref('');
+const today = new Date();
+const firstDayOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
+const lastDayOfMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0);
+
+// Formatting the start and end of the current month
+const formattedStartDate = `${firstDayOfMonth.getFullYear()}-${(firstDayOfMonth.getMonth() + 1).toString().padStart(2, '0')}-01`;
+const formattedEndDate = `${lastDayOfMonth.getFullYear()}-${(lastDayOfMonth.getMonth() + 1).toString().padStart(2, '0')}-${lastDayOfMonth.getDate().toString().padStart(2, '0')}`;
+
+// Set the initial date range to the current month
+const date = ref(`${formattedStartDate} - ${formattedEndDate}`);
 
 </script>
 
 <template>
-    <Head title="Withdrawal Request" />
+    <Head :title="$t('public.withdrawal_request')" />
     <AuthenticatedLayout>
         <template #header>
-            <h2 class="font-semibold text-xxl text-white leading-loose">Withdrawal Request</h2>
+            <h2 class="font-semibold text-xxl text-white leading-loose">{{ $t('public.withdrawal_request') }}</h2>
         </template>
 
         <div class="rounded-md shadow-md pb-3 sticky top-2 bg-gray-900 z-[5]">
@@ -38,14 +47,13 @@ const date = ref('');
                             <template #icon>
                                 <SearchIcon aria-hidden="true" class="w-5 h-5 text-white" />
                             </template>
-                            <Input withIcon id="search" variant="search" type="text" class="block w-full rounded-lg" placeholder="Search" v-model="search" />
+                            <Input withIcon id="search" variant="search" type="text" class="block w-full rounded-lg" :placeholder="$t('public.search')" v-model="search" />
                         </InputIconWrapper>
                     </div>
                 </div>
 
                 <div>
                     <vue-tailwind-datepicker
-                        :placeholder="$t('public.date_placeholder')"
                         :formatter="formatter"
                         separator=" - "
                         v-model="date"

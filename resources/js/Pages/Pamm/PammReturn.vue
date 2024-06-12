@@ -88,10 +88,10 @@ const updatePamm = () => {
 
 <template>
 
-    <Head title="Pamm Return" />
+    <Head :title="$t('public.pamm_return')" />
     <AuthenticatedLayout>
         <template #header>
-            <h2 class="font-semibold text-xxl text-white leading-loose">Pamm Return</h2>
+            <h2 class="font-semibold text-xxl text-white leading-loose">{{ $t('public.pamm_return') }}</h2>
         </template>
 
         <div class="flex justify-center items-center h-full my-3">
@@ -100,22 +100,22 @@ const updatePamm = () => {
                 <div class="flex-col justify-center items-center gap-3 flex mb-8">
                     <div class="flex-col justify-start items-center flex mb-3">
                         <div class="text-center text-white text-base font-semibold font-sans leading-normal">
-                            Current PAMM Return
+                            {{ $t('public.current_pamm_return') }}
                         </div>
                         <div class="text-center text-gray-300 text-xs font-normal font-sans leading-[18px]">
-                            Last updated at {{ formatDateTime(props.pamm.updated_at, true) }}
+                            {{ $t('public.last_updated_at') }} {{ formatDateTime(props.pamm.updated_at, true) }}
                         </div>
                     </div>
                     <div class="text-center text-white text-xxl font-semibold font-sans leading-[42px]">
                         <span v-if="props.pamm.value > 0">+</span>{{ formatAmount(props.pamm.value) }} %
                     </div>
                 </div>
-                <Button variant="primary" class="w-full" @click="openModal">Update PAMM Return</Button>
+                <Button variant="primary" class="w-full" @click="openModal">{{ $t('public.update_pamm_return') }}</Button>
             </div>
         </div>
 
         <span class="text-white text-base font-semibold font-sans leading-normal py-2">
-            Current PAMM Return
+            {{ $t('public.current_pamm_return') }}
         </span>
 
         <div v-if="histories.data.length <= 0">
@@ -126,7 +126,7 @@ const updatePamm = () => {
                         <NoHistory class="w-40 h-[120px]" />
                         <div
                             class="w-[328px] text-center text-gray-300 text-sm font-normal font-sans leading-tight mt-3">
-                            No history found
+                            {{ $t('public.no_history_message') }}
                         </div>
                     </div>
 
@@ -176,25 +176,25 @@ const updatePamm = () => {
             </div>
         </div>
 
-        <Modal :show="pammModal" title="Update PAMM Return" @close="closeModal" max-width="sm">
+        <Modal :show="pammModal" :title="$t('public.update_pamm_return')" @close="closeModal" max-width="sm">
             <form class="my-5">
                 <div>
-                    <Label for="pamm" value="Pamm Return" class="text-gray-300" :invalid="form.errors.pamm" />
+                    <Label for="pamm" :invalid="form.errors.pamm">{{ $t('public.pamm_return') }}</Label>
                     <Input
                         id="pamm"
                         class="block w-full my-1.5 bg-transparent text-white"
                         :invalid="form.errors.pamm"
                         v-model="form.pamm"
-                        placeholder="0.00%"
+                        :placeholder="$t('public.pamm_return_placeholder')"
                         required
                     />
 
-                    <div class="text-gray-300 text-xs font-normal font-sans leading-[18px] ">Enter a positive or negative percentage (e.g., +10% or -5%)</div>
+                    <div class="text-gray-300 text-xs font-normal font-sans leading-[18px] ">{{ $t('public.pamm_return_rule') }}</div>
                     <InputError :message="form.errors.pamm" />
                 </div>
                 <div class="w-full flex justify-end pt-8 gap-3">
-                    <Button variant="transparent" class="w-full border border-gray-600" @click="closeModal">Cancel</Button>
-                    <Button variant="primary" class="w-full" :disabled="form.processing" @click="updatePamm">Update</Button>
+                    <Button variant="transparent" class="w-full border border-gray-600" @click="closeModal">{{ $t('public.cancel') }}</Button>
+                    <Button variant="primary" class="w-full" :disabled="form.processing" @click="updatePamm">{{ $t('public.update') }}</Button>
                 </div>
             </form>
         </Modal>
