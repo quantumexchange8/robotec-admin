@@ -33,7 +33,7 @@ const submit = () => {
 
 <template>
     <GuestLayout>
-        <Head title="Log in" />
+        <Head :title="$t('public.login')" />
 
         <div v-if="status" class="mb-4 font-medium text-sm text-green-600">
             {{ status }}
@@ -43,14 +43,14 @@ const submit = () => {
                 <ApplicationLogo class="w-20 h-20 fill-current text-gray-500" />
             </Link>
             <div class="text-center mb-10">
-                <div class="mb-2 text-white text-xl font-semibold">Admin Portal</div>
-                <div class="text-gray-300">Welcome back! Please enter your details.</div>
+                <div class="mb-2 text-white text-xl font-semibold">{{ $t('public.admin_portal') }}</div>
+                <div class="text-gray-300">{{ $t('public.welcome_back') }}</div>
             </div>
         </div>
 
         <form @submit.prevent="submit">
             <div>
-                <Label for="email" value="Email" class="text-gray-300" :invalid="form.errors.email" />
+                <Label for="email" :invalid="form.errors.email">{{ $t('public.email') }}</Label>
 
                 <Input
                     id="email"
@@ -58,6 +58,7 @@ const submit = () => {
                     class="mt-1 block w-full bg-transparent text-white"
                     :invalid="form.errors.email"
                     v-model="form.email"
+                    :placeholder="$t('public.email_placeholder')"
                     required
                     autofocus
                     autocomplete="username"
@@ -67,7 +68,7 @@ const submit = () => {
             </div>
 
             <div class="mt-4">
-                <Label for="password" value="Password" class="text-gray-300" :invalid="form.errors.password" />
+                <Label for="password" :invalid="form.errors.password">{{ $t('public.password') }}</Label>
 
                 <Input
                     id="password"
@@ -75,6 +76,7 @@ const submit = () => {
                     class="mt-1 block w-full bg-transparent text-white"
                     v-model="form.password"
                     :invalid="form.errors.password"
+                    :placeholder="$t('public.password_placeholder')"
                     required
                     autocomplete="current-password"
                 />
@@ -86,14 +88,14 @@ const submit = () => {
                 <div class="flex items-center justify-between">
                     <label class="flex items-center">
                         <Switch name="remember" v-model:checked="form.remember" />
-                        <span class="ms-2 text-sm text-white">Remember me</span>
+                        <span class="ms-2 text-sm text-white">{{ $t('public.remember_me') }}</span>
                     </label>
                     <Link
                         v-if="canResetPassword"
                         :href="route('password.request')"
                         class="text-white rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                     >
-                        Forgot Password
+                        {{ $t('public.forgot_password') }}
                     </Link>
                 </div>
             </div>
@@ -101,7 +103,7 @@ const submit = () => {
             <div class="flex items-center justify-end mt-10">
 
                 <Button variant="primary" class="w-full" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
-                    Log in
+                    {{ $t('public.log_in') }}
                 </Button>
             </div>
         </form>

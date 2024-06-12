@@ -12,9 +12,17 @@ class CommissionController extends Controller
 {
     public function commission_payout()
     {
-        $totalCommissionRequest = Transaction::where('transaction_type', 'commission')->where('status', 'Pending')->count();
-        $totalCommissionHistory = Transaction::where('transaction_type', 'commission')->where('status', '!=', 'Pending')->count();
-
+        $currentMonth = Carbon::now()->startOfMonth();
+        $totalCommissionRequest = Transaction::where('transaction_type', 'commission')
+            ->where('status', 'Pending')
+            ->where('created_at', '>=', $currentMonth)
+            ->count();
+    
+        $totalCommissionHistory = Transaction::where('transaction_type', 'commission')
+            ->where('status', '!=', 'Pending')
+            ->where('created_at', '>=', $currentMonth)
+            ->count();
+            
         return Inertia::render('CommissionPayout/CommissionPayout', [
             'totalCommissionRequest' => $totalCommissionRequest,
             'totalCommissionHistory' => $totalCommissionHistory,
@@ -92,7 +100,7 @@ class CommissionController extends Controller
         }
     
         return redirect()->back()->with('toast', [
-            'title' => 'Commission Payout Approved!',
+            'title' => trans('public.commission_approve_title'),
             'type' => 'success'
         ]);
     }

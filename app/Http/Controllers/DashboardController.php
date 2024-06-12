@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Transaction;
+use Carbon\Carbon;
 use App\Models\User;
 use Inertia\Inertia;
+use App\Models\Transaction;
 use Illuminate\Http\Request;
 
 class DashboardController extends Controller
@@ -33,9 +34,17 @@ class DashboardController extends Controller
 
     public function withdrawal_transactions()
     {
-        $totalApprovedResult = Transaction::where('transaction_type', 'withdrawal')->where('status', 'Approved')->count();
-        $totalRejectedResult = Transaction::where('transaction_type', 'withdrawal')->where('status', 'Rejected')->count();
-
+        $currentMonth = Carbon::now()->startOfMonth();
+        $totalApprovedResult = Transaction::where('transaction_type', 'withdrawal')
+            ->where('status', 'Approved')
+            ->where('created_at', '>=', $currentMonth)
+            ->count();
+    
+        $totalRejectedResult = Transaction::where('transaction_type', 'withdrawal')
+            ->where('status', 'Rejected')
+            ->where('created_at', '>=', $currentMonth)
+            ->count();
+    
         return Inertia::render('Dashboard/WithdrawalTransaction', [
             'totalApprovedResult' => $totalApprovedResult,
             'totalRejectedResult' => $totalRejectedResult,

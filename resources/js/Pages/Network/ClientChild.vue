@@ -31,7 +31,7 @@ const getActiveChildren = (clients) => {
     <!-- Level {{ level }} -->
     <div class="my-5">
         <div class="w-full py-1 my-3 justify-start items-center gap-1 inline-flex">
-            <div class="text-gray-300 text-xs font-normal font-sans leading-[18px]">Level {{ level }}</div>
+            <div class="text-gray-300 text-xs font-normal font-sans leading-[18px]">{{ $t('public.level') }} {{ level }}</div>
             <div class="grow shrink basis-0 h-px bg-gray-600 rounded-[10px]"></div>
         </div>
         <div class="grid grid-cols-3 gap-4">
@@ -43,7 +43,7 @@ const getActiveChildren = (clients) => {
                         :src="child.profile_photo_url || 'https://via.placeholder.com/28x28'" />
                     <div class="self-stretch h-[34px] flex-col justify-start items-center flex">
                         <div class="self-stretch text-center text-white text-xs font-medium font-sans leading-[18px]">{{ child.name }}</div>
-                        <div class="text-center text-gray-300 text-xxs font-normal font-sans leading-none">ID: {{ child.id }}</div>
+                        <div class="text-center text-gray-300 text-xxs font-normal font-sans leading-none">{{ $t('public.id') }}: {{ child.id }}</div>
                     </div>
                 </div>
                 <!-- Conditional rendering for children -->

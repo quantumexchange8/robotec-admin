@@ -93,7 +93,7 @@ const closeModal = () => {
             <div class="self-stretch h-[212px] py-5 flex-col justify-start items-center gap-3 flex">
                 <NoHistory class="w-40 h-[120px] relative" />
                 <div class="self-stretch text-center text-gray-300 text-sm font-normal font-sans leading-tight">
-                    No transactions found
+                    {{ $t('public.no_transaction_history_message') }}
                 </div>
             </div>
         </div>
@@ -134,33 +134,33 @@ const closeModal = () => {
         </div>
     </div>
 
-    <Modal :show="transactionModal" title="Fund In Details" @close="closeModal" max-width="sm">
+    <Modal :show="transactionModal" :title="$t('public.fund_in_details')" @close="closeModal" max-width="sm">
         <div v-if="transactionDetails">
             <div class="w-full justify-start items-center gap-3 border-b border-gray-700 inline-flex">
                 <img class="w-9 h-9 rounded-full" :src="transactionDetails.user.profile_photo || 'https://via.placeholder.com/32x32'" alt="Client profile picture"/>
                 <div class="w-full flex-col justify-start items-start inline-flex">
                     <div class="self-stretch text-white text-base font-medium font-sans leading-normal">{{ transactionDetails.user.name }}</div>
-                    <div class="text-gray-300 text-xs font-normal font-sans leading-[18px]">ID: {{ transactionDetails.user.id }}</div>
+                    <div class="text-gray-300 text-xs font-normal font-sans leading-[18px]">{{ $t('public.id') }}: {{ transactionDetails.user.id }}</div>
                 </div>
             </div>
             <div class="w-full h-px bg-gray-700 my-4"></div>
 
             <div class="grid grid-cols-2 items-center mb-2">
-                <div class="col-span-1 text-gray-300 text-xs font-normal font-sans leading-[18px]">Transaction ID</div>
+                <div class="col-span-1 text-gray-300 text-xs font-normal font-sans leading-[18px]">{{ $t('public.transaction_id') }}</div>
                 <div class="col-span-1 text-white text-xs font-normal font-sans leading-tight">{{ transactionDetails.transaction_number }}</div>
             </div>
             <div class="grid grid-cols-2 items-center mb-2">
-                <div class="col-span-1 text-gray-300 text-xs font-normal font-sans leading-[18px]">Transaction Date</div>
+                <div class="col-span-1 text-gray-300 text-xs font-normal font-sans leading-[18px]">{{ $t('public.transaction_date') }}</div>
                 <div class="col-span-1 text-white text-xs font-normal font-sans leading-tight">{{ formatDateTime(transactionDetails.created_at) }}</div>
             </div>
 
             <div class="grid grid-cols-2 items-center mb-2">
-                <div class="col-span-1 text-gray-300 text-xs font-normal font-sans leading-[18px]">From</div>
+                <div class="col-span-1 text-gray-300 text-xs font-normal font-sans leading-[18px]">{{ $t('public.from') }}</div>
                 <div class="col-span-1 text-white text-xs font-normal font-sans leading-tight">{{ transactionDetails.from_wallet.name }}</div>
             </div>
 
             <div class="grid grid-cols-2 items-center">
-                <div class="col-span-1 text-gray-300 text-xs font-normal font-sans leading-[18px]">Amount</div>
+                <div class="col-span-1 text-gray-300 text-xs font-normal font-sans leading-[18px]">{{ $t('public.fund_in_amount') }}</div>
                 <div class="col-span-1 text-white text-xs font-normal font-sans leading-tight">$ {{ formatAmount(transactionDetails.transaction_amount) }}</div>
             </div>
 

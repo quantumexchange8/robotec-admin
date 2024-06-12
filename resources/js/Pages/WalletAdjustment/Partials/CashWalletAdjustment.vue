@@ -11,6 +11,7 @@ import { transactionFormat } from "@/Composables/index.js";
 import Modal from "@/Components/Modal.vue";
 import toast from "@/Composables/toast.js";
 import { TailwindPagination } from "laravel-vue-pagination";
+import { trans } from "laravel-vue-i18n";
 
 const props = defineProps({
   client: Object,
@@ -101,7 +102,7 @@ const openModal = (isDeductionModal) => {
     form.isDeduction = isDeductionModal;
   } else {
         toast.add({
-            title: 'No Client Selected!',
+            title: trans('public.no_client_selected'),
             type: 'warning'
         });
   }
@@ -168,126 +169,126 @@ const toggleExpanded = (history) => {
 </script>
 
 <template>
-<div class="w-full h-[3000px]">
-    <div class="w-full h-[210px] px-5 py-8 bg-gray-800 rounded-2xl flex flex-col justify-center items-center gap-8">
-        <div class="flex flex-col justify-center items-center gap-3">
-            <div class="text-gray-300 text-base font-semibold">Current Wallet Balance</div>
-            <div class="text-white text-3xl font-semibold">$ {{ formatAmount(wallet ? wallet.balance : 0) }}</div>
+    <div class="w-full h-[3000px]">
+        <div class="w-full h-[210px] px-5 py-8 bg-gray-800 rounded-2xl flex flex-col justify-center items-center gap-8">
+            <div class="flex flex-col justify-center items-center gap-3">
+                <div class="text-gray-300 text-base font-semibold">{{ $t('public.current_wallet_balance') }}</div>
+                <div class="text-white text-3xl font-semibold">$ {{ formatAmount(wallet ? wallet.balance : 0) }}</div>
+            </div>
+            <div class="flex justify-center items-center gap-3">
+                <Button variant="danger" class="w-[138px] font-semibold" @click="openModal(true)">{{ $t('public.deduction') }}</Button>
+                <Button variant="success" class="w-[138px] font-semibold" @click="openModal(false)">{{ $t('public.addition') }}</Button>
+            </div>
         </div>
-        <div class="flex justify-center items-center gap-3">
-            <Button variant="danger" class="w-[138px] font-semibold" @click="openModal(true)">Deduction</Button>
-            <Button variant="success" class="w-[138px] font-semibold" @click="openModal(false)">Addition</Button>
+
+        <div class="w-full mt-2 px-4 py-2 flex flex-col justify-start items-center gap-3">
+            <div class="w-full justify-start items-center">
+                <div class="text-white text-base font-semibold">{{ $t('public.adjustment_history') }}</div>
+            </div>
+
+            <div v-if="histories && histories.length <= 0" class="py-5">
+                <NoClientSelected class="w-40 h-[120px] relative mb-3" />
+                <div class="text-gray-300 text-sm font-normal">{{ $t('public.no_client_selected_message') }}</div>
+            </div>
+            <div v-else class="w-full justify-start items-center">
+                <div class="w-full px-4 py-3 bg-gray-800 rounded-xl flex-col justify-start items-start inline-flex">
+                    <table class="w-full text-sm text-left text-gray-500">
+                        <tbody>
+                            <tr
+                                v-for="history in histories.data"
+                                :key="history.id"
+                                class="text-xs font-normal text-white border-b border-gray-700"
+                            >
+                                <td class="w-full py-2 flex justify-between items-center" @click="toggleExpanded(history)">
+                                    <div class="w-full flex-row">
+                                        <div class="w-full flex justify-between">
+                                            <div class="text-gray-300 text-xs font-normal font-sans leading-[18px] gap-3 justify-start">
+                                                {{ formatDateTime(history.created_at) }}
+                                            </div>
+                                            <div class="font-medium font-sans leading-normal text-md justify-end"
+                                                :class="{'text-success-500': history.to_wallet_id,'text-error-500': history.from_wallet_id,'text-white': !history.from_wallet_id && !history.to_wallet_id}">
+                                                {{ history.to_wallet_id ? '+' + formatAmount(history.transaction_amount) : (history.from_wallet_id ? '-' + formatAmount(history.transaction_amount) : formatAmount(history.transaction_amount))}}
+                                            </div>
+                                        </div>
+                                        <div v-if="history.isExpanded" class="mt-2 w-full flex justify-between">
+                                            <div class="text-gray-300 text-xxs font-normal font-sans leading-[18px] gap-3 justify-start">
+                                                {{ $t('public.previous_balance') }}: <span class="text-white">$ {{ formatAmount(history.old_wallet_amount) }}</span>
+                                            </div>
+                                            <div class="text-gray-300 text-xxs font-normal font-sans leading-[18px] gap-3 justify-start">
+                                                {{ $t('public.current_balance') }}: <span class="text-white">$ {{ formatAmount(history.new_wallet_amount) }}</span>
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="flex justify-center mt-4">
+                    <TailwindPagination
+                        :item-classes="paginationClass"
+                        :active-classes="paginationActiveClass"
+                        :data="histories"
+                        :limit="10"
+                        @pagination-change-page="handlePageChange"
+                    />
+                </div>
+            </div>
         </div>
     </div>
 
-    <div class="w-full mt-2 px-4 py-2 flex flex-col justify-start items-center gap-3">
-        <div class="w-full justify-start items-center">
-            <div class="text-white text-base font-semibold">Adjustment History</div>
-        </div>
+    <Modal :show="WalletAdjustmentModal" :title="isDeduction ? $t('public.wallet_adjustment_deduction') : $t('public.wallet_adjustment_addition')" @close="closeModal" max-width="sm">
+        <form @submit.prevent="confirm">
+            <div class="w-full flex-col justify-start items-start gap-1.5 mb-5 inline-flex">
+                <Label for="amount" class="text-xs font-medium font-sans leading-[18px]" :invalid="form.errors.amount">{{ $t('public.adjustment_amount') }}</Label>
 
-        <div v-if="histories && histories.length <= 0" class="py-5">
-            <NoClientSelected class="w-40 h-[120px] relative mb-3" />
-            <div class="text-gray-300 text-sm font-normal">No client selected</div>
-        </div>
-        <div v-else class="w-full justify-start items-center">
-            <div class="w-full px-4 py-3 bg-gray-800 rounded-xl flex-col justify-start items-start inline-flex">
-                <table class="w-full text-sm text-left text-gray-500">
-                    <tbody>
-                        <tr
-                            v-for="history in histories.data"
-                            :key="history.id"
-                            class="text-xs font-normal text-white border-b border-gray-700"
-                        >
-                            <td class="w-full py-2 flex justify-between items-center" @click="toggleExpanded(history)">
-                                <div class="w-full flex-row">
-                                    <div class="w-full flex justify-between">
-                                        <div class="text-gray-300 text-xs font-normal font-sans leading-[18px] gap-3 justify-start">
-                                            {{ formatDateTime(history.created_at) }}
-                                        </div>
-                                        <div class="font-medium font-sans leading-normal text-md justify-end"
-                                            :class="{'text-success-500': history.to_wallet_id,'text-error-500': history.from_wallet_id,'text-white': !history.from_wallet_id && !history.to_wallet_id}">
-                                            {{ history.to_wallet_id ? '+' + formatAmount(history.transaction_amount) : (history.from_wallet_id ? '-' + formatAmount(history.transaction_amount) : formatAmount(history.transaction_amount))}}
-                                        </div>
-                                    </div>
-                                    <div v-if="history.isExpanded" class="mt-2 w-full flex justify-between">
-                                        <div class="text-gray-300 text-xxs font-normal font-sans leading-[18px] gap-3 justify-start">
-                                            Previous Balance: <span class="text-white">$ {{ formatAmount(history.old_wallet_amount) }}</span>
-                                        </div>
-                                        <div class="text-gray-300 text-xxs font-normal font-sans leading-[18px] gap-3 justify-start">
-                                            Current Balance: <span class="text-white">$ {{ formatAmount(history.new_wallet_amount) }}</span>
-                                        </div>
-                                    </div>
+                <InputIconWrapper class="col-span-2">
+                <template #icon>
+                    <span class='text-white'>{{ isDeduction ? '-$' : '+$' }}</span>
+                </template>
 
-                                </div>
-
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-            <div class="flex justify-center mt-4">
-                <TailwindPagination
-                    :item-classes="paginationClass"
-                    :active-classes="paginationActiveClass"
-                    :data="histories"
-                    :limit="10"
-                    @pagination-change-page="handlePageChange"
+                <Input
+                    withIcon
+                    id="amount"
+                    class="block w-full py-3 px-4 bg-transparent text-white"
+                    :invalid="form.errors.amount"
+                    v-model="form.amount"
+                    required
                 />
+                </InputIconWrapper>
+
+                <InputError class="mt-2" :message="form.errors.amount" />
             </div>
-        </div>
-    </div>
-</div>
 
-<Modal :show="WalletAdjustmentModal" :title="isDeduction ? 'Wallet Adjustment - Deduction' : 'Wallet Adjustment - Addition'" @close="closeModal" max-width="sm">
-    <form>
-        <div class="w-full flex-col justify-start items-start gap-1.5 mb-5 inline-flex">
-            <Label for="amount" value="Adjustment Amount" class="text-gray-300 text-xs font-medium font-sans leading-[18px]" :invalid="form.errors.amount" />
-
-            <InputIconWrapper class="col-span-2">
-            <template #icon>
-                <span class='text-white'>{{ isDeduction ? '-$' : '+$' }}</span>
-            </template>
-
-            <Input
-                withIcon
-                id="amount"
-                class="block w-full py-3 px-4 bg-transparent text-white"
-                :invalid="form.errors.amount"
-                v-model="form.amount"
-                required
-            />
-            </InputIconWrapper>
-
-            <InputError class="mt-2" :message="form.errors.amount" />
-        </div>
-
-        <div class="grid grid-cols-2 items-center mb-2">
-            <div class="col-span-1 text-gray-300 text-xs font-normal font-sans leading-[18px]">Client</div>
-            <div class="col-span-1 flex items-center">
-            <img class="w-5 h-5 rounded-full mr-2" :src="client ? client.img || 'https://via.placeholder.com/32x32' : 'https://via.placeholder.com/32x32'" alt="Client upline profile picture" />
-            <div class="text-white text-xs font-normal font-sans leading-tight">{{ client ? client.label : '' }}</div>
+            <div class="grid grid-cols-2 items-center mb-2">
+                <div class="col-span-1 text-gray-300 text-xs font-normal font-sans leading-[18px]">{{ $t('public.client') }}</div>
+                <div class="col-span-1 flex items-center">
+                <img class="w-5 h-5 rounded-full mr-2" :src="client ? client.img || 'https://via.placeholder.com/32x32' : 'https://via.placeholder.com/32x32'" alt="Client upline profile picture" />
+                <div class="text-white text-xs font-normal font-sans leading-tight">{{ client ? client.label : '' }}</div>
+                </div>
             </div>
-        </div>
-        <div class="grid grid-cols-2 items-center mb-2">
-            <div class="col-span-1 text-gray-300 text-xs font-normal font-sans leading-[18px]">Wallet</div>
-            <div class="col-span-1 text-white text-xs font-normal font-sans leading-tight">{{ wallet ? wallet.name : '' }}</div>
-        </div>
+            <div class="grid grid-cols-2 items-center mb-2">
+                <div class="col-span-1 text-gray-300 text-xs font-normal font-sans leading-[18px]">{{ $t('public.wallet') }}</div>
+                <div class="col-span-1 text-white text-xs font-normal font-sans leading-tight">{{ wallet ? $t('public.' + wallet.type.toLowerCase()) : '' }}</div>
+            </div>
 
-        <div class="grid grid-cols-2 items-center mb-2">
-            <div class="col-span-1 text-gray-300 text-xs font-normal font-sans leading-[18px]">Current Balance</div>
-            <div class="col-span-1 text-white text-xs font-normal font-sans leading-tight">{{ formatAmount(wallet ? wallet.balance : 0) }}</div>
-        </div>
+            <div class="grid grid-cols-2 items-center mb-2">
+                <div class="col-span-1 text-gray-300 text-xs font-normal font-sans leading-[18px]">{{ $t('public.current_balance') }}</div>
+                <div class="col-span-1 text-white text-xs font-normal font-sans leading-tight">{{ formatAmount(wallet ? wallet.balance : 0) }}</div>
+            </div>
 
-        <div class="grid grid-cols-2 items-center mb-5">
-            <div class="col-span-1 text-gray-300 text-xs font-normal font-sans leading-[18px]">After Adjustment</div>
-            <div class="col-span-1 text-white text-xs font-normal font-sans leading-tight">{{ formatAmount(adjustedBalance) }}</div>
-        </div>
+            <div class="grid grid-cols-2 items-center mb-5">
+                <div class="col-span-1 text-gray-300 text-xs font-normal font-sans leading-[18px]">{{ $t('public.after_adjustment') }}</div>
+                <div class="col-span-1 text-white text-xs font-normal font-sans leading-tight">{{ formatAmount(adjustedBalance) }}</div>
+            </div>
 
-        <div class="items-center pt-8 flex gap-3">
-            <Button variant="outline" class="w-full" @click="closeModal">Close</Button>
-            <Button variant="primary" class="w-full" :disabled="form.processing" @click="confirm">Confirm</Button>
-        </div>
-    </form>
-</Modal>
+            <div class="items-center pt-8 flex gap-3">
+                <Button variant="outline" class="w-full" @click="closeModal">{{ $t('public.close') }}</Button>
+                <Button variant="primary" class="w-full" :disabled="form.processing" @click="confirm">{{ $t('public.confirm') }}</Button>
+            </div>
+        </form>
+    </Modal>
 
 </template>

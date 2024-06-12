@@ -75,7 +75,7 @@ class ProfileController extends Controller
         }
 
         return redirect()->back()->with('toast', [
-            'title' => 'Upload Profile Photo Success!',
+            'title' => trans('public.upload_photo_success_title'),
             'type' => 'success'
         ]);
     }

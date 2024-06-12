@@ -51,7 +51,7 @@ class PammController extends Controller
         ]);
     
         return redirect()->back()->with('toast', [
-            'title' => 'PAMM Return Updated!',
+            'title' => trans('public.pamm_update_success_title'),
             'type' => 'success'
         ]);
     }

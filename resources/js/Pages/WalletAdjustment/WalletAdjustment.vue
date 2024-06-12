@@ -43,10 +43,10 @@ const updateWalletType = (wallet_type) => {
 </script>
 
 <template>
-    <Head title="Wallet Adjustment" />
+    <Head :title="$t('public.wallet_adjustment')" />
     <AuthenticatedLayout>
         <template #header>
-            <h2 class="font-semibold text-xxl text-white leading-loose">Wallet Adjustment</h2>
+            <h2 class="font-semibold text-xxl text-white leading-loose">{{ $t('public.wallet_adjustment') }}</h2>
         </template>
 
         <div class="rounded-md shadow-md mb-3">
@@ -55,11 +55,11 @@ const updateWalletType = (wallet_type) => {
                     <Combobox
                         :load-options="loadClient"
                         v-model="client"
-                        placeholder="Select Client"
+                        :placeholder="$t('public.select_client')"
                         image
                     />
                 </div>
-                <div class="text-gray-300 text-xs font-normal font-sans leading-[18px]">Select client by searching name or ID</div>
+                <div class="text-gray-300 text-xs font-normal font-sans leading-[18px]">{{ $t('public.select_client_message') }}</div>
             </div>
             <div class="w-full">
                 <TabGroup>
@@ -79,7 +79,7 @@ const updateWalletType = (wallet_type) => {
                                         : 'border-b border-gray-700',
                                 ]"
                             >
-                                Cash Wallet
+                                {{ $t('public.cash_wallet') }}
                             </button>
                         </Tab>
                         <Tab
@@ -97,7 +97,7 @@ const updateWalletType = (wallet_type) => {
                                         : 'border-b border-gray-700',
                                 ]"
                             >
-                                Commission Wallet
+                                {{ $t('public.commission_wallet') }}
                             </button>
                         </Tab>
                     </TabList>

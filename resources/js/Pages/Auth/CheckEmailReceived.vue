@@ -5,6 +5,7 @@ import Input from '@/Components/Input.vue';
 import { Head, useForm } from '@inertiajs/vue3';
 import { ArrowLeftIcon } from '@/Components/Icons/solid';
 import toast from "@/Composables/toast.js";
+import { trans } from 'laravel-vue-i18n';
 
 const props = defineProps({
     email: {
@@ -24,13 +25,13 @@ const resendEmail = async (email) => {
         });
         // If the request is successful, show a success toast
         toast.add({
-            title: 'Password Reset Link Resent!',
+            title: trans('public.password_reset_link_sent'),
             type: 'success',
         });
     } catch (error) {
         // If there's an error, show an error toast
         toast.add({
-            title: 'Password Reset Link Resent Error!',
+            title: trans('public.password_reset_link_sent_error'),
             type: 'error'
         });
         console.error('Error resending password reset email:', error);
@@ -45,15 +46,15 @@ const goToLoginPage = () => {
 
 <template>
     <GuestLayout>
-        <Head title="Check your email" />
+        <Head :title="$t('public.check_your_email')" />
 
         <div class="text-center mb-10">
             <div class="mb-2 text-xl text-white font-semibold">
-                Check your email
+                {{ $t('public.check_your_email') }}
             </div>
 
             <div class="text-sm text-gray-300">
-                We've sent a password reset link to
+                {{ $t('public.check_email_message') }}
             </div>
 
             <div class="text-sm text-gray-300 font-bold">
@@ -65,19 +66,19 @@ const goToLoginPage = () => {
         <div class="grid grid-cols-6 gap-4 w-full mt-10">
             <div class="col-span-6">
                 <Button variant="primary" :class="{ 'opacity-25': form.processing }" :disabled="form.processing" class="w-full">
-                    Open email app
+                    {{ $t('public.open_email_app') }}
                 </Button>
             </div>
 
             <!-- Didn't receive the email? -->
             <div class="col-span-3 text-sm text-gray-300 flex items-center justify-start">
-                Didn't receive the email?
+                {{ $t('public.not_received_email') }}
             </div>
 
             <!-- Click to resend -->
             <div class="col-span-3">
                 <Button @click="resendEmail(props.email)" variant="transparent" :class="{ 'opacity-25': form.processing }" :disabled="form.processing" class="w-full">
-                    Click to resend
+                    {{ $t('public.click_resend') }}
                 </Button>
             </div>
         </div>
@@ -85,7 +86,7 @@ const goToLoginPage = () => {
         <!-- Back to Log In -->
         <div class="col-span-6 mt-4">
             <Button @click="goToLoginPage" variant="transparent" :class="{ 'opacity-25': form.processing }" :disabled="form.processing" class="w-full">
-                <ArrowLeftIcon class="w-5 h-5 mr-2"/>Back to Log In
+                <ArrowLeftIcon class="w-5 h-5 mr-2"/>{{ $t('public.back_to_login') }}
             </Button>
         </div>
     </GuestLayout>

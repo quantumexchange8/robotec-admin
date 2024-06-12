@@ -23,6 +23,7 @@ onUnmounted(() => {
 })
 
 const currentLocale = ref(usePage().props.locale);
+console.log(currentLocale)
 const localeTextMap = {
     en: 'EN',
     cn: '简体中文',
@@ -90,7 +91,6 @@ const changeLanguage = async (langVal) => {
                         type="button"
                         v-slot="{ iconSizeClasses }"
                         class="inline-flex"
-                        srText="Toggle dark mode"
                         size="sm"
                     >
                         <GlobeAltIcon

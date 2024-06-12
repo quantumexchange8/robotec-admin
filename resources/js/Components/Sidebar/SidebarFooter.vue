@@ -25,7 +25,7 @@ import { sidebarState } from '@/Composables'
                 size="sm"
                 class="w-5 h-5"
             />
-            <span class="pl-4">Log Out</span>
+            <span class="pl-4">{{ $t('public.log_out')}}</span>
         </div>
     </Button>
 </div>

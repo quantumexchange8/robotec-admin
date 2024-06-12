@@ -50,11 +50,11 @@ class TransactionController extends Controller
         if ($isDeduction) {
             // If it's a deduction, ensure the amount is negative
             $amount = -abs($amount);
-            $actionMessage = 'deducted';
+            $actionMessage = trans('public.deducted');
         } else {
             // If it's an addition, ensure the amount is positive
             $amount = abs($amount);
-            $actionMessage = 'added';
+            $actionMessage = trans('public.added');
         }
     
         // Create a transaction record
@@ -78,13 +78,10 @@ class TransactionController extends Controller
         $wallet->update([
             'balance' => $wallet->balance + $amount,
         ]);
-        
-        // Generate the success message dynamically
-        $successMessage = "has been $actionMessage successfully.";
-        
+                
         return redirect()->back()->with('toast', [
-            'title' => 'Wallet Adjustment Successful',
-            'message' => '$ ' . number_format(abs($amount), 2) . ' has been ' . $successMessage,
+            'title' => trans('public.wallet_adjustment_success_title'),
+            'message' => trans('public.wallet_adjustment_success_message', ['amount' => number_format(abs($amount), 2), 'actionMessage' => $actionMessage]),
             'type' => 'success'
         ]);
     }
@@ -197,12 +194,18 @@ class TransactionController extends Controller
             'approved_at' => now(),
         ]);
 
+        if ($request->remarks) {
+            $withdrawalRequest->update([
+                'remarks' => $request->remarks,
+            ]);    
+        }
+
         // Update wallet balance
         $withdrawalRequest->from_wallet->decrement('balance', $withdrawalRequest->transaction_amount);
 
         return redirect()->back()->with('toast', [
-            'title' => 'Withdrawal Request Approved!',
-            'message' => 'Withdrawal request of $ '. $withdrawalRequest->transaction_amount . ' has been approved successfully.',
+            'title' => trans('public.withdrawal_request_approved_title'),
+            'message' => trans('public.withdrawal_request_approved_message', ['amount' => $withdrawalRequest->transaction_amount]),
             'type' => 'success'
         ]);
     }
@@ -224,15 +227,20 @@ class TransactionController extends Controller
         // Update withdrawal request status and approval timestamp
         $withdrawalRequest->update([
             'status' => 'Rejected',
-            'remarks' => $request->remarks,
         ]);
+
+        if ($request->remarks) {
+            $withdrawalRequest->update([
+                'remarks' => $request->remarks,
+            ]);    
+        }
 
         // Update wallet balance
         $withdrawalRequest->from_wallet->increment('balance', $withdrawalRequest->transaction_amount);
 
         return redirect()->back()->with('toast', [
-            'title' => 'Withdrawal Request Rejected!',
-            'message' => 'Withdrawal request of $ '. $withdrawalRequest->transaction_amount . ' has been rejected successfully.',
+            'title' => trans('public.withdrawal_request_rejected_title'),
+            'message' => trans('public.withdrawal_request_rejected_message', ['amount' => $withdrawalRequest->transaction_amount]),
             'type' => 'success'
         ]);
     }

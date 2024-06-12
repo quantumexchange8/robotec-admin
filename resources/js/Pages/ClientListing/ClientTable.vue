@@ -204,7 +204,7 @@ const updateClient = (clientDetails) => {
                     <div class="flex flex-col items-center mb-3 p-5">
                         <NoClient class="w-40 h-[120px]" />
                         <div class="w-full text-center text-gray-300 text-sm font-normal font-sans leading-tight mt-3">
-                            It looks like you haven't added any clients yet. Start by creating your first client to get started!
+                            {{ $t('public.no_client_message_1') }}
                         </div>
                     </div>
                 </div>
@@ -232,9 +232,9 @@ const updateClient = (clientDetails) => {
                                         {{ member.name }}
                                     </div>
                                     <div class="flex">
-                                        <div class="text-gray-300 text-xs font-normal font-sans leading-[18px] mr-2">ID: {{ member.id }}</div>
+                                        <div class="text-gray-300 text-xs font-normal font-sans leading-[18px] mr-2">{{ $t('public.id') }}: {{ member.id }}</div>
                                         <div class="flex items-center text-xs font-normal font-sans leading-[18px]">
-                                            <div class="text-gray-300">Commission:&nbsp;</div>
+                                            <div class="text-gray-300">{{ $t('public.commission') }}:&nbsp;</div>
                                             <div class="text-success-300">{{ member.id }}</div>
                                         </div>
                                     </div>
@@ -256,28 +256,28 @@ const updateClient = (clientDetails) => {
         </div>
     </div>
 
-    <Modal :show="clientDetailModal" title="Client Details" @close="closeClientModal" max-width="sm">
+    <Modal :show="clientDetailModal" :title="$t('public.client_details')" @close="closeClientModal" max-width="sm">
         <div v-if="clientDetails">
             <div class="w-full justify-start items-center gap-3 inline-flex">
                 <img class="w-9 h-9 rounded-full" :src="clientDetails.profile_photo || 'https://via.placeholder.com/32x32'" alt="Client profile picture"/>
                 <div class="w-full flex-col justify-start items-start inline-flex">
                     <div class="self-stretch text-white text-base font-medium font-sans leading-normal">{{ clientDetails.name }}</div>
-                    <div class="text-gray-300 text-xs font-normal font-sans leading-[18px]">ID: {{ clientDetails.id }}</div>
+                    <div class="text-gray-300 text-xs font-normal font-sans leading-[18px]">{{ $t('public.id') }}: {{ clientDetails.id }}</div>
                 </div>
             </div>
 
             <div class="w-full h-px bg-gray-700 my-4"></div>
 
             <div class="grid grid-cols-2 items-center mb-2">
-                <div class="col-span-1 text-gray-300 text-xs font-normal font-sans leading-[18px]">Email</div>
+                <div class="col-span-1 text-gray-300 text-xs font-normal font-sans leading-[18px]">{{ $t('public.email') }}</div>
                 <div class="col-span-1 text-white text-xs font-normal font-sans leading-tight">{{ clientDetails.email }}</div>
             </div>
             <div class="grid grid-cols-2 items-center mb-2">
-                <div class="col-span-1 text-gray-300 text-xs font-normal font-sans leading-[18px]">Phone Number</div>
+                <div class="col-span-1 text-gray-300 text-xs font-normal font-sans leading-[18px]">{{ $t('public.phone_number') }}</div>
                 <div class="col-span-1 text-white text-xs font-normal font-sans leading-tight">{{ clientDetails.phone }}</div>
             </div>
             <div class="grid grid-cols-2 items-center">
-                <div class="col-span-1 text-gray-300 text-xs font-normal font-sans leading-[18px]">Upline</div>
+                <div class="col-span-1 text-gray-300 text-xs font-normal font-sans leading-[18px]">{{ $t('public.upline') }}</div>
                 <div v-if="clientDetails.upline" class="col-span-1 flex items-center">
                     <img class="w-5 h-5 rounded-full mr-2" :src="clientDetails.upline.profile_photo || 'https://via.placeholder.com/32x32'" alt="Client upline profile picture"/>
                     <div class="text-white text-xs font-normal font-sans leading-tight">{{ clientDetails.upline.name }}</div>
@@ -287,46 +287,46 @@ const updateClient = (clientDetails) => {
             <div class="w-full h-px bg-gray-700 my-4"></div>
 
             <div class="grid grid-cols-2 items-center mb-2">
-                <div class="col-span-1 text-gray-300 text-xs font-normal font-sans leading-[18px]">Total Deposit</div>
+                <div class="col-span-1 text-gray-300 text-xs font-normal font-sans leading-[18px]">{{ $t('public.total_deposit') }}</div>
                 <div class="col-span-1 text-white text-xs font-normal font-sans leading-tight">{{ clientDetails.totalDeposit }}</div>
             </div>
             <div class="grid grid-cols-2 items-center mb-2">
-                <div class="col-span-1 text-gray-300 text-xs font-normal font-sans leading-[18px]">Total Withdrawal</div>
+                <div class="col-span-1 text-gray-300 text-xs font-normal font-sans leading-[18px]">{{ $t('public.total_withdrawal') }}</div>
                 <div class="col-span-1 text-white text-xs font-normal font-sans leading-tight">{{ clientDetails.totalWithdrawal }}</div>
             </div>
             <div class="grid grid-cols-2 items-center mb-2">
-                <div class="col-span-1 text-gray-300 text-xs font-normal font-sans leading-[18px]">Referee</div>
+                <div class="col-span-1 text-gray-300 text-xs font-normal font-sans leading-[18px]">{{ $t('public.referee') }}</div>
                 <div class="col-span-1 text-white text-xs font-normal font-sans leading-tight">{{ clientDetails.referee }}</div>
             </div>
             <div class="grid grid-cols-2 items-center mb-2">
-                <div class="col-span-1 text-gray-300 text-xs font-normal font-sans leading-[18px]">Total Commission</div>
-                <div class="col-span-1 text-white text-xs font-normal font-sans leading-tight">{{ clientDetails.totalCommission }}</div>
+                <div class="col-span-1 text-gray-300 text-xs font-normal font-sans leading-[18px]">{{ $t('public.total_commission') }}</div>
+                <div class="col-span-1 text-white text-xs font-normal font-sans leading-tight">{{ clientDetails.totalCommission ?? 0 }}</div>
             </div>
             <div class="grid grid-cols-2 items-center">
-                <div class="col-span-1 text-gray-300 text-xs font-normal font-sans leading-[18px]">PAMM Fund In Amount</div>
+                <div class="col-span-1 text-gray-300 text-xs font-normal font-sans leading-[18px]">{{ $t('public.pamm_fund_in_amount') }}</div>
                 <div class="col-span-1 text-white text-xs font-normal font-sans leading-tight">{{ clientDetails.totalFundedPAMM }}</div>
             </div>
 
             <div class="w-full h-px bg-gray-700 my-4"></div>
 
             <div class="items-center mb-5">
-                <div class="text-gray-300 text-xs font-normal font-sans leading-[18px] mb-1">USDT Address</div>
+                <div class="text-gray-300 text-xs font-normal font-sans leading-[18px] mb-1">{{ $t('public.usdt_address') }}</div>
                 <div class="text-white text-xs font-normal font-sans leading-tight">{{ clientDetails.cash_wallet.wallet_address }}</div>
             </div>
 
             <div class="items-center pt-8 flex gap-3">
-                <Button variant="gray" class="w-full" @click.prevent="openEditModal(clientDetails)">Edit</Button>
-                <Button variant="danger" class="w-full" @click.prevent="openDeleteModal(clientDetails)">Delete</Button>
+                <Button variant="gray" class="w-full" @click.prevent="openEditModal(clientDetails)">{{ $t('public.edit') }}</Button>
+                <Button variant="danger" class="w-full" @click.prevent="openDeleteModal(clientDetails)">{{ $t('public.delete') }}</Button>
             </div>
 
         </div>
     </Modal>
 
-    <Modal :show="editModal" title="Edit Client" @close="closeEditModal" max-width="sm">
+    <Modal :show="editModal" :title="$t('public.edit_client')" @close="closeEditModal" max-width="sm">
         <form>
             <div class="my-5 px-1">
                 <div>
-                    <Label for="name" value="Client Name" class="text-gray-300 mb-1.5" :invalid="form.errors.name" important />
+                    <Label for="name" :value="$t('public.client_name')" class="mb-1.5" :invalid="form.errors.name" />
                     <Input
                         id="name"
                         class="block w-full mb-5 bg-transparent text-white"
@@ -339,7 +339,7 @@ const updateClient = (clientDetails) => {
                 </div>
 
                 <div>
-                    <Label for="email" value="Email" class="text-gray-300 mb-1.5" :invalid="form.errors.email" important />
+                    <Label for="email" :value="$t('public.email')" class="mb-1.5" :invalid="form.errors.email" />
 
                     <Input
                         id="email"
@@ -353,7 +353,7 @@ const updateClient = (clientDetails) => {
                     <InputError class="mt-2" :message="form.errors.email" />
                 </div>
                 <div>
-                    <Label for="phone_number" value="Phone Number" class="text-gray-300 mb-1.5" :invalid="form.errors.phone || form.errors.dial_code" important />
+                    <Label for="phone_number" :value="$t('public.phone_number')" class="mb-1.5" :invalid="form.errors.phone || form.errors.dial_code" />
                             
                     <div class="grid grid-cols-5">
                         <div class="col-span-2">
@@ -385,7 +385,7 @@ const updateClient = (clientDetails) => {
                 <InputError class="mt-2" :message="form.errors.phone" />
                 </div>
                 <div>
-                    <Label for="wallet_address" value="USDT Address" class="text-gray-300 mb-1.5" :invalid="form.errors.wallet_address" />
+                    <Label for="wallet_address" class="mb-1.5" :invalid="form.errors.wallet_address">{{ $t('public.usdt_address') }}</Label>
 
                     <Input
                         id="wallet_address"
@@ -399,8 +399,8 @@ const updateClient = (clientDetails) => {
                 </div>
             </div>
             <div class="w-full flex justify-end pt-8 gap-3">
-                <Button variant="transparent" class="w-full border border-gray-600" @click.prevent="closeEditModal">Cancel</Button>
-                <Button variant="primary" class="w-full" :disabled="form.processing" @click.prevent="updateClient(clientDetails)">Save Changes</Button>
+                <Button variant="transparent" class="w-full border border-gray-600" @click.prevent="closeEditModal">{{ $t('public.cancel') }}</Button>
+                <Button variant="primary" class="w-full" :disabled="form.processing" @click.prevent="updateClient(clientDetails)">{{ $t('public.save_changes') }}</Button>
             </div>
         </form>
     </Modal>
@@ -411,12 +411,12 @@ const updateClient = (clientDetails) => {
                 <WarningIcon  class="w-12 h-12" />
             </div>
             <div class="my-8">
-                <div class="mb-1 text-center text-white text-sm font-semibold font-sans leading-tight ">Are you sure you want to delete this client?</div>
-                <div class="text-center text-gray-300 text-xs font-normal font-sans leading-[18px] ">This action cannot be undone and the deleted item will be removed permanently.</div>
+                <div class="mb-1 text-center text-white text-sm font-semibold font-sans leading-tight ">{{ $t('public.delete_warning_message') }}</div>
+                <div class="text-center text-gray-300 text-xs font-normal font-sans leading-[18px] ">{{ $t('public.delete_warning_message_1') }}</div>
             </div>
             <div class="w-full flex justify-center gap-3">
-                <Button variant="transparent" class="w-full border border-gray-600" @click.prevent="closeDeleteModal">Cancel</Button>
-                <Button variant="danger" class="w-full" :disabled="form.processing" @click.prevent="deleteClient(clientDetails)">Delete</Button>
+                <Button variant="transparent" class="w-full border border-gray-600" @click.prevent="closeDeleteModal">{{ $t('public.cancel') }}</Button>
+                <Button variant="danger" class="w-full" :disabled="form.processing" @click.prevent="deleteClient(clientDetails)">{{ $t('public.delete') }}</Button>
             </div>
         </form>
     </Modal>

@@ -28,7 +28,16 @@ const formatter = ref({
 const totalCommissionRequest = ref(props.totalCommissionRequest);
 const totalCommissionHistory = ref(props.totalCommissionHistory);
 const search = ref('');
-const date = ref('');
+const today = new Date();
+const firstDayOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
+const lastDayOfMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0);
+
+// Formatting the start and end of the current month
+const formattedStartDate = `${firstDayOfMonth.getFullYear()}-${(firstDayOfMonth.getMonth() + 1).toString().padStart(2, '0')}-01`;
+const formattedEndDate = `${lastDayOfMonth.getFullYear()}-${(lastDayOfMonth.getMonth() + 1).toString().padStart(2, '0')}-${lastDayOfMonth.getDate().toString().padStart(2, '0')}`;
+
+// Set the initial date range to the current month
+const date = ref(`${formattedStartDate} - ${formattedEndDate}`);
 const type = ref('Pending');
 const updateCommissionType = (commission_type) => {
     type.value = commission_type;
@@ -37,10 +46,10 @@ const updateCommissionType = (commission_type) => {
 </script>
 
 <template>
-    <Head title="Commission Payout" />
+    <Head :title="$t('public.commission_payout')" />
     <AuthenticatedLayout>
         <template #header>
-            <h2 class="font-semibold text-xxl text-white leading-loose">Commission Payout</h2>
+            <h2 class="font-semibold text-xxl text-white leading-loose">{{ $t('public.commission_payout') }}</h2>
         </template>
 
         <div class="rounded-md shadow-md mb-3">
@@ -62,7 +71,7 @@ const updateCommissionType = (commission_type) => {
                                         : 'border-b border-gray-700',
                                 ]"
                             >
-                                Pending Request ({{ totalCommissionRequest ?? 0 }})
+                                {{ $t('public.pending_request') }} ({{ totalCommissionRequest ?? 0 }})
                             </button>
                         </Tab>
                         <Tab
@@ -80,7 +89,7 @@ const updateCommissionType = (commission_type) => {
                                         : 'border-b border-gray-700',
                                 ]"
                             >
-                                History ({{ totalCommissionHistory ?? 0 }})
+                                {{ $t('public.history') }} ({{ totalCommissionHistory ?? 0 }})
                             </button>
                         </Tab>
                     </TabList>
@@ -90,7 +99,7 @@ const updateCommissionType = (commission_type) => {
                                 <template #icon>
                                     <SearchIcon aria-hidden="true" class="w-5 h-5 text-white" />
                                 </template>
-                                <Input withIcon id="search" variant="search" type="text" class="block w-full rounded-lg" placeholder="Search" v-model="search" />
+                                <Input withIcon id="search" variant="search" type="text" class="block w-full rounded-lg" :placeholder="$t('public.search')" v-model="search" />
                             </InputIconWrapper>
                         </div>
                     </div>
