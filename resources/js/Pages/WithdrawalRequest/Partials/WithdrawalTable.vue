@@ -217,7 +217,7 @@ const rejectRequest = (requestDetails) => {
     <Modal :show="withdrawalRequestModal" :title="$t('public.withdrawal_request')" @close="closeModal" max-width="sm">
         <div v-if="requestDetails">
             <div class="w-full justify-start items-center gap-3 my-5 pb-3 border-b border-gray-700 inline-flex">
-                <img class="w-9 h-9 rounded-full" :src="requestDetails.user.profile_photo || 'https://via.placeholder.com/32x32'" alt="Client profile picture"/>
+                <img class="w-9 h-9 rounded-full" :src="requestDetails.user.profile_photo || 'https://img.freepik.com/free-icon/user_318-159711.jpg'" alt="Client profile picture"/>
                 <div class="w-full flex-col justify-start items-start inline-flex">
                     <div class="self-stretch text-white text-base font-medium font-sans leading-normal">{{ requestDetails.user.name }}</div>
                     <div class="text-gray-300 text-xs font-normal font-sans leading-[18px]">{{ $t('public.id') }}: {{ requestDetails.user.id }}</div>

@@ -252,7 +252,7 @@ class TransactionController extends Controller
         $query = Transaction::query()
             ->with('user','from_wallet','to_wallet')
             ->where('transaction_type', $request->transaction_type)
-            ->whereNotIn('status', ['Pending', 'processing']);
+            ->whereNotIn('status', ['Pending']);
 
         // If 'status' is provided in the request, add it to the query
         if ($request->has('status')) {

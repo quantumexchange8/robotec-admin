@@ -245,7 +245,7 @@ const updateClient = (clientDetails) => {
                                         <div class="text-gray-300 text-xs font-normal font-sans leading-[18px] mr-2">{{ $t('public.id') }}: {{ member.id }}</div>
                                         <div class="flex items-center text-xs font-normal font-sans leading-[18px]">
                                             <div class="text-gray-300">{{ $t('public.commission') }}:&nbsp;</div>
-                                            <div class="text-success-300">{{ 'lack' }}</div>
+                                            <div class="text-success-300">{{ formatAmount(member.totalCommission) }}</div>
                                         </div>
                                     </div>
                                 </div>
@@ -269,7 +269,7 @@ const updateClient = (clientDetails) => {
     <Modal :show="clientDetailModal" :title="$t('public.client_details')" @close="closeClientModal" max-width="sm">
         <div v-if="clientDetails">
             <div class="w-full justify-start items-center gap-3 inline-flex">
-                <img class="w-9 h-9 rounded-full" :src="clientDetails.profile_photo || 'https://via.placeholder.com/32x32'" alt="Client profile picture"/>
+                <img class="w-9 h-9 rounded-full" :src="clientDetails.profile_photo || 'https://img.freepik.com/free-icon/user_318-159711.jpg'" alt="Client profile picture"/>
                 <div class="w-full flex-col justify-start items-start inline-flex">
                     <div class="self-stretch text-white text-base font-medium font-sans leading-normal">{{ clientDetails.name }}</div>
                     <div class="text-gray-300 text-xs font-normal font-sans leading-[18px]">{{ $t('public.id') }}: {{ clientDetails.id }}</div>
@@ -289,7 +289,7 @@ const updateClient = (clientDetails) => {
             <div class="grid grid-cols-2 items-center">
                 <div class="col-span-1 text-gray-300 text-xs font-normal font-sans leading-[18px]">{{ $t('public.upline') }}</div>
                 <div v-if="clientDetails.upline" class="col-span-1 flex items-center">
-                    <img class="w-5 h-5 rounded-full mr-2" :src="clientDetails.upline.profile_photo || 'https://via.placeholder.com/32x32'" alt="Client upline profile picture"/>
+                    <img class="w-5 h-5 rounded-full mr-2" :src="clientDetails.upline.profile_photo || 'https://img.freepik.com/free-icon/user_318-159711.jpg'" alt="Client upline profile picture"/>
                     <div class="text-white text-xs font-normal font-sans leading-tight">{{ clientDetails.upline.name }}</div>
                 </div>
             </div>
@@ -310,7 +310,7 @@ const updateClient = (clientDetails) => {
             </div>
             <div class="grid grid-cols-2 items-center mb-2">
                 <div class="col-span-1 text-gray-300 text-xs font-normal font-sans leading-[18px]">{{ $t('public.total_commission') }}</div>
-                <div class="col-span-1 text-white text-xs font-normal font-sans leading-tight">{{ formatAmount(clientDetails.totalCommission ?? 0) }}</div>
+                <div class="col-span-1 text-white text-xs font-normal font-sans leading-tight">{{ formatAmount(clientDetails.totalCommission) }}</div>
             </div>
             <div class="grid grid-cols-2 items-center">
                 <div class="col-span-1 text-gray-300 text-xs font-normal font-sans leading-[18px]">{{ $t('public.pamm_fund_in_amount') }}</div>

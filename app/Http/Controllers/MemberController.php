@@ -36,14 +36,18 @@ class MemberController extends Controller
         $fundedPAMM = $request->input('fundedPAMM');
     
         // Start building the query
-        $query = User::where('role', 'user');
-        $query = $query->selectRaw('*, 
-                    (SELECT SUM(transaction_amount) 
-                    FROM transactions 
-                    WHERE user_id = users.id 
-                    AND transaction_type = "commission" 
-                    AND status = "Approved") AS totalCommission');
-    
+        $query = User::where('role', 'user')
+            ->leftJoin('wallets', 'users.id', '=', 'wallets.user_id')
+            ->leftJoin('transactions', function($join) {
+                $join->on('transactions.user_id', '=', 'users.id')
+                    ->where('transactions.transaction_type', '=', 'commission')
+                    ->where('transactions.status', '=', 'Approved')
+                    ->whereColumn('transactions.to_wallet_id', '=', 'wallets.id');
+            })
+            ->selectRaw('users.*, 
+                        COALESCE(SUM(transactions.transaction_amount), 0) AS totalCommission')
+            ->groupBy('users.id');
+
         // Apply search filter if provided
         if ($search) {
             $query->where(function($q) use ($search) {
@@ -116,7 +120,6 @@ class MemberController extends Controller
             if ($user->upline) {
                 $user->upline->profile_photo = $user->upline->getFirstMediaUrl('profile_photo');
             }
-            $user->cash_wallet = $user->wallets()->where('type', 'cash_wallet')->first();
             $user->referee = $this->countDescendants($user);
             unset($user->children); // Unset the 'children' attribute
 
