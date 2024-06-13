@@ -43,8 +43,8 @@ const submit = () => {
                 <ApplicationLogo class="w-20 h-20 fill-current text-gray-500" />
             </Link>
             <div class="text-center mb-10">
-                <div class="mb-2 text-white text-xl font-semibold">{{ $t('public.admin_portal') }}</div>
-                <div class="text-gray-300">{{ $t('public.welcome_back') }}</div>
+                <div class="mb-2 text-white text-lg font-semibold">{{ $t('public.admin_portal') }}</div>
+                <div class="text-gray-300 text-sm">{{ $t('public.welcome_back') }}</div>
             </div>
         </div>
 
@@ -55,13 +55,12 @@ const submit = () => {
                 <Input
                     id="email"
                     type="email"
-                    class="mt-1 block w-full bg-transparent text-white"
+                    class="block w-full"
                     :invalid="form.errors.email"
                     v-model="form.email"
-                    :placeholder="$t('public.email_placeholder')"
-                    required
                     autofocus
-                    autocomplete="username"
+                    autocomplete="email"
+                    :placeholder="$t('public.email_placeholder')"
                 />
 
                 <InputError class="mt-2" :message="form.errors.email" />
@@ -72,13 +71,10 @@ const submit = () => {
 
                 <Input
                     id="password"
-                    type="password"
-                    class="mt-1 block w-full bg-transparent text-white"
                     v-model="form.password"
+                    :is_password="true"
                     :invalid="form.errors.password"
-                    :placeholder="$t('public.password_placeholder')"
-                    required
-                    autocomplete="current-password"
+                    :placeholderText="$t('public.password_placeholder')"
                 />
 
                 <InputError class="mt-2" :message="form.errors.password" />
@@ -102,7 +98,7 @@ const submit = () => {
 
             <div class="flex items-center justify-end mt-10">
 
-                <Button variant="primary" class="w-full" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
+                <Button variant="primary" size="lg" class="w-full" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
                     {{ $t('public.log_in') }}
                 </Button>
             </div>

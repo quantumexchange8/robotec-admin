@@ -31,7 +31,7 @@ class TransactionController extends Controller
         return response()->json($wallet);
     }
 
-    public function WalletAdjustment(WalletAdjustmentRequest $request)
+    public function walletAdjustment(WalletAdjustmentRequest $request)
     {
         $clientId = $request->input('id');
         $walletType = $request->input('type');
@@ -43,7 +43,7 @@ class TransactionController extends Controller
     
         // Check if it's a deduction and the amount exceeds the balance
         if ($isDeduction && $amount > $wallet->balance) {
-            throw ValidationException::withMessages(['amount' => 'The amount for deduction exceeds the available balance']);
+            throw ValidationException::withMessages(['amount' => trans('public.deduction_amount_exceed_balance')]);
         }
     
         // Adjust the amount based on isDeduction
@@ -59,7 +59,7 @@ class TransactionController extends Controller
     
         // Create a transaction record
         $transaction = Transaction::create([
-            'user_id' => $clientId,
+            'user_id' => Auth::id(),
             'category' => 'wallet',
             'transaction_type' => 'adjustment',
             'txn_hash' => RunningNumberService::getID('adjustment'),
@@ -93,8 +93,7 @@ class TransactionController extends Controller
 
         $wallet = Wallet::where('user_id', $clientId)->where('type', $walletType)->first();
 
-        $histories = Transaction::where('user_id', $clientId)
-            ->where('transaction_type', 'adjustment')
+        $histories = Transaction::where('transaction_type', 'adjustment')
             ->where(function ($query) use ($wallet) {
                 $query->where('from_wallet_id', $wallet->id)
                     ->orWhere('to_wallet_id', $wallet->id);
@@ -174,16 +173,16 @@ class TransactionController extends Controller
 
         // Verify wallet address and transaction number
         if ($request->wallet_address !== $withdrawalRequest->from_wallet_address) {
-            throw ValidationException::withMessages(['wallet_address' => 'The wallet address is not for this withdrawal request']);
+            throw ValidationException::withMessages(['wallet_address' => trans('public.incorrect_wallet_address')]);
         }
 
         if ($request->transaction_number !== $withdrawalRequest->transaction_number) {
-            throw ValidationException::withMessages(['transaction_number' => 'The transaction hash is not for this withdrawal request']);
+            throw ValidationException::withMessages(['transaction_number' => trans('public.incorrect_transaction_number')]);
         }
 
         // Check if the transaction amount exceeds the wallet balance
         if ($withdrawalRequest->transaction_amount > $withdrawalRequest->from_wallet->balance) {
-            throw ValidationException::withMessages(['transaction_amount' => 'The withdrawal amount exceeds the wallet balance']);
+            throw ValidationException::withMessages(['transaction_amount' => trans('public.withdrawal_amount_exceed_balance')]);
         }
 
         // Update withdrawal request status and approval timestamp
@@ -251,7 +250,7 @@ class TransactionController extends Controller
         $query = Transaction::query()
             ->with('user','from_wallet','to_wallet')
             ->where('transaction_type', $request->transaction_type)
-            ->where('status', '!=', 'Pending');
+            ->whereNotIn('status', ['Pending', 'processing']);
 
         // If 'status' is provided in the request, add it to the query
         if ($request->has('status')) {

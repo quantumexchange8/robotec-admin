@@ -29,25 +29,26 @@ function toggleDropdown() {
 
 // Function to handle uploading profile photo from Photo Library
 function uploadFromPhotoLibrary() {
-    document.getElementById('fileInput').click();
+    document.getElementById('fileInputLibrary').click();
 }
 
 // Function to handle uploading profile photo from Camera
 function uploadPhotoFromCamera() {
-    // Trigger the file input element to open the mobile camera
-    document.getElementById('fileInput').click();
+    document.getElementById('fileInputCamera').click();
 }
 
 // Function to handle uploading profile photo from File
 function uploadFromFile() {
-    document.getElementById('fileInput').click();
+    document.getElementById('fileInputFile').click();
 }
 
 // Function to handle the selected file from the input element
 function handleFileUpload(event) {
     const file = event.target.files[0];
-    form.profile_photo = file;
-    form.post(route('profile.upload_profile_photo'));
+    if (file) {
+        form.profile_photo = file;
+        form.post(route('profile.upload_profile_photo'));
+    }
 }
 </script>
 
@@ -76,8 +77,10 @@ function handleFileUpload(event) {
                             </Button>
                         </template>
                         <template #content>
-                            <!-- Hidden file input element -->
-                            <input id="fileInput" type="file" style="display: none" accept="image/*" capture="user" @change="handleFileUpload">
+                            <!-- Hidden file input elements -->
+                            <input id="fileInputLibrary" type="file" accept="image/*" style="display: none" @change="handleFileUpload">
+                            <input id="fileInputCamera" type="file" accept="image/*" capture="environment" style="display: none" @change="handleFileUpload">
+                            <input id="fileInputFile" type="file" accept="image/*" style="display: none" @change="handleFileUpload">
 
                             <DropdownLink @click="uploadFromPhotoLibrary">
                                 <div class="flex items-center justify-between gap-2">

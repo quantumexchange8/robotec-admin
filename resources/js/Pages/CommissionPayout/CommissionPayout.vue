@@ -49,7 +49,7 @@ const updateCommissionType = (commission_type) => {
     <Head :title="$t('public.commission_payout')" />
     <AuthenticatedLayout>
         <template #header>
-            <h2 class="font-semibold text-xxl text-white leading-loose">{{ $t('public.commission_payout') }}</h2>
+            <h2 class="font-semibold text-xl text-white leading-loose">{{ $t('public.commission_payout') }}</h2>
         </template>
 
         <div class="rounded-md shadow-md mb-3">

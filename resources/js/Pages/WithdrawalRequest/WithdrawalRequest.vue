@@ -36,7 +36,7 @@ const date = ref(`${formattedStartDate} - ${formattedEndDate}`);
     <Head :title="$t('public.withdrawal_request')" />
     <AuthenticatedLayout>
         <template #header>
-            <h2 class="font-semibold text-xxl text-white leading-loose">{{ $t('public.withdrawal_request') }}</h2>
+            <h2 class="font-semibold text-xl text-white leading-loose">{{ $t('public.withdrawal_request') }}</h2>
         </template>
 
         <div class="rounded-md shadow-md pb-3 sticky top-2 bg-gray-900 z-[5]">

@@ -109,11 +109,13 @@ const filteredOptions = computed(() => {
         return result;
     }
 
+    const normalizedQuery = query.value.toLowerCase().replace(/\s+/g, "");
+
     return result.filter(option => {
-        return option?.label
-            .toLowerCase()
-            .replace(/\s+/g, "")
-            .includes(query.value.toLowerCase().replace(/\s+/g, ""));
+        const normalizedLabel = option?.label?.toLowerCase().replace(/\s+/g, "") ?? "";
+        const normalizedValue = option?.value?.toLowerCase().replace(/\s+/g, "") ?? "";
+
+        return normalizedLabel.includes(normalizedQuery) || normalizedValue.includes(normalizedQuery);
     });
 });
 
@@ -223,9 +225,10 @@ const dropdownWidthClass = computed(() => {
                         ? props.placeholder
                         : ''
                 "
+                class="text-sm -mx-1 min-w-0 flex-grow cursor-pointer disabled:cursor-not-allowed border-none bg-transparent p-2 focus:ring-0 text-white"
                 :class="{
-                    '-mx-1 min-w-0 flex-grow cursor-pointer disabled:cursor-not-allowed border-none bg-transparent py-1.5 px-2 focus:ring-0 placeholder-white text-white': !open,
-                    '-mx-1 min-w-0 flex-grow cursor-pointer disabled:cursor-not-allowed border-none bg-transparent py-1.5 px-2 focus:ring-0 placeholder-gray-300 text-white': open
+                    'placeholder-white': !open,
+                    'placeholder-gray-300': open
                 }"
                 size="1"
                 @change="query = $event.target.value"

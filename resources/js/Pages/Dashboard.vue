@@ -3,6 +3,7 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head } from '@inertiajs/vue3';
 import { ExpandIcon } from '@/Components/Icons/outline';
 import { ClientIcon, DepositIcon, WithdrawalIcon, PurchaseIcon, PammFundInIcon } from '@/Components/Icons/solid';
+import { transactionFormat } from "@/Composables/index.js";
 
 const props = defineProps({
     totalClient: Number,
@@ -11,6 +12,8 @@ const props = defineProps({
     totalPurchasesEA: [String, Number],
     totalPammFundIn: [String, Number],
 });
+
+const { formatDateTime, formatAmount } = transactionFormat();
 
 const handleRedirectTo = (pending) => {
     switch (pending) {
@@ -70,7 +73,7 @@ const handleRedirectTo = (pending) => {
                 </div>
                 <div class="self-stretch justify-between items-center inline-flex">
                     <div class="text-gray-100 text-xs font-medium font-sans leading-[18px]">{{ $t('public.total_deposit') }} ($)</div>
-                    <div class="text-success-500 text-xl font-semibold font-sans leading-loose">{{ props.totalDeposit }}</div>
+                    <div class="text-success-500 text-xl font-semibold font-sans leading-loose">{{ formatAmount(props.totalDeposit) }}</div>
                 </div>
             </div>
             <div class="self-stretch px-4 pt-5 pb-11 bg-gray-600 rounded-tl-3xl rounded-tr-3xl shadow flex-col justify-start items-start gap-2 flex -mb-8">
@@ -82,7 +85,7 @@ const handleRedirectTo = (pending) => {
                 </div>
                 <div class="self-stretch justify-between items-center inline-flex">
                     <div class="text-gray-100 text-xs font-medium font-sans leading-[18px]">{{ $t('public.total_withdrawal') }} ($)</div>
-                    <div class="text-white text-xl font-semibold font-sans leading-loose">{{ props.totalWithdrawal }}</div>
+                    <div class="text-white text-xl font-semibold font-sans leading-loose">{{ formatAmount(props.totalWithdrawal) }}</div>
                 </div>
             </div>
             <div class="self-stretch px-4 pt-5 pb-11 bg-gray-700 rounded-tl-3xl rounded-tr-3xl shadow flex-col justify-start items-start gap-2 flex -mb-8">
@@ -94,7 +97,7 @@ const handleRedirectTo = (pending) => {
                 </div>
                 <div class="self-stretch justify-between items-center inline-flex">
                     <div class="text-gray-100 text-xs font-medium font-sans leading-[18px]">{{ $t('public.purchased_ea') }} ($)</div>
-                    <div class="text-success-500 text-xl font-semibold font-sans leading-loose">{{ props.totalPurchasesEA }}</div>
+                    <div class="text-success-500 text-xl font-semibold font-sans leading-loose">{{ formatAmount(props.totalPurchasesEA) }}</div>
                 </div>
             </div>
             <div class="self-stretch grow shrink basis-0 px-4 pt-5 bg-gray-800 rounded-tl-3xl rounded-tr-3xl shadow flex-col justify-start items-start gap-2 flex">
@@ -106,7 +109,7 @@ const handleRedirectTo = (pending) => {
                 </div>
                 <div class="self-stretch justify-between items-center inline-flex">
                     <div class="text-gray-100 text-xs font-medium font-sans leading-[18px]">{{ $t('public.pamm_fund_in') }} ($)</div>
-                    <div class="text-success-500 text-xl font-semibold font-sans leading-loose">{{ props.totalPammFundIn }}</div>
+                    <div class="text-success-500 text-xl font-semibold font-sans leading-loose">{{ formatAmount(props.totalPammFundIn) }}</div>
                 </div>
             </div>
         </div>

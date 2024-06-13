@@ -60,21 +60,20 @@ let removeFinishEventListener = Inertia.on("finish", () => {
 </script>
 
 <template>
-    <div class="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0" style="background: linear-gradient(180deg, rgba(0, 10, 255, 0.20) 0%, rgba(0, 0, 0, 0.00) 50%), #0C111D;">
-        <div class="flex items-center gap-2 self-stretch w-full justify-end pt-2 pr-2 sm:pr-8">
+    <div class="min-h-screen flex flex-col sm:justify-center items-center" style="background: linear-gradient(180deg, rgba(0, 10, 255, 0.20) 0%, rgba(0, 0, 0, 0.00) 50%), #0C111D;">
+        <div class="flex items-center gap-2 self-stretch w-full justify-end py-5 px-4">
             <Dropdown align="right">
                 <template #trigger>
                     <Button
                         iconOnly
                         variant="transparent"
                         type="button"
-                        v-slot="{ iconSizeClasses }"
                         class="inline-flex"
                         srText="Change language"
                     >
                         <GlobeAltIcon
                             aria-hidden="true"
-                            :class="iconSizeClasses"
+                            class="w-6 h-6"
                         />
                     </Button>
                 </template>
@@ -99,7 +98,7 @@ let removeFinishEventListener = Inertia.on("finish", () => {
         </div>
 
         <div
-            class="w-full sm:max-w-md mt-6 px-6 py-4 shadow-md overflow-hidden sm:rounded-lg"
+            class="w-full sm:max-w-md px-6 shadow-md overflow-hidden sm:rounded-lg"
         >
             <Alert
                 :show="showAlert"
@@ -112,6 +111,11 @@ let removeFinishEventListener = Inertia.on("finish", () => {
             </Alert>
             <ToastList />
             <slot />
+        </div>
+        <div class="w-full sm:max-w-[360px] fixed bottom-0 bg-gray-900 z-[6]">
+            <div class="w-full mx-auto h-6 px-[126px] justify-center items-center inline-flex">
+                <div class="w-[108px] h-1 bg-white rounded-xl"></div>
+            </div>
         </div>
     </div>
 </template>

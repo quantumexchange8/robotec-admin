@@ -196,7 +196,7 @@ const rejectRequest = (requestDetails) => {
                                     <div class="text-gray-300 text-xs font-normal font-sans leading-[24px]">{{ formatDateTime(request.created_at) }}</div>
                                     <div class="text-white text-sm font-medium font-sans leading-tight">{{ request.user.name }}</div>
                                 </div>
-                                <div class="text-white text-right text-md font-medium font-sans leading-normal">$ {{ request.transaction_amount }}</div>
+                                <div class="text-white text-right text-md font-medium font-sans leading-normal">$ {{ formatAmount(request.transaction_amount) }}</div>
                             </div>
                         </td>
                     </tr>

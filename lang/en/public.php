@@ -172,4 +172,9 @@ return [
     'no_client_selected' => 'No Client Selected!',
     'password_reset_link_sent' => 'Password Reset Link Resent!',
     'password_reset_link_sent_error' => 'Password Reset Link Resent Error!',
+    'invalid_mobile_phone' => 'This phone number is already exist, please check your phone number again',
+    'deduction_amount_exceed_balance' => 'The amount for deduction exceeds the available balance',
+    'incorrect_wallet_address' => 'The wallet address is not for this withdrawal request',
+    'incorrect_transaction_number' => 'The transaction number is not for this withdrawal request',
+    'withdrawal_amount_exceed_balance' => 'The withdrawal amount exceeds the wallet balance',
 ];

@@ -42,13 +42,16 @@ const goToLoginPage = () => {
     window.location.href = '/login'; // Redirect to the login page URL
 }
 
+const openEmailApp = () => {
+    window.location.href = 'mailto:';
+}
 </script>
 
 <template>
     <GuestLayout>
         <Head :title="$t('public.check_your_email')" />
 
-        <div class="text-center mb-10">
+        <div class="text-center my-10">
             <div class="mb-2 text-xl text-white font-semibold">
                 {{ $t('public.check_your_email') }}
             </div>
@@ -63,12 +66,13 @@ const goToLoginPage = () => {
         </div>
 
         <!-- Didn't receive the email? and Click to resend -->
-        <div class="grid grid-cols-6 gap-4 w-full mt-10">
-            <div class="col-span-6">
-                <Button variant="primary" :class="{ 'opacity-25': form.processing }" :disabled="form.processing" class="w-full">
+            <div>
+                <Button @click="openEmailApp" variant="primary" size="lg" :class="{ 'opacity-25': form.processing }" :disabled="form.processing" class="w-full">
                     {{ $t('public.open_email_app') }}
                 </Button>
             </div>
+            
+            <div class="grid grid-cols-6 gap-2.5 my-3 w-full">
 
             <!-- Didn't receive the email? -->
             <div class="col-span-3 text-sm text-gray-300 flex items-center justify-start">

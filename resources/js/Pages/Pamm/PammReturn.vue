@@ -75,6 +75,7 @@ const updatePamm = () => {
     form.post(route('pamm.update_pamm'), {
         onSuccess: () => {
             closeModal();
+            form.reset();
             getResults();
         },
         onError: (errors) => {
@@ -91,7 +92,7 @@ const updatePamm = () => {
     <Head :title="$t('public.pamm_return')" />
     <AuthenticatedLayout>
         <template #header>
-            <h2 class="font-semibold text-xxl text-white leading-loose">{{ $t('public.pamm_return') }}</h2>
+            <h2 class="font-semibold text-xl text-white leading-loose">{{ $t('public.pamm_return') }}</h2>
         </template>
 
         <div class="flex justify-center items-center h-full my-3">
@@ -177,7 +178,7 @@ const updatePamm = () => {
         </div>
 
         <Modal :show="pammModal" :title="$t('public.update_pamm_return')" @close="closeModal" max-width="sm">
-            <form class="my-5">
+            <form class="my-5" @submit.prevent="updatePamm">
                 <div>
                     <Label for="pamm" :invalid="form.errors.pamm">{{ $t('public.pamm_return') }}</Label>
                     <Input

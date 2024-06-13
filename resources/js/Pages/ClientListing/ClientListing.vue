@@ -122,7 +122,7 @@ watchEffect(() => {
     <Head :title="$t('public.client_listing')" />
     <AuthenticatedLayout>
         <template #header>
-            <h2 class="font-semibold text-xxl text-white leading-loose">{{ $t('public.client_listing') }}</h2>
+            <h2 class="font-semibold text-xl text-white leading-loose">{{ $t('public.client_listing') }}</h2>
         </template>
 
         <div class="sticky top-2 bg-gray-900 z-[5]">

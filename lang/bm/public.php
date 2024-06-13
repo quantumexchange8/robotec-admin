@@ -172,4 +172,9 @@ return [
     'no_client_selected' => 'Tiada Pelanggan Dipilih!',
     'password_reset_link_sent' => 'Pautan Set Semula Kata Laluan Dihantar Semula!',
     'password_reset_link_sent_error' => 'Ralat Penghantaran Pautan Set Semula Kata Laluan!',
+    'invalid_mobile_phone' => 'Nombor telefon ini sudah wujud, sila semak nombor telefon anda sekali lagi',
+    'deduction_amount_exceed_balance' => 'Jumlah penolakan melebihi baki yang tersedia',
+    'incorrect_wallet_address' => 'Alamat dompet tidak sesuai untuk permintaan pengeluaran ini',
+    'incorrect_transaction_number' => 'Nombor transaksi tidak sesuai untuk permintaan pengeluaran ini',
+    'withdrawal_amount_exceed_balance' => 'Jumlah pengeluaran melebihi baki dompet',
 ];

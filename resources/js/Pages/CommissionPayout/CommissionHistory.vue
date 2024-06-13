@@ -131,7 +131,7 @@ const closeModal = () => {
                                     <div class="text-gray-300 text-xs font-normal font-sans leading-[24px]">{{ formatDateTime(commission.created_at) }}</div>
                                     <div class="text-white text-sm font-medium font-sans leading-tight">{{ commission.user.name }}</div>
                                 </div>
-                                <div class="text-white text-right text-md font-medium font-sans leading-normal">$ {{ commission.transaction_amount }}</div>
+                                <div class="text-white text-right text-md font-medium font-sans leading-normal">$ {{ formatAmount(commission.transaction_amount) }}</div>
                             </div>
                         </td>
                     </tr>
@@ -178,7 +178,7 @@ const closeModal = () => {
 
             <div class="grid grid-cols-2 items-center mb-5">
                 <div class="col-span-1 text-gray-300 text-xs font-normal font-sans leading-[18px]">{{ $t('public.commission_amount') }}</div>
-                <div class="col-span-1 text-white text-xs font-normal font-sans leading-tight">{{ commissionDetails.transaction_amount }}</div>
+                <div class="col-span-1 text-white text-xs font-normal font-sans leading-tight">{{ formatAmount(commissionDetails.transaction_amount) }}</div>
             </div>
 
         </div>

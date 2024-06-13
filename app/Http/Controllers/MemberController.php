@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Inertia\Inertia;
 use App\Models\Wallet;
+use App\Models\Country;
 use App\Models\Transaction;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
@@ -231,7 +232,7 @@ class MemberController extends Controller
             'user_id' => $user->id,
             'name' => 'Cash Wallet',
             'type' => 'cash_wallet',
-            'wallet_address' => RunningNumberService::getID('cash_wallet'),
+            // 'wallet_address' => RunningNumberService::getID('cash_wallet'),
         ]);
 
         // Create commission wallet
@@ -239,11 +240,11 @@ class MemberController extends Controller
             'user_id' => $user->id,
             'name' => 'Commission Wallet',
             'type' => 'commission_wallet',
-            'wallet_address' => RunningNumberService::getID('commission_wallet'),
+            // 'wallet_address' => RunningNumberService::getID('commission_wallet'),
         ]);
 
-        // Send a notification to the user with their password
-        $user->notify(new NewClientNotification($password));
+        // Send a notification to the user with their password and email
+        $user->notify(new NewClientNotification($password, $request->email));
     
         return redirect()->back()->with('toast', [
             'title' => trans('public.add_client_success_title'),
@@ -251,6 +252,33 @@ class MemberController extends Controller
         ]);
     }
     
+    public function getDialCodes(Request $request)
+    {
+        $locale = app()->getLocale();
+
+        $countries = Country::query()
+            ->when($request->filled('query'), function ($query) use ($request) {
+                $search = $request->input('query');
+                $query->where(function ($innerQuery) use ($search) {
+                    $innerQuery->where('name', 'like', "%{$search}%")
+                        ->orWhere('phone_code', 'like', "%{$search}%")
+                        ->orWhere('translations', 'like', "%{$search}%");
+                });
+            })
+            ->select('id', 'name', 'phone_code', 'translations')
+            ->get()
+            ->map(function ($country) use ($locale) {
+                $translations = json_decode($country->translations, true);
+                $label = $translations[$locale] ?? $country->name;
+                return [
+                    'phone_code' => $country->phone_code,
+                    'name' => $label,
+                ];
+            });
+
+        return response()->json($countries);
+    }
+
 
     public function update_client(EditClientRequest $request)
     {

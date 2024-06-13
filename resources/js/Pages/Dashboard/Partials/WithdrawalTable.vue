@@ -149,7 +149,7 @@ const closeModal = () => {
                                     <div class="text-gray-300 text-xs font-normal font-sans leading-[24px]">{{ formatDateTime(transaction.created_at) }}</div>
                                     <div class="text-white text-sm font-medium font-sans leading-tight">{{ transaction.user.name }}</div>
                                 </div>
-                                <div class="text-white text-right text-md font-medium font-sans leading-normal">$ {{ transaction.transaction_amount }}</div>
+                                <div class="text-white text-right text-md font-medium font-sans leading-normal">$ {{ formatAmount(transaction.transaction_amount) }}</div>
                             </div>
                         </td>
                     </tr>

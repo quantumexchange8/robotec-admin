@@ -234,7 +234,7 @@ const approveCommission = () => {
                             <div class="text-gray-300 text-xs font-normal font-sans leading-[24px]">{{ formatDateTime(commission.created_at) }}</div>
                             <div class="text-white text-sm font-medium font-sans leading-tight">{{ commission.user.name }}</div>
                         </td>
-                        <td class="text-white text-md flex items-center justify-center py-3">$ {{ commission.transaction_amount }}</td>
+                        <td class="text-white text-md flex items-center justify-center py-3">$ {{ formatAmount(commission.transaction_amount) }}</td>
                     </tr>
                 </tbody>
             </table>
@@ -275,7 +275,7 @@ const approveCommission = () => {
 
                 <div class="grid grid-cols-2 items-center mb-5">
                     <div class="col-span-1 text-gray-300 text-xs font-normal font-sans leading-[18px]">{{ $t('public.commission_amount') }}</div>
-                    <div class="col-span-1 text-white text-xs font-normal font-sans leading-tight">{{ commissionDetails.transaction_amount }}</div>
+                    <div class="col-span-1 text-white text-xs font-normal font-sans leading-tight">{{ formatAmount(commissionDetails.transaction_amount) }}</div>
                 </div>
 
                 <div class="items-center pt-8 flex gap-3">

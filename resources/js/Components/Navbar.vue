@@ -88,13 +88,12 @@ const changeLanguage = async (langVal) => {
                         iconOnly
                         variant="transparent"
                         type="button"
-                        v-slot="{ iconSizeClasses }"
                         class="inline-flex"
                         size="sm"
                     >
                         <GlobeAltIcon
                             aria-hidden="true"
-                            :class="iconSizeClasses"
+                            class="w-6 h-6"
                         />
                     </Button>
                 </template>

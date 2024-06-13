@@ -66,7 +66,7 @@ const variantClasses = (variant) => ({
     'bg-success-500 focus:bg-success-600 text-white disabled:bg-success-900 disabled:text-success-800': variant === 'success',
     'bg-error-500 focus:bg-error-600 text-white disabled:bg-error-700 disabled:text-error-600': variant === 'danger',
     'bg-transparent focus:text-gray-400 text-white disabled:text-gray-600': variant === 'transparent',
-    'bg-bray-900 focus:bg-gray-800 text-white border border-gray-600 disabled:border-gray-700 disabled:text-gray-600': variant === 'outline',
+    'bg-gray-900 focus:bg-gray-800 text-white border border-gray-600 disabled:border-gray-700 disabled:text-gray-600': variant === 'outline',
 })
 
 const classes = computed(() => [

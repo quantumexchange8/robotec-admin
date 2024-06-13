@@ -11,17 +11,18 @@ import toast from "@/Composables/toast.js";
 import Combobox from "@/Components/Combobox.vue";
 import CountryLists from '/public/data/countries.json'
 
-// Find the index of Malaysia in the country list
-const malaysiaIndex = CountryLists.findIndex(country => country.label === "Malaysia");
+// // Find the index of Malaysia in the country list
+// const malaysiaIndex = CountryLists.findIndex(country => country.label === "Malaysia");
 
-// Set the default dial code to +60 for Malaysia
-const defaultDialCode = malaysiaIndex !== -1 ? CountryLists[malaysiaIndex] : null;
+// // Set the default dial code to +60 for Malaysia
+// const defaultDialCode = malaysiaIndex !== -1 ? CountryLists[malaysiaIndex] : null;
 
+const dialCode = ref({value: '+60'});
 // Initialize the form with default values
 const form = useForm({
     name: '',
     email: '',
-    dial_code: defaultDialCode, // Set default dial code to +60 for Malaysia
+    dial_code: dialCode, // Set default dial code to +60 for Malaysia
     phone: '',
     upline: null,
 });
@@ -53,6 +54,21 @@ function loadUpline(query, setOptions) {
                         value: user.id,
                         label: user.name,
                         img: user.profile_photo
+                    }
+                })
+            )
+        });
+}
+
+function loadDialCodes(query, setOptions) {
+    fetch('/member/getDialCodes?query=' + query)
+        .then(response => response.json())
+        .then(results => {
+            setOptions(
+                results.map(country => {
+                    return {
+                        value: country.phone_code,
+                        label: country.name,
                     }
                 })
             )
@@ -120,7 +136,7 @@ const addClient = () => {
                 <div class="col-span-2">
                     <div class="mr-1.5">
                         <Combobox 
-                            :options="CountryLists"
+                            :load-options="loadDialCodes"
                             id="dial_code"
                             class="block w-full"
                             :invalid="form.errors.phone"

@@ -55,7 +55,7 @@ const goToLoginPage = () => {
                 <Input
                     id="email"
                     type="email"
-                    class="mt-1 block w-full"
+                    class="mt-1.5 block w-full"
                     v-model="form.email"
                     :placeholder="$t('public.email_placeholder')"
                     required
@@ -68,7 +68,7 @@ const goToLoginPage = () => {
 
         <div class="grid grid-cols-6 gap-4 w-full mt-4">
                 <div class="col-span-6">
-                    <Button :class="{ 'opacity-25': form.processing }" :disabled="form.processing" class="w-full" @click="submit">
+                    <Button size="lg" :class="{ 'opacity-25': form.processing }" :disabled="form.processing" class="w-full" @click="submit">
                         {{ $t('public.send_email') }}
                     </Button>
                 </div>

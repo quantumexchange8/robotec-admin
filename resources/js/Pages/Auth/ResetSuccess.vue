@@ -14,7 +14,7 @@ const goToLoginPage = () => {
     <GuestLayout>
         <Head :title="$t('public.reset_password_success')" />
 
-        <div class="flex justify-center">
+        <div class="flex justify-center mt-10">
             <Success class="w-12 h-12 mb-3" />
         </div>
 
@@ -23,13 +23,13 @@ const goToLoginPage = () => {
                 {{ $t('public.success_1') }}
             </div>
 
-            <div class="text-sm text-gray-300">
+            <div class="text-md text-gray-300">
                 {{ $t('public.password_changed_success_message') }}
             </div>
         </div>
 
         <div class="flex items-center justify-end mt-10">
-            <Button variant="primary" class="w-full" @click="goToLoginPage">
+            <Button variant="primary" size="lg" class="w-full" @click="goToLoginPage">
                 {{ $t('public.return_login') }}
             </Button>
         </div>

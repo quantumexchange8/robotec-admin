@@ -33,27 +33,28 @@ const submit = () => {
     <GuestLayout>
         <Head :title="$t('public.reset_password')" />
 
-        <div class="text-center mb-10">
-            <div class="mb-2 text-xl text-white font-semibold">
+        <div class="text-center my-10">
+            <div class="mb-2 text-lg text-white font-semibold">
                 {{ $t('public.choose_password') }}
             </div>
 
-            <div class="text-gray-300">
+            <div class="text-gray-300 text-sm">
                 {{ $t('public.password_criteria') }}
             </div>
         </div>
 
         <form @submit.prevent="submit">
-            <div class="mt-4 gap-1.5">
+            <div class="my-1.5 gap-1.5">
                 <Label for="password" class="gap-1.5" :invalid="form.errors.password">{{ $t('public.password') }}</Label>
 
                 <Input
                     id="password"
                     type="password"
-                    class="mt-1 block w-full"
+                    class="mt-1.5 block w-full"
                     v-model="form.password"
                     required
                     autocomplete="new-password"
+                    :invalid="form.errors.password"
                     :placeholder="$t('public.new_password')"
                 />
 
@@ -67,10 +68,11 @@ const submit = () => {
                 <Input
                     id="password_confirmation"
                     type="password"
-                    class="mt-1 block w-full"
+                    class="mt-1.5 block w-full"
                     v-model="form.password_confirmation"
                     required
                     autocomplete="new-password"
+                    :invalid="form.errors.password_confirmation"
                     :placeholder="$t('public.confirm_password')"
                 />
 
@@ -79,7 +81,7 @@ const submit = () => {
         </form>
 
         <div class="flex items-center justify-end mt-10">
-            <Button class="w-full" :class="{ 'opacity-25': form.processing }" :disabled="form.processing" @click="submit">
+            <Button class="w-full" size="lg" :class="{ 'opacity-25': form.processing }" :disabled="form.processing" @click="submit">
                 {{ $t('public.reset_password') }}
             </Button>
         </div>

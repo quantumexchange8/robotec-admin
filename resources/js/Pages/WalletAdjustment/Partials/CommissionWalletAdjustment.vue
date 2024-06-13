@@ -131,7 +131,7 @@ watch(() => form.amount, (newAmount, oldAmount) => {
 });
 
 const confirm = () => {
-  form.post(route('transaction.WalletAdjustment'), {
+  form.post(route('transaction.walletAdjustment'), {
     onSuccess: () => {
         form.amount = '';
         closeModal();
@@ -240,7 +240,7 @@ const toggleExpanded = (history) => {
     </div>
 
     <Modal :show="WalletAdjustmentModal" :title="isDeduction ? $t('public.wallet_adjustment_deduction') : $t('public.wallet_adjustment_addition')" @close="closeModal" max-width="sm">
-        <form>
+        <form @submit.prevent="confirm">
             <div class="w-full flex-col justify-start items-start gap-1.5 mb-5 inline-flex">
                 <Label for="amount" class="text-xs font-medium font-sans leading-[18px]" :invalid="form.errors.amount">{{ $t('public.adjustment_amount') }}</Label>
 
@@ -265,7 +265,7 @@ const toggleExpanded = (history) => {
             <div class="grid grid-cols-2 items-center mb-2">
                 <div class="col-span-1 text-gray-300 text-xs font-normal font-sans leading-[18px]">{{ $t('public.client') }}</div>
                 <div class="col-span-1 flex items-center">
-                <img class="w-5 h-5 rounded-full mr-2" :src="client ? client.img || 'https://via.placeholder.com/32x32' : 'https://via.placeholder.com/32x32'" alt="Client upline profile picture" />
+                <img class="w-5 h-5 rounded-full mr-2" :src="client.img ? client.img : 'https://img.freepik.com/free-icon/user_318-159711.jpg'" alt="Client upline profile picture" />
                 <div class="text-white text-xs font-normal font-sans leading-tight">{{ client ? client.label : '' }}</div>
                 </div>
             </div>

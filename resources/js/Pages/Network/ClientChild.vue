@@ -34,22 +34,21 @@ const getActiveChildren = (clients) => {
             <div class="text-gray-300 text-xs font-normal font-sans leading-[18px]">{{ $t('public.level') }} {{ level }}</div>
             <div class="grow shrink basis-0 h-px bg-gray-600 rounded-[10px]"></div>
         </div>
-        <div class="grid grid-cols-3 gap-4">
+        <div class="grid grid-cols-3 gap-2">
             <div v-for="(child, index) in props.clients" :key="index" class="flex items-center justify-center relative">
                 <div class="w-full px-2 pt-4 pb-3 bg-gray-800 rounded-2xl flex-col justify-center items-center gap-2 inline-flex relative"
                     :class="{ 'shadow-inner border border-primary-500': child.children && child.children.length > 0 && child.isActive }"
                     @click="toggleClient(child)">
-                    <img class="w-7 h-7 rounded-full"
-                        :src="child.profile_photo_url || 'https://via.placeholder.com/28x28'" />
-                    <div class="self-stretch h-[34px] flex-col justify-start items-center flex">
-                        <div class="self-stretch text-center text-white text-xs font-medium font-sans leading-[18px]">{{ child.name }}</div>
-                        <div class="text-center text-gray-300 text-xxs font-normal font-sans leading-none">{{ $t('public.id') }}: {{ child.id }}</div>
+                    <img class="w-7 h-7 rounded-full" :src="child.profile_photo_url || 'https://via.placeholder.com/28x28'" />
+                    <div class="self-stretch flex-col justify-start items-center flex">
+                        <div class="self-stretch text-center text-white text-xs w-full overflow-hidden truncate">{{ child.name }}</div>
+                        <div class="text-center text-gray-300 text-xxs">{{ $t('public.id') }}: {{ child.id }}</div>
                     </div>
                 </div>
                 <!-- Conditional rendering for children -->
                 <div v-if="child.children && child.children.length > 0"
                     class="absolute -bottom-1.5 flex justify-center">
-                    <div class="w-4 h-4 p-[3.20px] bg-primary-500 rounded-2xl justify-center items-center inline-flex cursor-pointer"
+                    <div class="w-4 h-4 p-[3.20px] bg-primary-500 rounded-full justify-center items-center inline-flex cursor-pointer"
                         @click.stop="toggleClient(child)">
                         <div class="w-[9.60px] h-[9.60px] relative flex justify-center items-center">
                             <Users01Icon class="text-white" />

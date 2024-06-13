@@ -12,10 +12,12 @@ class NewClientNotification extends Notification
     use Queueable;
 
     public $password;
+    public $email;
 
-    public function __construct($password)
+    public function __construct($password, $email)
     {
         $this->password = $password;
+        $this->email = $email;
     }
 
     public function via($notifiable)
@@ -26,7 +28,8 @@ class NewClientNotification extends Notification
     public function toMail($notifiable)
     {
         return (new MailMessage)
-            ->subject('Your New Account Password')
+            ->subject('Your New Account Information')
+            ->line('Your email: ' . $this->email)
             ->line('Your password for the new account is: ' . $this->password)
             ->line('Please keep it secure and do not share it with anyone.');
     }

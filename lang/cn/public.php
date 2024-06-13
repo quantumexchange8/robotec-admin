@@ -172,4 +172,9 @@ return [
     'no_client_selected' => '未选择客户！',
     'password_reset_link_sent' => '密码重置链接已重新发送！',
     'password_reset_link_sent_error' => '密码重置链接重新发送错误！',
+    'invalid_mobile_phone' => '此手机号码已存在，请再次检查您的手机号码',
+    'deduction_amount_exceed_balance' => '扣除金额超出可用余额',
+    'incorrect_wallet_address' => '钱包地址不正确，请检查此提款请求的钱包地址',
+    'incorrect_transaction_number' => '交易号不正确，请检查此提款请求的交易号',
+    'withdrawal_amount_exceed_balance' => '提款金额超出钱包余额',
 ];

@@ -235,7 +235,7 @@ const updateClient = (clientDetails) => {
                                         <div class="text-gray-300 text-xs font-normal font-sans leading-[18px] mr-2">{{ $t('public.id') }}: {{ member.id }}</div>
                                         <div class="flex items-center text-xs font-normal font-sans leading-[18px]">
                                             <div class="text-gray-300">{{ $t('public.commission') }}:&nbsp;</div>
-                                            <div class="text-success-300">{{ member.id }}</div>
+                                            <div class="text-success-300">{{ 'lack' }}</div>
                                         </div>
                                     </div>
                                 </div>
@@ -288,11 +288,11 @@ const updateClient = (clientDetails) => {
 
             <div class="grid grid-cols-2 items-center mb-2">
                 <div class="col-span-1 text-gray-300 text-xs font-normal font-sans leading-[18px]">{{ $t('public.total_deposit') }}</div>
-                <div class="col-span-1 text-white text-xs font-normal font-sans leading-tight">{{ clientDetails.totalDeposit }}</div>
+                <div class="col-span-1 text-white text-xs font-normal font-sans leading-tight">{{ formatAmount(clientDetails.totalDeposit) }}</div>
             </div>
             <div class="grid grid-cols-2 items-center mb-2">
                 <div class="col-span-1 text-gray-300 text-xs font-normal font-sans leading-[18px]">{{ $t('public.total_withdrawal') }}</div>
-                <div class="col-span-1 text-white text-xs font-normal font-sans leading-tight">{{ clientDetails.totalWithdrawal }}</div>
+                <div class="col-span-1 text-white text-xs font-normal font-sans leading-tight">{{ formatAmount(clientDetails.totalWithdrawal) }}</div>
             </div>
             <div class="grid grid-cols-2 items-center mb-2">
                 <div class="col-span-1 text-gray-300 text-xs font-normal font-sans leading-[18px]">{{ $t('public.referee') }}</div>
@@ -300,11 +300,11 @@ const updateClient = (clientDetails) => {
             </div>
             <div class="grid grid-cols-2 items-center mb-2">
                 <div class="col-span-1 text-gray-300 text-xs font-normal font-sans leading-[18px]">{{ $t('public.total_commission') }}</div>
-                <div class="col-span-1 text-white text-xs font-normal font-sans leading-tight">{{ clientDetails.totalCommission ?? 0 }}</div>
+                <div class="col-span-1 text-white text-xs font-normal font-sans leading-tight">{{ formatAmount(clientDetails.totalCommission ?? 0) }}</div>
             </div>
             <div class="grid grid-cols-2 items-center">
                 <div class="col-span-1 text-gray-300 text-xs font-normal font-sans leading-[18px]">{{ $t('public.pamm_fund_in_amount') }}</div>
-                <div class="col-span-1 text-white text-xs font-normal font-sans leading-tight">{{ clientDetails.totalFundedPAMM }}</div>
+                <div class="col-span-1 text-white text-xs font-normal font-sans leading-tight">{{ formatAmount(clientDetails.totalFundedPAMM) }}</div>
             </div>
 
             <div class="w-full h-px bg-gray-700 my-4"></div>
