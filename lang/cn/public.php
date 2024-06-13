@@ -177,4 +177,5 @@ return [
     'incorrect_wallet_address' => '钱包地址不正确，请检查此提款请求的钱包地址',
     'incorrect_transaction_number' => '交易号不正确，请检查此提款请求的交易号',
     'withdrawal_amount_exceed_balance' => '提款金额超出钱包余额',
+    'unauthorized_access' => '未经授权的访问',
 ];

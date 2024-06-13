@@ -62,7 +62,7 @@ class TransactionController extends Controller
             'user_id' => Auth::id(),
             'category' => 'wallet',
             'transaction_type' => 'adjustment',
-            'txn_hash' => RunningNumberService::getID('adjustment'),
+            'transaction_number' => RunningNumberService::getID('adjustment'),
             'amount' => abs($amount),
             'transaction_amount' => abs($amount),
             'old_wallet_amount' => $wallet->balance,

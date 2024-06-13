@@ -24,7 +24,7 @@ Route::get('/', function () {
     return redirect()->route('login');
 });
 
-Route::middleware('auth')->group(function () {
+Route::middleware(['auth', 'role:admin,super-admin'])->group(function () {
     Route::prefix('dashboard')->group(function () {
         Route::get('/', [DashboardController::class, 'index'])->name('dashboard.index');
         Route::get('/deposit_transactions', [DashboardController::class, 'deposit_transactions'])->name('dashboard.deposit_transactions');

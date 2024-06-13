@@ -177,4 +177,5 @@ return [
     'incorrect_wallet_address' => 'The wallet address is not for this withdrawal request',
     'incorrect_transaction_number' => 'The transaction number is not for this withdrawal request',
     'withdrawal_amount_exceed_balance' => 'The withdrawal amount exceeds the wallet balance',
+    'unauthorized_access' => 'Unauthorized access',
 ];

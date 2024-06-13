@@ -169,7 +169,7 @@ const toggleExpanded = (history) => {
 </script>
 
 <template>
-    <div class="w-full h-[3000px]">
+    <div class="w-full">
         <div class="w-full h-[210px] px-5 py-8 bg-gray-800 rounded-2xl flex flex-col justify-center items-center gap-8">
             <div class="flex flex-col justify-center items-center gap-3">
                 <div class="text-gray-300 text-base font-semibold">{{ $t('public.current_wallet_balance') }}</div>

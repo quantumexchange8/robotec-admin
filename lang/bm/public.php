@@ -177,4 +177,5 @@ return [
     'incorrect_wallet_address' => 'Alamat dompet tidak sesuai untuk permintaan pengeluaran ini',
     'incorrect_transaction_number' => 'Nombor transaksi tidak sesuai untuk permintaan pengeluaran ini',
     'withdrawal_amount_exceed_balance' => 'Jumlah pengeluaran melebihi baki dompet',
+    'unauthorized_access' => 'Akses tidak dibenarkan',
 ];
