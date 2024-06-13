@@ -232,7 +232,6 @@ class MemberController extends Controller
             'user_id' => $user->id,
             'name' => 'Cash Wallet',
             'type' => 'cash_wallet',
-            // 'wallet_address' => RunningNumberService::getID('cash_wallet'),
         ]);
 
         // Create commission wallet
@@ -240,7 +239,6 @@ class MemberController extends Controller
             'user_id' => $user->id,
             'name' => 'Commission Wallet',
             'type' => 'commission_wallet',
-            // 'wallet_address' => RunningNumberService::getID('commission_wallet'),
         ]);
 
         // Send a notification to the user with their password and email
@@ -323,16 +321,8 @@ class MemberController extends Controller
             'email' => $request->email,
             'dial_code' => $request->dial_code['value'],
             'phone' => $phone_number,
+            'usdt_address' => $request->usdt_address
         ]);
-
-        // Update cash wallet address
-        $cashWallet = Wallet::where('user_id', $client->id)->where('type', 'cash_wallet')->first();
-
-        if ($cashWallet) {
-            $cashWallet->update([
-                'wallet_address' => $request->wallet_address,
-            ]);
-        }
 
         return redirect()->back()->with('toast', [
             'title' => trans('public.update_client_success_title'),

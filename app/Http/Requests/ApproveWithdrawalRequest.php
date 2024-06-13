@@ -23,7 +23,7 @@ class ApproveWithdrawalRequest extends FormRequest
     public function rules()
     {
         return [
-            'wallet_address' => ['required','string','max:255',Rule::exists('wallets', 'wallet_address'),],
+            'usdt_address' => ['required','string','max:255',Rule::exists('users', 'usdt_address'),],
             'transaction_number' => ['required','string','max:255',Rule::exists('transactions', 'transaction_number'),],
             'remarks' => ['nullable', 'string', 'max:255'],
         ];
@@ -32,7 +32,7 @@ class ApproveWithdrawalRequest extends FormRequest
     public function attributes(): array
     {
         return [
-            'wallet_address' => 'Wallet Address',
+            'usdt_address' => 'USDT Address',
             'transaction_number' => 'Transaction ID',
             'remarks' => 'Remarks',
         ];

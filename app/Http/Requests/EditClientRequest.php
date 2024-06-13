@@ -30,7 +30,7 @@ class EditClientRequest extends FormRequest
             'email' => ['required', 'email', Rule::unique(User::class)->ignore($userID)],
             'dial_code' => ['required'],
             'phone' => ['required'],
-            'wallet_address' => ['string','min:8','max:255'],
+            'usdt_address' => ['string','min:8','max:255'],
         ];
     }
                 
@@ -41,7 +41,7 @@ class EditClientRequest extends FormRequest
             'email' => 'Email',
             'dial_code' => 'Dial Code',
             'phone' => 'Phone Number',
-            'wallet_address' => 'Wallet Address',
+            'usdt_address' => 'USDT Address',
         ];
     }
 

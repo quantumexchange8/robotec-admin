@@ -32,7 +32,7 @@ const form = useForm({
     email: '',
     dial_code:'',
     phone: '',
-    wallet_address: '',
+    usdt_address: '',
 });
 
 const members = ref({ data: [] });
@@ -135,7 +135,7 @@ const openEditModal = (clientDetails) => {
     editModal.value = true;
     form.name = clientDetails.name;
     form.email = clientDetails.email;
-    form.wallet_address = clientDetails.cash_wallet.wallet_address;
+    form.usdt_address = clientDetails.usdt_address;
 
     // Find the country object with the matching dial code
     const country = CountryLists.find(country => country.value  === clientDetails.dial_code);
@@ -311,7 +311,7 @@ const updateClient = (clientDetails) => {
 
             <div class="items-center mb-5">
                 <div class="text-gray-300 text-xs font-normal font-sans leading-[18px] mb-1">{{ $t('public.usdt_address') }}</div>
-                <div class="text-white text-xs font-normal font-sans leading-tight">{{ clientDetails.cash_wallet.wallet_address }}</div>
+                <div class="text-white text-xs font-normal font-sans leading-tight">{{ clientDetails.usdt_address }}</div>
             </div>
 
             <div class="items-center pt-8 flex gap-3">
@@ -385,17 +385,17 @@ const updateClient = (clientDetails) => {
                 <InputError class="mt-2" :message="form.errors.phone" />
                 </div>
                 <div>
-                    <Label for="wallet_address" class="mb-1.5" :invalid="form.errors.wallet_address">{{ $t('public.usdt_address') }}</Label>
+                    <Label for="usdt_address" class="mb-1.5" :invalid="form.errors.usdt_address">{{ $t('public.usdt_address') }}</Label>
 
                     <Input
-                        id="wallet_address"
+                        id="usdt_address"
                         class="block w-full bg-transparent text-white"
-                        :invalid="form.errors.wallet_address"
-                        v-model="form.wallet_address"
+                        :invalid="form.errors.usdt_address"
+                        v-model="form.usdt_address"
                         required
                     />
 
-                    <InputError class="mt-2" :message="form.errors.wallet_address" />
+                    <InputError class="mt-2" :message="form.errors.usdt_address" />
                 </div>
             </div>
             <div class="w-full flex justify-end pt-8 gap-3">

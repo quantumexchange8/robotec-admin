@@ -15,7 +15,6 @@ class Wallet extends Model
         'name',
         'type',
         'balance',
-        'wallet_address',
     ];
 
     public function user(): \Illuminate\Database\Eloquent\Relations\BelongsTo

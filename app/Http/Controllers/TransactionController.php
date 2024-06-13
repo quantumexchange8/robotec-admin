@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redis;
 use App\Services\RunningNumberService;
 use App\Http\Requests\WalletAdjustmentRequest;
+use App\Models\User;
 use Illuminate\Validation\ValidationException;
 
 class TransactionController extends Controller
@@ -38,7 +39,8 @@ class TransactionController extends Controller
         $amount = (float) $request->input('amount');
         $isDeduction = $request->input('isDeduction'); // Retrieve the boolean value
         
-        // Retrieve the wallet
+        // Retrieve the client and wallet
+        $client = User::where('id', $clientId)->where('status', 'Active')->first();
         $wallet = Wallet::where('user_id', $clientId)->where('type', $walletType)->first();
     
         // Check if it's a deduction and the amount exceeds the balance
@@ -69,8 +71,8 @@ class TransactionController extends Controller
             'new_wallet_amount' => $wallet->balance + $amount,
             'from_wallet_id' => $isDeduction ? $wallet->id :  null,
             'to_wallet_id' => $isDeduction ?  null : $wallet->id,
-            'from_wallet_address' => $isDeduction ? $wallet->wallet_address : null,
-            'to_wallet_address' => $isDeduction ? null : $wallet->wallet_address,
+            'from_wallet_address' => $isDeduction ? $client->usdt_address : null,
+            'to_wallet_address' => $isDeduction ? null : $client->usdt_address,
             'status' => 'Success',
         ]);
 
@@ -172,8 +174,8 @@ class TransactionController extends Controller
             ->firstOrFail();
 
         // Verify wallet address and transaction number
-        if ($request->wallet_address !== $withdrawalRequest->from_wallet_address) {
-            throw ValidationException::withMessages(['wallet_address' => trans('public.incorrect_wallet_address')]);
+        if ($request->usdt_address !== $withdrawalRequest->from_wallet_address) {
+            throw ValidationException::withMessages(['usdt_address' => trans('public.incorrect_wallet_address')]);
         }
 
         if ($request->transaction_number !== $withdrawalRequest->transaction_number) {

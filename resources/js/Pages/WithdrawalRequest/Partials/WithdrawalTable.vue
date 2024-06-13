@@ -20,7 +20,7 @@ const props = defineProps({
 
 const form = useForm({
     id: '',
-    wallet_address: '',
+    usdt_address: '',
     transaction_number: '',
     remarks: '',
 });
@@ -240,9 +240,9 @@ const rejectRequest = (requestDetails) => {
 
             <div class="grid grid-cols-2 items-center mb-5">
                 <div class="col-span-1 text-gray-300 text-xs font-normal font-sans leading-[18px]">{{ $t('public.usdt_address') }}</div>
-                <div class="col-span-1 text-white text-xs font-normal font-sans leading-tight">{{ requestDetails.from_wallet.wallet_address }}
+                <div class="col-span-1 text-white text-xs font-normal font-sans leading-tight">{{ requestDetails.usdt_address }}
                     <Tooltip :content="$t('public.' + tooltipContent)" placement="bottom">
-                        <DuplicateIcon aria-hidden="true" :class="['w-4 h-4 text-gray-200']" @click.stop.prevent="copyTestingCode(requestDetails.from_wallet.wallet_address)" style="cursor: pointer" />
+                        <DuplicateIcon aria-hidden="true" :class="['w-4 h-4 text-gray-200']" @click.stop.prevent="copyTestingCode(requestDetails.usdt_address)" style="cursor: pointer" />
                     </Tooltip>
                 </div>
             </div>
@@ -258,16 +258,16 @@ const rejectRequest = (requestDetails) => {
         <form>
             <div class="my-5 px-1">
                 <div>
-                    <Label for="wallet_address" :value="$t('public.usdt_address')" class="mb-1.5" :invalid="form.errors.wallet_address" />
+                    <Label for="usdt_address" :value="$t('public.usdt_address')" class="mb-1.5" :invalid="form.errors.usdt_address" />
                     <Input
-                        id="wallet_address"
+                        id="usdt_address"
                         class="block w-full mb-5 bg-transparent text-white"
-                        :invalid="form.errors.wallet_address"
-                        v-model="form.wallet_address"
+                        :invalid="form.errors.usdt_address"
+                        v-model="form.usdt_address"
                         required
                     />
 
-                    <InputError class="mt-2" :message="form.errors.wallet_address" />
+                    <InputError class="mt-2" :message="form.errors.usdt_address" />
                 </div>
 
                 <div>
