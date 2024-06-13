@@ -136,19 +136,14 @@ const openEditModal = (clientDetails) => {
     form.name = clientDetails.name;
     form.email = clientDetails.email;
     form.usdt_address = clientDetails.usdt_address;
+    // Set the dial code in the form
+    form.dial_code = { value: clientDetails.dial_code };
+    // Remove the dial code from the phone number
+    const dialCode = clientDetails.dial_code.replace(/\D/g, ''); // Extract only numeric characters from the dial code
+    const phoneWithoutDialCode = clientDetails.phone.replace(/\D/g, ''); // Extract only numeric characters from the phone number
 
-    // Find the country object with the matching dial code
-    const country = CountryLists.find(country => country.value  === clientDetails.dial_code);
-    if (country) {
-        // Set the dial code in the form
-        form.dial_code = country;
-        // Remove the dial code from the phone number
-        const dialCode = clientDetails.dial_code.replace(/\D/g, ''); // Extract only numeric characters from the dial code
-        const phoneWithoutDialCode = clientDetails.phone.replace(/\D/g, ''); // Extract only numeric characters from the phone number
-
-        const dialCodeLength = dialCode.length;
-        form.phone = phoneWithoutDialCode.substring(dialCodeLength);
-    } 
+    const dialCodeLength = dialCode.length;
+    form.phone = phoneWithoutDialCode.substring(dialCodeLength);
 };
 
 const closeEditModal = () => {
@@ -163,6 +158,21 @@ const openDeleteModal = (clientDetails) => {
 const closeDeleteModal = () => {
     deleteModal.value = false;
 };
+
+function loadDialCodes(query, setOptions) {
+    fetch('/member/getDialCodes?query=' + query)
+        .then(response => response.json())
+        .then(results => {
+            setOptions(
+                results.map(country => {
+                    return {
+                        value: country.phone_code,
+                        label: country.name,
+                    }
+                })
+            )
+        });
+}
 
 const deleteClient = (clientDetails) => {
     form.id = clientDetails.id;
@@ -359,7 +369,7 @@ const updateClient = (clientDetails) => {
                         <div class="col-span-2">
                             <div class="mr-1.5">
                                 <Combobox 
-                                    :options="CountryLists"
+                                    :load-options="loadDialCodes"
                                     id="dial_code"
                                     class="block w-full"
                                     :invalid="form.errors.phone"
