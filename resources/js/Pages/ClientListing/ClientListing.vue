@@ -223,7 +223,7 @@ watchEffect(() => {
             <div class="flex flex-col h-[300px] justify-end mt-5">
                 <div class="flex gap-3 pt-8">
                     <Button variant="gray" class="w-full" @click="clearFilters">{{ $t('public.clear_all') }}</Button>
-                    <Button variant="primary" class="w-full" @click="applyFilters">{{ $t('public.apply') }}</Button>
+                    <Button variant="primary" class="w-full" @click="applyFilters">{{ $t('public.done') }}</Button>
                 </div>
             </div>
         </Modal>

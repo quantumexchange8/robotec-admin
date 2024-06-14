@@ -116,7 +116,7 @@ const updatePamm = () => {
         </div>
 
         <span class="text-white text-base font-semibold font-sans leading-normal py-2">
-            {{ $t('public.current_pamm_return') }}
+            {{ $t('public.update_history') }}
         </span>
 
         <div v-if="histories.data.length <= 0">

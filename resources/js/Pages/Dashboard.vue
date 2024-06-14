@@ -60,7 +60,7 @@ const handleRedirectTo = (pending) => {
                     <ExpandIcon class="w-4 h-4 relative opacity-50 text-white" @click="handleRedirectTo('member')"/>
                 </div>
                 <div class="self-stretch justify-between items-center inline-flex">
-                    <div class="text-gray-100 text-xs font-medium font-sans leading-[18px]">{{ $t('public.total_clients') }}</div>
+                    <div class="text-gray-100 text-xs font-medium font-sans leading-[18px]">{{ $t('public.total_clients') }} (pax)</div>
                     <div class="text-white text-xl font-semibold font-sans leading-loose">{{ props.totalClient }}</div>
                 </div>
             </div>

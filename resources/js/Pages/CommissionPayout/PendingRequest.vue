@@ -279,7 +279,7 @@ const approveCommission = () => {
                 </div>
 
                 <div class="items-center pt-8 flex gap-3">
-                    <Button variant="outline" class="w-full" @click.prevent="closeModal">{{ $t('public.close') }}</Button>
+                    <Button variant="outline" class="w-full" @click.prevent="closeModal">{{ $t('public.cancel') }}</Button>
                     <Button variant="success" class="w-full" :disabled="form.processing" @click.prevent="approveCommission">{{ $t('public.approve') }}</Button>
                 </div>
             </form>

@@ -175,7 +175,7 @@ class TransactionController extends Controller
 
         // Verify wallet address and transaction number
         if ($request->usdt_address !== $withdrawalRequest->from_wallet_address) {
-            throw ValidationException::withMessages(['usdt_address' => trans('public.incorrect_wallet_address')]);
+            throw ValidationException::withMessages(['usdt_address' => trans('public.incorrect_usdt_address')]);
         }
 
         if ($request->transaction_number !== $withdrawalRequest->transaction_number) {
