@@ -257,7 +257,7 @@ const approveCommission = () => {
                     <img class="w-9 h-9 rounded-full" :src="commissionDetails.user.profile_photo || 'https://img.freepik.com/free-icon/user_318-159711.jpg'" alt="Client profile picture"/>
                     <div class="w-full flex-col justify-start items-start inline-flex">
                         <div class="self-stretch text-white text-base font-medium font-sans leading-normal">{{ commissionDetails.user.name }}</div>
-                        <div class="text-gray-300 text-xs font-normal font-sans leading-[18px]">{{ $t('public.id') }}: {{ commissionDetails.user.id }}</div>
+                        <div class="text-gray-300 text-xs font-normal font-sans leading-[18px]">{{ $t('public.id') }}: {{ commissionDetails.user.id_number }}</div>
                     </div>
                 </div>
 

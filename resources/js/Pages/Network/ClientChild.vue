@@ -63,7 +63,7 @@ const getActiveChildren = (clients) => {
                     <img class="w-7 h-7 rounded-full" :src="child.profile_photo_url || 'https://img.freepik.com/free-icon/user_318-159711.jpg'" />
                     <div class="self-stretch flex-col justify-start items-center flex">
                         <div class="self-stretch text-center text-white text-xs w-full overflow-hidden truncate">{{ child.name }}</div>
-                        <div class="text-center text-gray-300 text-xxs">{{ $t('public.id') }}: {{ child.id }}</div>
+                        <div class="text-center text-gray-300 text-xxs">{{ $t('public.id') }}: {{ child.id_number }}</div>
                     </div>
                 </div>
                 <!-- Conditional rendering for children -->

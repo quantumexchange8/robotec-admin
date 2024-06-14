@@ -34,6 +34,7 @@ class NetworkController extends Controller
         $node = [
             'id' => $user->id,
             'name' => $user->name,
+            'id_number' => $user->id_number,
             'profile_photo' => $user->getFirstMediaUrl('profile_photo'),
             'email' => $user->email,
             'children' => [], // Initialize children array

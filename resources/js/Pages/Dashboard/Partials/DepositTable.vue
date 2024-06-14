@@ -164,14 +164,14 @@ const closeModal = () => {
                 <img class="w-9 h-9 rounded-full" :src="transactionDetails.user.profile_photo || 'https://img.freepik.com/free-icon/user_318-159711.jpg'" alt="Client profile picture"/>
                 <div class="w-full flex-col justify-start items-start inline-flex">
                     <div class="self-stretch text-white text-base font-medium font-sans leading-normal">{{ transactionDetails.user.name }}</div>
-                    <div class="text-gray-300 text-xs font-normal font-sans leading-[18px]">{{ $t('public.id') }}: {{ transactionDetails.user.id }}</div>
+                    <div class="text-gray-300 text-xs font-normal font-sans leading-[18px]">{{ $t('public.id') }}: {{ transactionDetails.user.id_number }}</div>
                 </div>
             </div>
             <div class="w-full h-px bg-gray-700 my-4"></div>
 
             <div class="grid grid-cols-2 items-center mb-2">
                 <div class="col-span-1 text-gray-300 text-xs font-normal font-sans leading-[18px]">{{ $t('public.transaction_id') }}</div>
-                <div class="col-span-1 text-white text-xs font-normal font-sans leading-tight">{{ transactionDetails.id }}</div>
+                <div class="col-span-1 text-white text-xs font-normal font-sans leading-tight">{{ transactionDetails.transaction_number }}</div>
             </div>
             <div class="grid grid-cols-2 items-center mb-2">
                 <div class="col-span-1 text-gray-300 text-xs font-normal font-sans leading-[18px]">{{ $t('public.transaction_date') }}</div>

@@ -12,6 +12,7 @@ import Modal from "@/Components/Modal.vue";
 import toast from "@/Composables/toast.js";
 import { TailwindPagination } from "laravel-vue-pagination";
 import { trans } from "laravel-vue-i18n";
+import NoHistory from "@/Components/NoHistory.vue";
 
 const props = defineProps({
   client: Object,
@@ -186,9 +187,13 @@ const toggleExpanded = (history) => {
                 <div class="text-white text-base font-semibold">{{ $t('public.adjustment_history') }}</div>
             </div>
 
-            <div v-if="histories && histories.length <= 0" class="py-5">
+            <div v-if="!props.client" class="py-5">
                 <NoClientSelected class="w-40 h-[120px] relative mb-3" />
                 <div class="text-gray-300 text-sm font-normal">{{ $t('public.no_client_selected_message') }}</div>
+            </div>
+            <div v-else-if="histories && histories.data == ''" class="py-5">
+                <NoHistory class="w-40 h-[120px] relative" />
+                <div class="text-gray-300 text-sm font-normal">{{ $t('public.no_history_message') }}</div>
             </div>
             <div v-else class="w-full justify-start items-center">
                 <div class="w-full px-4 py-3 bg-gray-800 rounded-xl flex-col justify-start items-start inline-flex">

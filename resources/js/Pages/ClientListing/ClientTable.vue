@@ -242,7 +242,7 @@ const updateClient = (clientDetails) => {
                                         {{ member.name }}
                                     </div>
                                     <div class="flex">
-                                        <div class="text-gray-300 text-xs font-normal font-sans leading-[18px] mr-2">{{ $t('public.id') }}: {{ member.id }}</div>
+                                        <div class="text-gray-300 text-xs font-normal font-sans leading-[18px] mr-2">{{ $t('public.id') }}: {{ member.id_number }}</div>
                                         <div class="flex items-center text-xs font-normal font-sans leading-[18px]">
                                             <div class="text-gray-300">{{ $t('public.commission') }}:&nbsp;</div>
                                             <div class="text-success-300">{{ formatAmount(member.totalCommission) }}</div>
@@ -272,7 +272,7 @@ const updateClient = (clientDetails) => {
                 <img class="w-9 h-9 rounded-full" :src="clientDetails.profile_photo || 'https://img.freepik.com/free-icon/user_318-159711.jpg'" alt="Client profile picture"/>
                 <div class="w-full flex-col justify-start items-start inline-flex">
                     <div class="self-stretch text-white text-base font-medium font-sans leading-normal">{{ clientDetails.name }}</div>
-                    <div class="text-gray-300 text-xs font-normal font-sans leading-[18px]">{{ $t('public.id') }}: {{ clientDetails.id }}</div>
+                    <div class="text-gray-300 text-xs font-normal font-sans leading-[18px]">{{ $t('public.id') }}: {{ clientDetails.id_number }}</div>
                 </div>
             </div>
 
