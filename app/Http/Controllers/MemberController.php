@@ -228,6 +228,11 @@ class MemberController extends Controller
             'role' => 'user',
         ]);
     
+        $id_number = str_pad($user->id, 6, '0', STR_PAD_LEFT);
+
+        // Update the user with id_number
+        $user->update(['id_number' => $id_number]);
+
         $user->setReferralId();
     
         // Create cash wallet
