@@ -240,10 +240,13 @@ const rejectRequest = (requestDetails) => {
 
             <div class="grid grid-cols-2 items-center mb-5">
                 <div class="col-span-1 text-gray-300 text-xs font-normal font-sans leading-[18px]">{{ $t('public.usdt_address') }}</div>
-                <div class="col-span-1 text-white text-xs font-normal font-sans leading-tight">{{ requestDetails.usdt_address }}
-                    <Tooltip :content="$t('public.' + tooltipContent)" placement="bottom">
-                        <DuplicateIcon aria-hidden="true" :class="['w-4 h-4 text-gray-200']" @click.stop.prevent="copyTestingCode(requestDetails.usdt_address)" style="cursor: pointer" />
-                    </Tooltip>
+                <div class="col-span-1 flex items-start">
+                    <div class="text-white text-xs font-normal font-sans leading-tight break-all">
+                        {{ requestDetails.usdt_address }}
+                        <Tooltip :content="$t('public.' + tooltipContent)" placement="bottom">
+                            <DuplicateIcon aria-hidden="true" :class="['w-4 h-4 text-gray-200']" @click.stop.prevent="copyTestingCode(requestDetails.usdt_address)" style="cursor: pointer" />
+                        </Tooltip>
+                    </div>
                 </div>
             </div>
 

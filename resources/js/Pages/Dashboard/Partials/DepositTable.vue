@@ -160,7 +160,7 @@ const closeModal = () => {
 
     <Modal :show="transactionModal" :title="$t('public.deposit_details')" @close="closeModal" max-width="sm">
         <div v-if="transactionDetails">
-            <div class="w-full justify-start items-center gap-3 border-b border-gray-700 inline-flex">
+            <div class="w-full justify-start items-center gap-3 inline-flex">
                 <img class="w-9 h-9 rounded-full" :src="transactionDetails.user.profile_photo || 'https://img.freepik.com/free-icon/user_318-159711.jpg'" alt="Client profile picture"/>
                 <div class="w-full flex-col justify-start items-start inline-flex">
                     <div class="self-stretch text-white text-base font-medium font-sans leading-normal">{{ transactionDetails.user.name }}</div>
@@ -191,19 +191,27 @@ const closeModal = () => {
             </div>
             <div class="grid grid-cols-2 items-center mb-2">
                 <div class="col-span-1 text-gray-300 text-xs font-normal font-sans leading-[18px]">{{ $t('public.sent_address') }}</div>
-                <div class="col-span-1 text-white text-xs font-normal font-sans leading-tight">{{ transactionDetails.from_wallet_address }}
-                    <Tooltip :content="$t('public.' + tooltipContent)" placement="bottom">
-                        <DuplicateIcon aria-hidden="true" :class="['w-4 h-4 text-gray-200']" @click.stop.prevent="copyTestingCode(transactionDetails.from_wallet_address)" style="cursor: pointer" />
-                    </Tooltip>
+                <div class="col-span-1 flex items-start">
+                    <div class="text-white text-xs font-normal font-sans leading-tight break-all">
+                        {{ transactionDetails.from_wallet_address }}
+                        <Tooltip :content="$t('public.' + tooltipContent)" placement="bottom">
+                            <DuplicateIcon aria-hidden="true" :class="['w-4 h-4 text-gray-200']" @click.stop.prevent="copyTestingCode(transactionDetails.from_wallet_address)" style="cursor: pointer" />
+                        </Tooltip>
+                    </div>
                 </div>
             </div>
 
             <div class="grid grid-cols-2 items-center">
-                <div class="col-span-1 text-gray-300 text-xs font-normal font-sans leading-[18px]">{{ $t('public.receiving_address') }}</div>
-                <div class="col-span-1 text-white text-xs font-normal font-sans leading-tight">{{ transactionDetails.to_wallet_address }}                
-                    <Tooltip :content="$t('public.' + tooltipContent)" placement="bottom">
-                        <DuplicateIcon aria-hidden="true" :class="['w-4 h-4 text-gray-200']" @click.stop.prevent="copyTestingCode(transactionDetails.to_wallet_address)" style="cursor: pointer" />
-                    </Tooltip>
+                <div class="col-span-1 text-gray-300 text-xs font-normal font-sans leading-[18px]">
+                    {{ $t('public.receiving_address') }}
+                </div>
+                <div class="col-span-1 flex items-start">
+                    <div class="text-white text-xs font-normal font-sans leading-tight break-all">
+                        {{ transactionDetails.to_wallet_address }}
+                        <Tooltip :content="$t('public.' + tooltipContent)" placement="bottom">
+                            <DuplicateIcon aria-hidden="true" :class="['w-4 h-4 text-gray-200']" @click.stop.prevent="copyTestingCode(transactionDetails.to_wallet_address)" style="cursor: pointer" />
+                        </Tooltip>
+                    </div>
                 </div>
             </div>
 

@@ -222,19 +222,25 @@ const closeModal = () => {
                 </div>
                 <div class="grid grid-cols-2 items-center mb-2">
                     <div class="col-span-1 text-gray-300 text-xs font-normal font-sans leading-[18px]">{{ $t('public.sent_address') }}</div>
-                    <div class="col-span-1 text-white text-xs font-normal font-sans leading-tight">{{ transactionDetails.from_wallet_address }}
-                        <Tooltip :content="$t('public.' + tooltipContent)" placement="bottom">
-                            <DuplicateIcon aria-hidden="true" :class="['w-4 h-4 text-gray-200']" @click.stop.prevent="copyTestingCode(transactionDetails.from_wallet_address)" style="cursor: pointer" />
-                        </Tooltip>
+                    <div class="col-span-1 flex items-start">
+                        <div class="text-white text-xs font-normal font-sans leading-tight break-all">
+                            {{ transactionDetails.from_wallet_address }}
+                            <Tooltip :content="$t('public.' + tooltipContent)" placement="bottom">
+                                <DuplicateIcon aria-hidden="true" :class="['w-4 h-4 text-gray-200']" @click.stop.prevent="copyTestingCode(transactionDetails.from_wallet_address)" style="cursor: pointer" />
+                            </Tooltip>
+                        </div>
                     </div>
                 </div>
 
                 <div class="grid grid-cols-2 items-center">
                     <div class="col-span-1 text-gray-300 text-xs font-normal font-sans leading-[18px]">{{ $t('public.receiving_address') }}</div>
-                    <div class="col-span-1 text-white text-xs font-normal font-sans leading-tight">{{ transactionDetails.to_wallet_address }}                
-                        <Tooltip :content="$t('public.' + tooltipContent)" placement="bottom">
-                            <DuplicateIcon aria-hidden="true" :class="['w-4 h-4 text-gray-200']" @click.stop.prevent="copyTestingCode(transactionDetails.to_wallet_address)" style="cursor: pointer" />
-                        </Tooltip>
+                    <div class="col-span-1 flex items-start">
+                        <div class="text-white text-xs font-normal font-sans leading-tight break-all">
+                            {{ transactionDetails.to_wallet_address }}
+                            <Tooltip :content="$t('public.' + tooltipContent)" placement="bottom">
+                                <DuplicateIcon aria-hidden="true" :class="['w-4 h-4 text-gray-200']" @click.stop.prevent="copyTestingCode(transactionDetails.to_wallet_address)" style="cursor: pointer" />
+                            </Tooltip>
+                        </div>
                     </div>
                 </div>
             </div>
