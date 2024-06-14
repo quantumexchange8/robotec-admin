@@ -41,7 +41,7 @@ class MemberController extends Controller
             ->leftJoin('transactions', function($join) {
                 $join->on('transactions.user_id', '=', 'users.id')
                     ->where('transactions.transaction_type', '=', 'commission')
-                    ->where('transactions.status', '=', 'Approved')
+                    ->where('transactions.status', '=', 'approved')
                     ->whereColumn('transactions.to_wallet_id', '=', 'wallets.id');
             })
             ->selectRaw('users.*, 
@@ -126,25 +126,25 @@ class MemberController extends Controller
             // Calculate total deposit
             $user->totalDeposit = Transaction::where('user_id', $user->id)
                 ->where('transaction_type', 'deposit')
-                ->where('status', 'Success')
+                ->where('status', 'success')
                 ->sum('transaction_amount');
 
             // Calculate total withdrawal
             $user->totalWithdrawal = Transaction::where('user_id', $user->id)
                 ->where('transaction_type', 'withdrawal')
-                ->where('status', 'Approved')
+                ->where('status', 'approved')
                 ->sum('transaction_amount');
 
             // // Calculate total commission
             // $user->totalCommission = Transaction::where('to_wallet_id', $user->wallets()->where('type', 'commission_wallet')->value('id'))
             //     ->where('transaction_type', 'commission')
-            //     ->where('status', 'Approved')
+            //     ->where('status', 'approved')
             //     ->sum('transaction_amount');
 
             // Calculate total funded PAMM
             $user->totalFundedPAMM = Transaction::where('user_id', $user->id)
                 ->where('transaction_type', 'pamm_funding')
-                ->where('status', 'Success')
+                ->where('status', 'success')
                 ->sum('transaction_amount');
 
             return $user;

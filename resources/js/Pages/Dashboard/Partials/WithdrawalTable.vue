@@ -206,14 +206,14 @@ const closeModal = () => {
                 <div class="col-span-1 text-gray-300 text-xs font-normal font-sans leading-[18px]">{{ $t('public.status') }}</div>
                 <div class="col-span-1 text-sm font-medium font-sans leading-tight"
                     :class="{
-                        'text-success-500': transactionDetails.status === 'Approved',
-                        'text-error-500': transactionDetails.status === 'Rejected'
+                        'text-success-500': transactionDetails.status === 'approved',
+                        'text-error-500': transactionDetails.status === 'rejected'
                     }">
-                    {{ $t('public.' + transactionDetails.status.toLowerCase()) }}
+                    {{ $t('public.' + transactionDetails.status) }}
                 </div>
             </div>
             
-            <div v-if="transactionDetails.status == 'Approved'" >
+            <div v-if="transactionDetails.status == 'approved'" >
                 <div class="w-full h-px bg-gray-700 my-4"></div>
 
                 <div class="grid grid-cols-2 items-center mb-2">

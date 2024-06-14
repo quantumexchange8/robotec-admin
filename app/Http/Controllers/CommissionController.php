@@ -14,12 +14,12 @@ class CommissionController extends Controller
     {
         $currentMonth = Carbon::now()->startOfMonth();
         $totalCommissionRequest = Transaction::where('transaction_type', 'commission')
-            ->where('status', 'Pending')
+            ->where('status', 'processing')
             ->where('created_at', '>=', $currentMonth)
             ->count();
     
         $totalCommissionHistory = Transaction::where('transaction_type', 'commission')
-            ->where('status', '!=', 'Pending')
+            ->where('status', '!=', 'processing')
             ->where('created_at', '>=', $currentMonth)
             ->count();
             
@@ -36,9 +36,9 @@ class CommissionController extends Controller
     
         // Apply type filter
         $query->when($request->type == 'Pending', function ($query) {
-            $query->where('status', 'Pending');
+            $query->where('status', 'processing');
         })->when($request->type == 'History', function ($query) {
-            $query->where('status', '!=', 'Pending');
+            $query->where('status', '!=', 'processing');
         });
         
         // Apply search filter if provided
@@ -88,7 +88,7 @@ class CommissionController extends Controller
     
             // Update the transaction's status and new_wallet_amount
             $transaction->update([
-                'status' => 'Approved',
+                'status' => 'approved',
                 'old_wallet_amount' => $commissionWallet->balance,
                 'new_wallet_amount' => $commissionWallet->balance + $transaction->amount,
                 'approved_at' => Carbon::now(),

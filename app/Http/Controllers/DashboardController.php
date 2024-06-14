@@ -13,10 +13,10 @@ class DashboardController extends Controller
     public function index()
     {
         $totalClient = User::whereNull('deleted_at')->where('role','user')->count();
-        $totalDeposit = Transaction::where('transaction_type', 'deposit')->where('status', 'Success')->sum('transaction_amount');
-        $totalWithdrawal = Transaction::where('transaction_type', 'withdrawal')->where('status', 'Approved')->sum('transaction_amount');
-        $totalPurchasesEA = Transaction::where('transaction_type', 'robotec_purchase')->where('status', 'Success')->sum('transaction_amount');
-        $totalPammFundIn = Transaction::where('transaction_type', 'pamm_funding')->where('status', 'Success')->sum('transaction_amount');
+        $totalDeposit = Transaction::where('transaction_type', 'deposit')->where('status', 'success')->sum('transaction_amount');
+        $totalWithdrawal = Transaction::where('transaction_type', 'withdrawal')->where('status', 'approved')->sum('transaction_amount');
+        $totalPurchasesEA = Transaction::where('transaction_type', 'robotec_purchase')->where('status', 'success')->sum('transaction_amount');
+        $totalPammFundIn = Transaction::where('transaction_type', 'pamm_funding')->where('status', 'success')->sum('transaction_amount');
 
         return Inertia::render('Dashboard', [
             'totalClient' => $totalClient,

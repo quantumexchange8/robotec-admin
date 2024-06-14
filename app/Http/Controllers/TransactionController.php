@@ -73,7 +73,7 @@ class TransactionController extends Controller
             'to_wallet_id' => $isDeduction ?  null : $wallet->id,
             'from_wallet_address' => $isDeduction ? $client->usdt_address : null,
             'to_wallet_address' => $isDeduction ? null : $client->usdt_address,
-            'status' => 'Success',
+            'status' => 'success',
         ]);
 
         // Update the wallet balance
@@ -120,7 +120,7 @@ class TransactionController extends Controller
             ->whereNotNull('from_wallet_id')
             ->whereNotNull('from_wallet_address')
             ->whereNull('approved_at')
-            ->where('status', 'Pending');
+            ->where('status', 'processing');
     
         
         // Apply search filter if provided
@@ -170,7 +170,7 @@ class TransactionController extends Controller
             ->whereNotNull('from_wallet_id')
             ->whereNotNull('from_wallet_address')
             ->whereNull('approved_at')
-            ->where('status', 'Pending')
+            ->where('status', 'processing')
             ->firstOrFail();
 
         // Verify wallet address and transaction number
@@ -189,7 +189,7 @@ class TransactionController extends Controller
             'new_wallet_amount' => $withdrawalRequest->from_wallet->balance - $withdrawalRequest->transaction_amount,
             'to_wallet_address' => $request->usdt_address,
             'txn_hash' => $request->txn_hash,
-            'status' => 'Success',
+            'status' => 'approved',
             'approved_at' => now(),
         ]);
 
@@ -220,12 +220,12 @@ class TransactionController extends Controller
             ->whereNotNull('from_wallet_id')
             ->whereNotNull('from_wallet_address')
             ->whereNull('approved_at')
-            ->where('status', 'Pending')
+            ->where('status', 'processing')
             ->first();
 
         // Update withdrawal request status and approval timestamp
         $withdrawalRequest->update([
-            'status' => 'Rejected',
+            'status' => 'rejected',
         ]);
 
         if ($request->remarks) {
@@ -250,7 +250,7 @@ class TransactionController extends Controller
         $query = Transaction::query()
             ->with('user','from_wallet','to_wallet')
             ->where('transaction_type', $request->transaction_type)
-            ->whereNotIn('status', ['Pending']);
+            ->whereNotIn('status', ['processing']);
 
         // If 'status' is provided in the request, add it to the query
         if ($request->has('status')) {

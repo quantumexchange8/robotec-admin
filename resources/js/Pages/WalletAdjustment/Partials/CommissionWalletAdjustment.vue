@@ -271,7 +271,7 @@ const toggleExpanded = (history) => {
             </div>
             <div class="grid grid-cols-2 items-center mb-2">
                 <div class="col-span-1 text-gray-300 text-xs font-normal font-sans leading-[18px]">{{ $t('public.wallet') }}</div>
-                <div class="col-span-1 text-white text-xs font-normal font-sans leading-tight">{{ wallet ? $t('public.' + wallet.type.toLowerCase()) : '' }}</div>
+                <div class="col-span-1 text-white text-xs font-normal font-sans leading-tight">{{ wallet ? $t('public.' + wallet.type) : '' }}</div>
             </div>
 
             <div class="grid grid-cols-2 items-center mb-2">
