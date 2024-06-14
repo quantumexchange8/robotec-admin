@@ -189,11 +189,11 @@ const toggleExpanded = (history) => {
 
             <div v-if="!props.client" class="py-5">
                 <NoClientSelected class="w-40 h-[120px] relative mb-3" />
-                <div class="text-gray-300 text-sm font-normal">{{ $t('public.no_client_selected_message') }}</div>
+                <div class="text-gray-300 text-sm text-center font-normal mt-3">{{ $t('public.no_client_selected_message') }}</div>
             </div>
             <div v-else-if="histories && histories.data == ''" class="py-5">
                 <NoHistory class="w-40 h-[120px] relative" />
-                <div class="text-gray-300 text-sm font-normal">{{ $t('public.no_history_message') }}</div>
+                <div class="text-gray-300 text-sm text-center font-normal mt-3">{{ $t('public.no_history_message') }}</div>
             </div>
             <div v-else class="w-full justify-start items-center">
                 <div class="w-full px-4 py-3 bg-gray-800 rounded-xl flex-col justify-start items-start inline-flex">
