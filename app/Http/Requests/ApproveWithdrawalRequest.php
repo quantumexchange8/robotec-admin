@@ -23,8 +23,8 @@ class ApproveWithdrawalRequest extends FormRequest
     public function rules()
     {
         return [
-            'usdt_address' => ['required','string','max:255',Rule::exists('users', 'usdt_address'),],
-            'transaction_number' => ['required','string','max:255',Rule::exists('transactions', 'transaction_number'),],
+            'usdt_address' => ['required','string','max:255',],
+            'txn_hash' => ['required','string','max:255',Rule::exists('transactions', 'txn_hash'),],
             'remarks' => ['nullable', 'string', 'max:255'],
         ];
     }
@@ -32,9 +32,9 @@ class ApproveWithdrawalRequest extends FormRequest
     public function attributes(): array
     {
         return [
-            'usdt_address' => 'USDT Address',
-            'transaction_number' => 'Transaction ID',
-            'remarks' => 'Remarks',
+            'usdt_address' => trans('public.usdt_address'),
+            'txn_hash' => trans('public.txn_hash'),
+            'remarks' => trans('public.description'),
         ];
     }
 }

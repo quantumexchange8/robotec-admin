@@ -135,7 +135,7 @@ watchEffect(() => {
                 </InputIconWrapper>
             </div>
             <div class="pb-3 grid grid-cols-3 gap-3">
-                <Button variant="transparent" class="relative w-full border border-gray-600 focus:border-primary-500" @click="openFilterModal()">
+                <Button variant="transparent" class="relative w-full border border-gray-600 focus:border-primary-500" @click.prevent="openFilterModal()">
                     <span class="inline-flex items-center">
                         <span class="mr-2">
                             <FilterIcon aria-hidden="true" class="w-5 h-5" />
@@ -222,8 +222,8 @@ watchEffect(() => {
 
             <div class="flex flex-col h-[300px] justify-end mt-5">
                 <div class="flex gap-3 pt-8">
-                    <Button variant="gray" class="w-full" @click="clearFilters">{{ $t('public.clear_all') }}</Button>
-                    <Button variant="primary" class="w-full" @click="applyFilters">{{ $t('public.done') }}</Button>
+                    <Button variant="gray" class="w-full" @click.prevent="clearFilters">{{ $t('public.clear_all') }}</Button>
+                    <Button variant="primary" class="w-full" @click.prevent="applyFilters">{{ $t('public.done') }}</Button>
                 </div>
             </div>
         </Modal>

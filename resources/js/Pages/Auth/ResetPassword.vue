@@ -81,7 +81,7 @@ const submit = () => {
         </form>
 
         <div class="flex items-center justify-end mt-10">
-            <Button class="w-full" size="lg" :class="{ 'opacity-25': form.processing }" :disabled="form.processing" @click="submit">
+            <Button class="w-full" size="lg" :class="{ 'opacity-25': form.processing }" :disabled="form.processing" @click.prevent="submit">
                 {{ $t('public.reset_password') }}
             </Button>
         </div>

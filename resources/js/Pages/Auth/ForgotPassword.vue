@@ -68,12 +68,12 @@ const goToLoginPage = () => {
 
         <div class="grid grid-cols-6 gap-4 w-full mt-4">
                 <div class="col-span-6">
-                    <Button size="lg" :class="{ 'opacity-25': form.processing }" :disabled="form.processing" class="w-full" @click="submit">
+                    <Button size="lg" :class="{ 'opacity-25': form.processing }" :disabled="form.processing" class="w-full" @click.prevent="submit">
                         {{ $t('public.send_email') }}
                     </Button>
                 </div>
                 <div class="col-span-6">
-                    <Button variant="transparent" :class="{ 'opacity-25': form.processing }" :disabled="form.processing" class="w-full" @click="goToLoginPage">
+                    <Button variant="transparent" :class="{ 'opacity-25': form.processing }" :disabled="form.processing" class="w-full" @click.prevent="goToLoginPage">
                         <ArrowLeftIcon class="w-5 h-5 mr-2"/>{{ $t('public.back_to_login') }}
                     </Button>
                 </div>

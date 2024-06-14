@@ -211,7 +211,7 @@ const approveCommission = () => {
                     <th class="py-2">
                     <Checkbox
                         v-model="isAllSelected"
-                        @click="handleSelectAll"
+                        @click.prevent="handleSelectAll"
                         id="selectAllCheckbox"
                     />
                     </th>

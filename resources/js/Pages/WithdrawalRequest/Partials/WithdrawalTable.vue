@@ -21,7 +21,7 @@ const props = defineProps({
 const form = useForm({
     id: '',
     usdt_address: '',
-    transaction_number: '',
+    txn_hash: '',
     remarks: '',
 });
 
@@ -261,7 +261,7 @@ const rejectRequest = (requestDetails) => {
         <form>
             <div class="my-5 px-1">
                 <div>
-                    <Label for="usdt_address" :value="$t('public.usdt_address')" class="mb-1.5" :invalid="form.errors.usdt_address" />
+                    <Label for="usdt_address" :value="$t('public.from_usdt_address')" class="mb-1.5" :invalid="form.errors.usdt_address" />
                     <Input
                         id="usdt_address"
                         class="block w-full mb-5 bg-transparent text-white"
@@ -274,17 +274,17 @@ const rejectRequest = (requestDetails) => {
                 </div>
 
                 <div>
-                    <Label for="transaction_number" :value="$t('public.txid')" class="mb-1.5" :invalid="form.errors.transaction_number" />
+                    <Label for="txn_hash" :value="$t('public.txn_hash')" class="mb-1.5" :invalid="form.errors.txn_hash" />
 
                     <Input
-                        id="transaction_number"
+                        id="txn_hash"
                         class="block w-full mb-5 bg-transparent text-white"
-                        :invalid="form.errors.transaction_number"
-                        v-model="form.transaction_number"
+                        :invalid="form.errors.txn_hash"
+                        v-model="form.txn_hash"
                         required
                     />
 
-                    <InputError class="mt-2" :message="form.errors.transaction_number" />
+                    <InputError class="mt-2" :message="form.errors.txn_hash" />
                 </div>
 
                 <div>

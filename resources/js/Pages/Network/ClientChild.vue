@@ -8,11 +8,32 @@ const props = defineProps({
     level: Number,
 });
 
+// // Function to toggle client and its children at the next level
+// const toggleClient = (client) => {
+//     if (client.children && client.children.length > 0) {
+//         client.isActive = !client.isActive;
+//     }
+// };
+
+// // Function to get all active children for the next level
+// const getActiveChildren = (clients) => {
+//     let children = [];
+//     clients.forEach(client => {
+//         if (client.isActive && client.children && client.children.length > 0) {
+//             children = children.concat(client.children);
+//         }
+//     });
+//     return children;
+// };
+
 // Function to toggle client and its children at the next level
-const toggleClient = (client) => {
-    if (client.children && client.children.length > 0) {
-        client.isActive = !client.isActive;
-    }
+const toggleClient = (clickedClient) => {
+    props.clients.forEach(client => {
+        if (client !== clickedClient) {
+            client.isActive = false; // Deactivate all other clients
+        }
+    });
+    clickedClient.isActive = !clickedClient.isActive; // Toggle the clicked client
 };
 
 // Function to get all active children for the next level

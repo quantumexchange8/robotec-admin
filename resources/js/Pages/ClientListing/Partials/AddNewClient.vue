@@ -91,7 +91,7 @@ const addClient = () => {
 <template>
     <div>
       <!-- Button to open the modal -->
-        <Button variant="primary" class="px-3 py-2 justify-end" @click="openModal">
+        <Button variant="primary" class="px-3 py-2 justify-end" @click.prevent="openModal">
           <PlusCircleIcon class="w-5 h-5 mr-2 relative" /> {{ $t('public.new_client') }}
         </Button>
       
@@ -176,8 +176,8 @@ const addClient = () => {
             </div>
 
             <div class="w-full flex justify-end gap-3 pt-8">
-                <Button variant="transparent" class="w-full border border-gray-600" @click="closeModal">{{ $t('public.cancel') }}</Button>
-                <Button variant="primary" class="w-full" :disabled="!isFormValid || form.processing" @click="addClient">{{ $t('public.add') }}</Button>
+                <Button variant="transparent" class="w-full border border-gray-600" @click.prevent="closeModal">{{ $t('public.cancel') }}</Button>
+                <Button variant="primary" class="w-full" :disabled="!isFormValid || form.processing" @click.prevent="addClient">{{ $t('public.add') }}</Button>
             </div>
         </form>
       </Modal>

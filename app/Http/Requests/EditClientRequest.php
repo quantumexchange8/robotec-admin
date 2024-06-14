@@ -37,11 +37,11 @@ class EditClientRequest extends FormRequest
     public function attributes(): array
     {
         return [
-            'name' => 'Name',
-            'email' => 'Email',
-            'dial_code' => 'Dial Code',
-            'phone' => 'Phone Number',
-            'usdt_address' => 'USDT Address',
+            'name' => trans('public.name'),
+            'email' => trans('public.email'),
+            'dial_code' => trans('public.dial_code'),
+            'phone' => trans('public.phone_number'),
+            'usdt_address' => trans('public.usdt_address'),
         ];
     }
 

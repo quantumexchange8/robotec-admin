@@ -21,7 +21,7 @@ class UpdatePammRequest extends FormRequest
     public function attributes(): array
     {
         return [
-            'pamm' => 'Pamm Return',
+            'pamm' => trans('public.pamm_return'),
         ];
     }
 

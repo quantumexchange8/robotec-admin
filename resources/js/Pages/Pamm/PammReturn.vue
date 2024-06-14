@@ -194,8 +194,8 @@ const updatePamm = () => {
                     <InputError :message="form.errors.pamm" />
                 </div>
                 <div class="w-full flex justify-end pt-8 gap-3">
-                    <Button variant="transparent" class="w-full border border-gray-600" @click="closeModal">{{ $t('public.cancel') }}</Button>
-                    <Button variant="primary" class="w-full" :disabled="form.processing" @click="updatePamm">{{ $t('public.update') }}</Button>
+                    <Button variant="transparent" class="w-full border border-gray-600" @click.prevent="closeModal">{{ $t('public.cancel') }}</Button>
+                    <Button variant="primary" class="w-full" :disabled="form.processing" @click.prevent="updatePamm">{{ $t('public.update') }}</Button>
                 </div>
             </form>
         </Modal>

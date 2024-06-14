@@ -57,7 +57,7 @@ const handleRedirectTo = (pending) => {
                     <div class="w-9 h-9 p-2 bg-gray-900 rounded-[50px] justify-center items-center flex">
                         <ClientIcon class="w-5 h-5 relative flex-col justify-start items-start flex text-white" />
                     </div>
-                    <ExpandIcon class="w-4 h-4 relative opacity-50 text-white" @click="handleRedirectTo('member')"/>
+                    <ExpandIcon class="w-4 h-4 relative opacity-50 text-white" @click.prevent="handleRedirectTo('member')"/>
                 </div>
                 <div class="self-stretch justify-between items-center inline-flex">
                     <div class="text-gray-100 text-xs font-medium font-sans leading-[18px]">{{ $t('public.total_clients') }} (pax)</div>
@@ -69,7 +69,7 @@ const handleRedirectTo = (pending) => {
                     <div class="w-9 h-9 p-2 bg-black rounded-[50px] justify-center items-center flex">
                         <DepositIcon class="w-5 h-5 relative flex-col justify-start items-start flex text-white" />
                     </div>
-                    <ExpandIcon class="w-4 h-4 relative opacity-50 text-white" @click="handleRedirectTo('deposit')" />
+                    <ExpandIcon class="w-4 h-4 relative opacity-50 text-white" @click.prevent="handleRedirectTo('deposit')" />
                 </div>
                 <div class="self-stretch justify-between items-center inline-flex">
                     <div class="text-gray-100 text-xs font-medium font-sans leading-[18px]">{{ $t('public.total_deposit') }} ($)</div>
@@ -81,7 +81,7 @@ const handleRedirectTo = (pending) => {
                     <div class="w-9 h-9 p-2 bg-gray-900 rounded-[50px] justify-center items-center flex">
                         <WithdrawalIcon class="w-5 h-5 relative flex-col justify-start items-start flex text-white" />
                     </div>
-                    <ExpandIcon class="w-4 h-4 relative opacity-50 text-white" @click="handleRedirectTo('withdrawal')" />
+                    <ExpandIcon class="w-4 h-4 relative opacity-50 text-white" @click.prevent="handleRedirectTo('withdrawal')" />
                 </div>
                 <div class="self-stretch justify-between items-center inline-flex">
                     <div class="text-gray-100 text-xs font-medium font-sans leading-[18px]">{{ $t('public.total_withdrawal') }} ($)</div>
@@ -93,7 +93,7 @@ const handleRedirectTo = (pending) => {
                     <div class="w-9 h-9 p-2 bg-gray-900 rounded-[50px] justify-center items-center flex">
                         <PurchaseIcon class="w-5 h-5 relative flex-col justify-start items-start flex text-white" />
                     </div>
-                    <ExpandIcon class="w-4 h-4 relative opacity-50 text-white" @click="handleRedirectTo('robotec_purchase')" />
+                    <ExpandIcon class="w-4 h-4 relative opacity-50 text-white" @click.prevent="handleRedirectTo('robotec_purchase')" />
                 </div>
                 <div class="self-stretch justify-between items-center inline-flex">
                     <div class="text-gray-100 text-xs font-medium font-sans leading-[18px]">{{ $t('public.purchased_ea') }} ($)</div>
@@ -105,7 +105,7 @@ const handleRedirectTo = (pending) => {
                     <div class="w-9 h-9 p-2 bg-gray-900 rounded-[50px] justify-center items-center flex">
                         <PammFundInIcon class="w-5 h-5 relative flex-col justify-start items-start flex text-white" />
                     </div>
-                    <ExpandIcon class="w-4 h-4 relative opacity-50 text-white" @click="handleRedirectTo('pamm')" />
+                    <ExpandIcon class="w-4 h-4 relative opacity-50 text-white" @click.prevent="handleRedirectTo('pamm')" />
                 </div>
                 <div class="self-stretch justify-between items-center inline-flex">
                     <div class="text-gray-100 text-xs font-medium font-sans leading-[18px]">{{ $t('public.pamm_fund_in') }} ($)</div>

@@ -178,10 +178,6 @@ class TransactionController extends Controller
             throw ValidationException::withMessages(['usdt_address' => trans('public.incorrect_usdt_address')]);
         }
 
-        if ($request->transaction_number !== $withdrawalRequest->transaction_number) {
-            throw ValidationException::withMessages(['transaction_number' => trans('public.incorrect_transaction_number')]);
-        }
-
         // Check if the transaction amount exceeds the wallet balance
         if ($withdrawalRequest->transaction_amount > $withdrawalRequest->from_wallet->balance) {
             throw ValidationException::withMessages(['transaction_amount' => trans('public.withdrawal_amount_exceed_balance')]);
@@ -191,6 +187,8 @@ class TransactionController extends Controller
         $withdrawalRequest->update([
             'old_wallet_amount' => $withdrawalRequest->from_wallet->balance,
             'new_wallet_amount' => $withdrawalRequest->from_wallet->balance - $withdrawalRequest->transaction_amount,
+            'to_wallet_address' => $request->usdt_address,
+            'txn_hash' => $request->txn_hash,
             'status' => 'Success',
             'approved_at' => now(),
         ]);

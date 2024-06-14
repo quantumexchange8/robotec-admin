@@ -219,7 +219,7 @@ function loadDialCodes(query, setOptions) {
                         type="button"
                         class="w-full font-semibold"
                         :disabled="form.processing"
-                        @click="firstStep"
+                        @click.prevent="firstStep"
                     >
                         {{ $t('public.next') }}
                     </Button>
@@ -254,7 +254,7 @@ function loadDialCodes(query, setOptions) {
                         class="w-full font-semibold flex gap-2"
                         :disabled="form.processing"
                         v-slot="{ iconSizeClasses }"
-                        @click="backToFirstStep"
+                        @click.prevent="backToFirstStep"
                     >
                         <ArrowNarrowLeftIcon />
                         {{ $t('public.go_back') }}

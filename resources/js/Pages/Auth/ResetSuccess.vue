@@ -29,7 +29,7 @@ const goToLoginPage = () => {
         </div>
 
         <div class="flex items-center justify-end mt-10">
-            <Button variant="primary" size="lg" class="w-full" @click="goToLoginPage">
+            <Button variant="primary" size="lg" class="w-full" @click.prevent="goToLoginPage">
                 {{ $t('public.return_login') }}
             </Button>
         </div>

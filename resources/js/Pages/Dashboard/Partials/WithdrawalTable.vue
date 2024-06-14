@@ -217,9 +217,10 @@ const closeModal = () => {
                 <div class="w-full h-px bg-gray-700 my-4"></div>
 
                 <div class="grid grid-cols-2 items-center mb-2">
-                    <div class="col-span-1 text-gray-300 text-xs font-normal font-sans leading-[18px]">{{ $t('public.txid') }}</div>
+                    <div class="col-span-1 text-gray-300 text-xs font-normal font-sans leading-[18px]">{{ $t('public.txn_hash') }}</div>
                     <div class="col-span-1 text-white text-xs font-normal font-sans leading-tight">{{ transactionDetails.txn_hash }}</div>
                 </div>
+                
                 <div class="grid grid-cols-2 items-center mb-2">
                     <div class="col-span-1 text-gray-300 text-xs font-normal font-sans leading-[18px]">{{ $t('public.sent_address') }}</div>
                     <div class="col-span-1 flex items-start">

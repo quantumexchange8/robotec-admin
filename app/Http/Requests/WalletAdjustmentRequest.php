@@ -25,7 +25,7 @@ class WalletAdjustmentRequest extends FormRequest
     public function attributes(): array
     {
         return [
-            'amount' => 'Amount',
+            'amount' => trans('public.amount'),
         ];
     }
 }

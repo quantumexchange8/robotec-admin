@@ -67,7 +67,7 @@ const openEmailApp = () => {
 
         <!-- Didn't receive the email? and Click to resend -->
             <div>
-                <Button @click="openEmailApp" variant="primary" size="lg" :class="{ 'opacity-25': form.processing }" :disabled="form.processing" class="w-full">
+                <Button @click.prevent="openEmailApp" variant="primary" size="lg" :class="{ 'opacity-25': form.processing }" :disabled="form.processing" class="w-full">
                     {{ $t('public.open_email_app') }}
                 </Button>
             </div>
@@ -81,7 +81,7 @@ const openEmailApp = () => {
 
             <!-- Click to resend -->
             <div class="col-span-3">
-                <Button @click="resendEmail(props.email)" variant="transparent" :class="{ 'opacity-25': form.processing }" :disabled="form.processing" class="w-full">
+                <Button @click.prevent="resendEmail(props.email)" variant="transparent" :class="{ 'opacity-25': form.processing }" :disabled="form.processing" class="w-full">
                     {{ $t('public.click_resend') }}
                 </Button>
             </div>
@@ -89,7 +89,7 @@ const openEmailApp = () => {
 
         <!-- Back to Log In -->
         <div class="col-span-6 mt-4">
-            <Button @click="goToLoginPage" variant="transparent" :class="{ 'opacity-25': form.processing }" :disabled="form.processing" class="w-full">
+            <Button @click.prevent="goToLoginPage" variant="transparent" :class="{ 'opacity-25': form.processing }" :disabled="form.processing" class="w-full">
                 <ArrowLeftIcon class="w-5 h-5 mr-2"/>{{ $t('public.back_to_login') }}
             </Button>
         </div>

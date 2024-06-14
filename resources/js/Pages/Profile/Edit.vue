@@ -70,7 +70,7 @@ function handleFileUpload(event) {
                                 type="button"
                                 size="lg"
                                 class="font-semibold flex gap-2 self-stretch"
-                                @click="toggleDropdown"
+                                @click.prevent="toggleDropdown"
                             >
                                 <Upload01Icon />
                                 {{ $t('public.upload_profile_photo') }}
@@ -82,7 +82,7 @@ function handleFileUpload(event) {
                             <input id="fileInputCamera" type="file" accept="image/*" capture="environment" style="display: none" @change="handleFileUpload">
                             <input id="fileInputFile" type="file" accept="image/*" style="display: none" @change="handleFileUpload">
 
-                            <DropdownLink @click="uploadFromPhotoLibrary">
+                            <DropdownLink @click.prevent="uploadFromPhotoLibrary">
                                 <div class="flex items-center justify-between gap-2">
                                     <div>
                                         {{ $t('public.photo_library') }}
@@ -90,7 +90,7 @@ function handleFileUpload(event) {
                                     <PhotoLibrary />
                                 </div>
                             </DropdownLink>
-                            <DropdownLink @click="uploadPhotoFromCamera">
+                            <DropdownLink @click.prevent="uploadPhotoFromCamera">
                                 <div class="flex items-center justify-between gap-2">
                                     <div>
                                         {{ $t('public.take_photo') }}
@@ -98,7 +98,7 @@ function handleFileUpload(event) {
                                     <PhotoIcon />
                                 </div>
                             </DropdownLink>
-                            <DropdownLink @click="uploadFromFile">
+                            <DropdownLink @click.prevent="uploadFromFile">
                                 <div class="flex items-center justify-between gap-2">
                                     <div>
                                         {{ $t('public.choose_file') }}

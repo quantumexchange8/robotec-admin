@@ -17,10 +17,30 @@ const props = defineProps({
     clients: Object,
 });
 
+
+// const toggleClient = (client) => {
+//     if (client.children && client.children.length > 0) {
+//         client.isActive = !client.isActive;
+//     }
+// };
+
+// const getActiveChildren = () => {
+//     let children = [];
+//     props.clients.forEach(client => {
+//         if (client.isActive && client.children && client.children.length > 0) {
+//             children = children.concat(client.children);
+//         }
+//     });
+//     return children;
+// };
+
 const toggleClient = (client) => {
-    if (client.children && client.children.length > 0) {
-        client.isActive = !client.isActive;
-    }
+    props.clients.forEach((c) => {
+        if (c !== client) {
+            c.isActive = false; // Deactivate all other clients
+        }
+    });
+    client.isActive = !client.isActive; // Toggle the clicked client
 };
 
 const getActiveChildren = () => {

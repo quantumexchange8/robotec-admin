@@ -286,7 +286,7 @@ const toggleExpanded = (history) => {
 
             <div class="items-center pt-8 flex gap-3">
                 <Button variant="outline" class="w-full" @click="closeModal">{{ $t('public.close') }}</Button>
-                <Button variant="primary" class="w-full" :disabled="form.processing" @click="confirm">{{ $t('public.confirm') }}</Button>
+                <Button variant="primary" class="w-full" :disabled="form.processing" @click.prevent="confirm">{{ $t('public.confirm') }}</Button>
             </div>
         </form>
     </Modal>

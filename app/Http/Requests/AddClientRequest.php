@@ -34,10 +34,10 @@ class AddClientRequest extends FormRequest
     public function attributes(): array
     {
         return [
-            'name' => 'Name',
-            'email' => 'Email',
-            'phone' => 'Phone Number',
-            'upline' => 'Upline',
+            'name' => trans('public.name'),
+            'email' => trans('public.email'),
+            'phone' => trans('public.phone_number'),
+            'upline' => trans('public.upline'),
         ];
     }
 
