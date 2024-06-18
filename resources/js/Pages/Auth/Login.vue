@@ -63,7 +63,7 @@ const submit = () => {
                     :placeholder="$t('public.email_placeholder')"
                 />
 
-                <InputError class="mt-2" :message="form.errors.email" />
+                <InputError class="mt-1.5" :message="form.errors.email" />
             </div>
 
             <div class="mt-4">
@@ -77,7 +77,7 @@ const submit = () => {
                     :placeholderText="$t('public.password_placeholder')"
                 />
 
-                <InputError class="mt-2" :message="form.errors.password" />
+                <InputError class="mt-1.5" :message="form.errors.password" />
             </div>
 
             <div class="block mt-10">

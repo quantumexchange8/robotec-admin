@@ -100,7 +100,7 @@ const closeModal = () => {
 
 <template>
     <div class="w-full py-3 justify-between items-center inline-flex">
-        <div class="text-white text-base font-semibold font-sans leading-normal">{{ $t('public.total') }}: $ {{ formatAmount(totalAmount) }}</div>
+        <div class="text-white text-base font-semibold font-sans leading-normal">{{ $t('public.total') }}: $&nbsp;{{ formatAmount(totalAmount) }}</div>
     </div>
 
     <div v-if="commissions.data.length == 0" >
@@ -129,9 +129,9 @@ const closeModal = () => {
                             <div class="flex justify-between items-center gap-3">
                                 <div>
                                     <div class="text-gray-300 text-xs font-normal font-sans leading-[24px]">{{ formatDateTime(commission.created_at) }}</div>
-                                    <div class="text-white text-sm font-medium font-sans leading-tight">{{ commission.user.name }}</div>
+                                    <div class="text-white text-sm font-medium font-sans leading-tight break-all">{{ commission.user.name }}</div>
                                 </div>
-                                <div class="text-white text-right text-md font-medium font-sans leading-normal">$ {{ formatAmount(commission.transaction_amount) }}</div>
+                                <div class="text-white text-right text-md font-medium font-sans leading-normal">$&nbsp;{{ formatAmount(commission.transaction_amount) }}</div>
                             </div>
                         </td>
                     </tr>
@@ -154,7 +154,7 @@ const closeModal = () => {
             <div class="w-full justify-start items-center gap-3 my-5 pb-3 border-b border-gray-700 inline-flex">
                 <img class="w-9 h-9 rounded-full" :src="commissionDetails.user.profile_photo || 'https://img.freepik.com/free-icon/user_318-159711.jpg'" alt="Client profile picture"/>
                 <div class="w-full flex-col justify-start items-start inline-flex">
-                    <div class="self-stretch text-white text-base font-medium font-sans leading-normal">{{ commissionDetails.user.name }}</div>
+                    <div class="self-stretch text-white text-base font-medium font-sans leading-normal break-all">{{ commissionDetails.user.name }}</div>
                     <div class="text-gray-300 text-xs font-normal font-sans leading-[18px]">{{ $t('public.id') }}: {{ commissionDetails.user.id_number }}</div>
                 </div>
             </div>
@@ -163,7 +163,7 @@ const closeModal = () => {
                 <div class="col-span-1 text-gray-300 text-xs font-normal font-sans leading-[18px]">{{ $t('public.referee') }}</div>
                 <div class="col-span-1 flex items-center">
                     <!-- <img class="w-5 h-5 rounded-full mr-2" :src="commissionDetails.user.upline.profile_photo || 'https://img.freepik.com/free-icon/user_318-159711.jpg'" alt="Client upline profile picture"/>
-                    <div class="text-white text-xs font-normal font-sans leading-tight">{{ commissionDetails.user.upline.name }}</div> -->
+                    <div class="text-white text-xs font-normal font-sans leading-tight break-all">{{ commissionDetails.user.upline.name }}</div> -->
                 </div>
             </div>
             <div class="grid grid-cols-2 items-center mb-2">

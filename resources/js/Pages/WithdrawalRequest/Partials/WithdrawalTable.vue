@@ -165,7 +165,7 @@ const rejectRequest = (requestDetails) => {
 
 <template>
     <div class="w-full py-3 justify-between items-center inline-flex">
-        <div class="text-white text-base font-semibold font-sans leading-normal">{{ $t('public.total') }}: $ {{ formatAmount(totalAmount) }}</div>
+        <div class="text-white text-base font-semibold font-sans leading-normal">{{ $t('public.total') }}: $&nbsp;{{ formatAmount(totalAmount) }}</div>
     </div>
 
     <div v-if="requests.data.length == 0" >
@@ -194,9 +194,9 @@ const rejectRequest = (requestDetails) => {
                             <div class="flex justify-between items-center gap-3">
                                 <div>
                                     <div class="text-gray-300 text-xs font-normal font-sans leading-[24px]">{{ formatDateTime(request.created_at) }}</div>
-                                    <div class="text-white text-sm font-medium font-sans leading-tight">{{ request.user.name }}</div>
+                                    <div class="text-white text-sm font-medium font-sans leading-tight break-all">{{ request.user.name }}</div>
                                 </div>
-                                <div class="text-white text-right text-md font-medium font-sans leading-normal">$ {{ formatAmount(request.transaction_amount) }}</div>
+                                <div class="text-white text-right text-md font-medium font-sans leading-normal">$&nbsp;{{ formatAmount(request.transaction_amount) }}</div>
                             </div>
                         </td>
                     </tr>
@@ -219,7 +219,7 @@ const rejectRequest = (requestDetails) => {
             <div class="w-full justify-start items-center gap-3 my-5 pb-3 border-b border-gray-700 inline-flex">
                 <img class="w-9 h-9 rounded-full" :src="requestDetails.user.profile_photo || 'https://img.freepik.com/free-icon/user_318-159711.jpg'" alt="Client profile picture"/>
                 <div class="w-full flex-col justify-start items-start inline-flex">
-                    <div class="self-stretch text-white text-base font-medium font-sans leading-normal">{{ requestDetails.user.name }}</div>
+                    <div class="self-stretch text-white text-base font-medium font-sans leading-normal break-all">{{ requestDetails.user.name }}</div>
                     <div class="text-gray-300 text-xs font-normal font-sans leading-[18px]">{{ $t('public.id') }}: {{ requestDetails.user.id_number }}</div>
                 </div>
             </div>
@@ -242,9 +242,9 @@ const rejectRequest = (requestDetails) => {
                 <div class="col-span-1 text-gray-300 text-xs font-normal font-sans leading-[18px]">{{ $t('public.usdt_address') }}</div>
                 <div class="col-span-1 flex items-start">
                     <div class="text-white text-xs font-normal font-sans leading-tight break-all">
-                        {{ requestDetails.usdt_address }}
+                        {{ requestDetails.to_wallet_address }}
                         <Tooltip :content="$t('public.' + tooltipContent)" placement="bottom">
-                            <DuplicateIcon aria-hidden="true" :class="['w-4 h-4 text-gray-200']" @click.stop.prevent="copyTestingCode(requestDetails.usdt_address)" style="cursor: pointer" />
+                            <DuplicateIcon aria-hidden="true" :class="['w-4 h-4 text-gray-200']" @click.stop.prevent="copyTestingCode(requestDetails.to_wallet_address)" style="cursor: pointer" />
                         </Tooltip>
                     </div>
                 </div>
@@ -261,16 +261,16 @@ const rejectRequest = (requestDetails) => {
         <form>
             <div class="my-5 px-1">
                 <div>
-                    <Label for="usdt_address" :value="$t('public.from_usdt_address')" class="mb-1.5" :invalid="form.errors.usdt_address" />
+                    <Label for="from_wallet_address" :value="$t('public.from_usdt_address')" class="mb-1.5" :invalid="form.errors.from_wallet_address" />
                     <Input
-                        id="usdt_address"
+                        id="from_wallet_address"
                         class="block w-full mb-5 bg-transparent text-white"
-                        :invalid="form.errors.usdt_address"
-                        v-model="form.usdt_address"
+                        :invalid="form.errors.from_wallet_address"
+                        v-model="form.from_wallet_address"
                         required
                     />
 
-                    <InputError class="mt-2" :message="form.errors.usdt_address" />
+                    <InputError class="mt-1.5" :message="form.errors.from_wallet_address" />
                 </div>
 
                 <div>
@@ -284,7 +284,7 @@ const rejectRequest = (requestDetails) => {
                         required
                     />
 
-                    <InputError class="mt-2" :message="form.errors.txn_hash" />
+                    <InputError class="mt-1.5" :message="form.errors.txn_hash" />
                 </div>
 
                 <div>
@@ -298,7 +298,7 @@ const rejectRequest = (requestDetails) => {
                         :placeholder="$t('public.description_optional_placeholder')"
                     />
 
-                    <InputError class="mt-2" :message="form.errors.remarks" />
+                    <InputError class="mt-1.5" :message="form.errors.remarks" />
                 </div>
             </div>
             <InputError :message="form.errors.transaction_amount" />
@@ -324,7 +324,7 @@ const rejectRequest = (requestDetails) => {
                         :placeholder="$t('public.description_optional_placeholder')"
                     />
 
-                    <InputError class="mt-2" :message="form.errors.remarks" />
+                    <InputError class="mt-1.5" :message="form.errors.remarks" />
                 </div>
             </div>
 

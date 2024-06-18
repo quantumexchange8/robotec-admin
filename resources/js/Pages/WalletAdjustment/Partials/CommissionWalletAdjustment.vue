@@ -174,7 +174,7 @@ const toggleExpanded = (history) => {
         <div class="w-full h-[210px] px-5 py-8 bg-gray-800 rounded-2xl flex flex-col justify-center items-center gap-8">
             <div class="flex flex-col justify-center items-center gap-3">
                 <div class="text-gray-300 text-base font-semibold">{{ $t('public.current_wallet_balance') }}</div>
-                <div class="text-white text-3xl font-semibold">$ {{ formatAmount(wallet ? wallet.balance : 0) }}</div>
+                <div class="text-white text-3xl font-semibold">$&nbsp;{{ formatAmount(wallet ? wallet.balance : 0) }}</div>
             </div>
             <div class="flex justify-center items-center gap-3">
                 <Button variant="danger" class="w-[138px] font-semibold" @click="openModal(true)">{{ $t('public.deduction') }}</Button>
@@ -217,10 +217,10 @@ const toggleExpanded = (history) => {
                                         </div>
                                         <div v-if="history.isExpanded" class="mt-2 w-full flex justify-between">
                                             <div class="text-gray-300 text-xxs font-normal font-sans leading-[18px] gap-3 justify-start">
-                                                {{ $t('public.previous_balance') }}: <span class="text-white">$ {{ formatAmount(history.old_wallet_amount) }}</span>
+                                                {{ $t('public.previous_balance') }}: <span class="text-white">$&nbsp;{{ formatAmount(history.old_wallet_amount) }}</span>
                                             </div>
                                             <div class="text-gray-300 text-xxs font-normal font-sans leading-[18px] gap-3 justify-start">
-                                                {{ $t('public.current_balance') }}: <span class="text-white">$ {{ formatAmount(history.new_wallet_amount) }}</span>
+                                                {{ $t('public.current_balance') }}: <span class="text-white">$&nbsp;{{ formatAmount(history.new_wallet_amount) }}</span>
                                             </div>
                                         </div>
 
@@ -264,7 +264,7 @@ const toggleExpanded = (history) => {
                 />
                 </InputIconWrapper>
 
-                <InputError class="mt-2" :message="form.errors.amount" />
+                <InputError class="mt-1.5" :message="form.errors.amount" />
             </div>
 
             <div class="grid grid-cols-2 items-center mb-2">

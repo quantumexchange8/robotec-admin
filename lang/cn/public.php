@@ -62,6 +62,8 @@ return [
     'withdrawal_transactions' => '提款交易',
     'approved' => '已批准',
     'rejected' => '已拒绝',
+    'success' => '成功',
+    'failed' => '失败',
     'requested_date' => '请求日期',
     'approval_date' => '批准日期',
     'withdrawal_amount' => '提款金额',

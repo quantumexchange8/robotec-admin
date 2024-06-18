@@ -238,7 +238,7 @@ const updateClient = (clientDetails) => {
                             <div class="inline-flex items-center gap-2 mr-3">
                                 <img :src="member.profile_photo ? member.profile_photo : 'https://img.freepik.com/free-icon/user_318-159711.jpg'" class="w-8 h-8 rounded-full" alt="">
                                 <div class="flex flex-col">
-                                    <div>
+                                    <div class="break-all">
                                         {{ member.name }}
                                     </div>
                                     <div class="flex">
@@ -271,7 +271,7 @@ const updateClient = (clientDetails) => {
             <div class="w-full justify-start items-center gap-3 inline-flex">
                 <img class="w-9 h-9 rounded-full" :src="clientDetails.profile_photo || 'https://img.freepik.com/free-icon/user_318-159711.jpg'" alt="Client profile picture"/>
                 <div class="w-full flex-col justify-start items-start inline-flex">
-                    <div class="self-stretch text-white text-base font-medium font-sans leading-normal">{{ clientDetails.name }}</div>
+                    <div class="self-stretch text-white text-base font-medium font-sans leading-normal break-all">{{ clientDetails.name }}</div>
                     <div class="text-gray-300 text-xs font-normal font-sans leading-[18px]">{{ $t('public.id') }}: {{ clientDetails.id_number }}</div>
                 </div>
             </div>
@@ -279,18 +279,18 @@ const updateClient = (clientDetails) => {
             <div class="w-full h-px bg-gray-700 my-4"></div>
 
             <div class="grid grid-cols-2 items-center mb-2">
-                <div class="col-span-1 text-gray-300 text-xs font-normal font-sans leading-[18px]">{{ $t('public.email') }}</div>
-                <div class="col-span-1 text-white text-xs font-normal font-sans leading-tight">{{ clientDetails.email }}</div>
+                <div class="col-span-1 text-gray-300 text-xs font-normal font-sans leading-[18px] break-all">{{ $t('public.email') }}</div>
+                <div class="col-span-1 text-white text-xs font-normal font-sans leading-tight break-all">{{ clientDetails.email }}</div>
             </div>
             <div class="grid grid-cols-2 items-center mb-2">
                 <div class="col-span-1 text-gray-300 text-xs font-normal font-sans leading-[18px]">{{ $t('public.phone_number') }}</div>
-                <div class="col-span-1 text-white text-xs font-normal font-sans leading-tight">{{ clientDetails.phone }}</div>
+                <div class="col-span-1 text-white text-xs font-normal font-sans leading-tight break-all">{{ clientDetails.phone }}</div>
             </div>
             <div class="grid grid-cols-2 items-center">
                 <div class="col-span-1 text-gray-300 text-xs font-normal font-sans leading-[18px]">{{ $t('public.upline') }}</div>
                 <div v-if="clientDetails.upline" class="col-span-1 flex items-center">
                     <img class="w-5 h-5 rounded-full mr-2" :src="clientDetails.upline.profile_photo || 'https://img.freepik.com/free-icon/user_318-159711.jpg'" alt="Client upline profile picture"/>
-                    <div class="text-white text-xs font-normal font-sans leading-tight">{{ clientDetails.upline.name }}</div>
+                    <div class="text-white text-xs font-normal font-sans leading-tight break-all">{{ clientDetails.upline.name }}</div>
                 </div>
             </div>
 
@@ -321,7 +321,7 @@ const updateClient = (clientDetails) => {
 
             <div class="items-center mb-5">
                 <div class="text-gray-300 text-xs font-normal font-sans leading-[18px] mb-1">{{ $t('public.usdt_address') }}</div>
-                <div class="text-white text-xs font-normal font-sans leading-tight">{{ clientDetails.usdt_address }}</div>
+                <div class="text-white text-xs font-normal font-sans leading-tight overflow-x-auto">{{ clientDetails.usdt_address }}</div>
             </div>
 
             <div class="items-center pt-8 flex gap-3">
@@ -345,7 +345,7 @@ const updateClient = (clientDetails) => {
                         required
                     />
 
-                    <InputError class="mt-2" :message="form.errors.name" />
+                    <InputError class="mt-1.5" :message="form.errors.name" />
                 </div>
 
                 <div>
@@ -360,7 +360,7 @@ const updateClient = (clientDetails) => {
                         required
                     />
 
-                    <InputError class="mt-2" :message="form.errors.email" />
+                    <InputError class="mt-1.5" :message="form.errors.email" />
                 </div>
                 <div>
                     <Label for="phone_number" :value="$t('public.phone_number')" class="mb-1.5" :invalid="form.errors.phone || form.errors.dial_code" />
@@ -392,7 +392,7 @@ const updateClient = (clientDetails) => {
                         </div>
                     </div>
 
-                <InputError class="mt-2" :message="form.errors.phone" />
+                <InputError class="mt-1.5" :message="form.errors.phone" />
                 </div>
                 <div>
                     <Label for="usdt_address" class="mb-1.5" :invalid="form.errors.usdt_address">{{ $t('public.usdt_address') }}</Label>
@@ -405,7 +405,7 @@ const updateClient = (clientDetails) => {
                         required
                     />
 
-                    <InputError class="mt-2" :message="form.errors.usdt_address" />
+                    <InputError class="mt-1.5" :message="form.errors.usdt_address" />
                 </div>
             </div>
             <div class="w-full flex justify-end pt-8 gap-3">

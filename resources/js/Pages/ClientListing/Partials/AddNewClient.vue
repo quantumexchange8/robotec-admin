@@ -110,7 +110,7 @@ const addClient = () => {
               required
             />
   
-            <InputError class="mt-2" :message="form.errors.name" />
+            <InputError class="mt-1.5" :message="form.errors.name" />
           </div>
   
           <div class="mb-5">
@@ -126,7 +126,7 @@ const addClient = () => {
               required
             />
   
-            <InputError class="mt-2" :message="form.errors.email" />
+            <InputError class="mt-1.5" :message="form.errors.email" />
           </div>
           
           <div class="mb-5">
@@ -159,7 +159,7 @@ const addClient = () => {
                 </div>
             </div>
 
-            <InputError class="mt-2" :message="form.errors.phone" />
+            <InputError class="mt-1.5" :message="form.errors.phone" />
         </div>
             <div>
                 <Label for="upline" :value="$t('public.assign_upline')" class="mb-1.5" :invalid="form.errors.upline" />
@@ -171,7 +171,7 @@ const addClient = () => {
                     image
                 />
 
-                <InputError class="mt-2" :message="form.errors.upline" />
+                <InputError class="mt-1.5" :message="form.errors.upline" />
 
             </div>
 

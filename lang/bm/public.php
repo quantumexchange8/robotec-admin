@@ -62,6 +62,8 @@ return [
     'withdrawal_transactions' => 'Transaksi Pengeluaran',
     'approved' => 'Diluluskan',
     'rejected' => 'Ditolak',
+    'success' => 'Berjaya',
+    'failed' => 'Gagal',
     'requested_date' => 'Tarikh Diminta',
     'approval_date' => 'Tarikh Kelulusan',
     'withdrawal_amount' => 'Amaun Pengeluaran',

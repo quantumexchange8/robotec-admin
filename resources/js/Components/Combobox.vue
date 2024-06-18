@@ -112,8 +112,8 @@ const filteredOptions = computed(() => {
     const normalizedQuery = query.value.toLowerCase().replace(/\s+/g, "");
 
     return result.filter(option => {
-        const normalizedLabel = option?.label?.toLowerCase().replace(/\s+/g, "") ?? "";
-        const normalizedValue = option?.value?.toLowerCase().replace(/\s+/g, "") ?? "";
+        const normalizedLabel = (typeof option?.label === 'string' ? option.label : '').toLowerCase().replace(/\s+/g, "");
+        const normalizedValue = (typeof option?.value === 'string' ? option.value : '').toLowerCase().replace(/\s+/g, "");
 
         return normalizedLabel.includes(normalizedQuery) || normalizedValue.includes(normalizedQuery);
     });

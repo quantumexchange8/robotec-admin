@@ -58,7 +58,7 @@ const submit = () => {
                     :placeholder="$t('public.new_password')"
                 />
 
-                <InputError class="mt-2" :message="form.errors.password" />
+                <InputError class="mt-1.5" :message="form.errors.password" />
             </div>
             <span class="text-gray-300 mb-3">{{ $t('public.password_rule') }}</span>
 
@@ -76,7 +76,7 @@ const submit = () => {
                     :placeholder="$t('public.confirm_password')"
                 />
 
-                <InputError class="mt-2" :message="form.errors.password_confirmation" />
+                <InputError class="mt-1.5" :message="form.errors.password_confirmation" />
             </div>
         </form>
 

@@ -32,7 +32,7 @@ const formattedEndDate = `${lastDayOfMonth.getFullYear()}-${(lastDayOfMonth.getM
 
 // Set the initial date range to the current month
 const date = ref(`${formattedStartDate} - ${formattedEndDate}`);
-const status = ref('Approved');
+const status = ref('success');
 const updateStatus = (newStatus) => {
     status.value = newStatus;
 };
@@ -56,7 +56,7 @@ const updateStatus = (newStatus) => {
                             class="px-3 py-2"
                         >
                             <button
-                                @click="updateStatus('Approved')"
+                                @click="updateStatus('success')"
                                 :class="[
                                     'w-full py-2.5 text-sm font-semibold text-gray-300',
                                     'ring-white ring-offset-0 focus:outline-none focus:ring-0',
@@ -74,7 +74,7 @@ const updateStatus = (newStatus) => {
                             class="px-3 py-2"
                         >
                             <button
-                                @click="updateStatus('Rejected')"
+                                @click="updateStatus('failed')"
                                 :class="[
                                     'w-full py-2.5 text-sm font-semibold text-gray-300',
                                     'ring-white ring-offset-0 focus:outline-none focus:ring-0',

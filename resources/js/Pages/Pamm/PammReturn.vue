@@ -108,7 +108,7 @@ const updatePamm = () => {
                         </div>
                     </div>
                     <div class="text-center text-white text-xxl font-semibold font-sans leading-[42px]">
-                        <span v-if="props.pamm.value > 0">+</span>{{ formatAmount(props.pamm.value) }} %
+                        <span v-if="props.pamm.value > 0">+</span>{{ (props.pamm.value) }} %
                     </div>
                 </div>
                 <Button variant="primary" class="w-full" @click="openModal">{{ $t('public.update_pamm_return') }}</Button>
@@ -157,7 +157,7 @@ const updatePamm = () => {
                             <div class="text-right">
                                 <div class="font-medium font-sans leading-normal text-md"
                                     :class="{ 'text-success-500': history.setting_new_value > 0, 'text-error-500': history.setting_new_value < 0, 'text-white': history.setting_new_value === 0 }">
-                                    {{ history.setting_new_value > 0 ? '+' + formatAmount(history.setting_new_value) : formatAmount(history.setting_new_value) }}
+                                    {{ history.setting_new_value > 0 ? '+' + (history.setting_new_value) : (history.setting_new_value) }}
                                 </div>
                             </div>
                         </td>

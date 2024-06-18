@@ -118,7 +118,6 @@ class TransactionController extends Controller
             ->with('user','from_wallet')
             ->where('transaction_type', 'withdrawal')
             ->whereNotNull('from_wallet_id')
-            ->whereNotNull('from_wallet_address')
             ->whereNull('approved_at')
             ->where('status', 'processing');
     
@@ -168,28 +167,25 @@ class TransactionController extends Controller
             ->where('id', $request->id)
             ->where('transaction_type', 'withdrawal')
             ->whereNotNull('from_wallet_id')
-            ->whereNotNull('from_wallet_address')
             ->whereNull('approved_at')
             ->where('status', 'processing')
             ->firstOrFail();
 
-        // Verify wallet address and transaction number
-        if ($request->usdt_address !== $withdrawalRequest->from_wallet_address) {
-            throw ValidationException::withMessages(['usdt_address' => trans('public.incorrect_usdt_address')]);
-        }
+        // // Verify wallet address and transaction number
+        // if ($request->to_wallet_address !== $withdrawalRequest->to_wallet_address) {
+        //     throw ValidationException::withMessages(['to_wallet_address' => trans('public.incorrect_usdt_address')]);
+        // }
 
-        // Check if the transaction amount exceeds the wallet balance
-        if ($withdrawalRequest->transaction_amount > $withdrawalRequest->from_wallet->balance) {
-            throw ValidationException::withMessages(['transaction_amount' => trans('public.withdrawal_amount_exceed_balance')]);
-        }
+        // // Check if the transaction amount exceeds the wallet balance
+        // if ($withdrawalRequest->transaction_amount > $withdrawalRequest->from_wallet->balance) {
+        //     throw ValidationException::withMessages(['transaction_amount' => trans('public.withdrawal_amount_exceed_balance')]);
+        // }
 
         // Update withdrawal request status and approval timestamp
         $withdrawalRequest->update([
-            'old_wallet_amount' => $withdrawalRequest->from_wallet->balance,
-            'new_wallet_amount' => $withdrawalRequest->from_wallet->balance - $withdrawalRequest->transaction_amount,
-            'to_wallet_address' => $request->usdt_address,
+            'from_wallet_address' => $request->from_wallet_address,
             'txn_hash' => $request->txn_hash,
-            'status' => 'approved',
+            'status' => 'success',
             'approved_at' => now(),
         ]);
 
@@ -198,9 +194,6 @@ class TransactionController extends Controller
                 'remarks' => $request->remarks,
             ]);    
         }
-
-        // Update wallet balance
-        $withdrawalRequest->from_wallet->decrement('balance', $withdrawalRequest->transaction_amount);
 
         return redirect()->back()->with('toast', [
             'title' => trans('public.withdrawal_request_approved_title'),
@@ -218,14 +211,15 @@ class TransactionController extends Controller
         $withdrawalRequest = Transaction::where('id', $request->id)
             ->where('transaction_type', 'withdrawal')
             ->whereNotNull('from_wallet_id')
-            ->whereNotNull('from_wallet_address')
             ->whereNull('approved_at')
             ->where('status', 'processing')
             ->first();
 
         // Update withdrawal request status and approval timestamp
         $withdrawalRequest->update([
-            'status' => 'rejected',
+            'status' => 'failed',
+            'old_wallet_amount' => $withdrawalRequest->from_wallet->balance,
+            'new_wallet_amount' => $withdrawalRequest->from_wallet->balance + $withdrawalRequest->transaction_amount,
         ]);
 
         if ($request->remarks) {

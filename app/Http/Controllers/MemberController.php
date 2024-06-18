@@ -66,12 +66,12 @@ class MemberController extends Controller
                 if ($purchasedEA === 'yes') {
                     $q->whereHas('transactions', function ($q) {
                         $q->where('transaction_type', 'robotec_purchase')
-                            ->where('status', 'Success');
+                            ->where('status', 'success');
                     });
                 } elseif ($purchasedEA === 'no') {
                     $q->whereDoesntHave('transactions', function ($q) {
                         $q->where('transaction_type', 'robotec_purchase')
-                            ->where('status', 'Success');
+                            ->where('status', 'success');
                     });
                 }
             });
@@ -82,12 +82,12 @@ class MemberController extends Controller
                 if ($fundedPAMM === 'yes') {
                     $q->whereHas('transactions', function ($q) {
                         $q->where('transaction_type', 'pamm_funding')
-                            ->where('status', 'Success');
+                            ->where('status', 'success');
                     });
                 } elseif ($fundedPAMM === 'no') {
                     $q->whereDoesntHave('transactions', function ($q) {
                         $q->where('transaction_type', 'pamm_funding')
-                            ->where('status', 'Success');
+                            ->where('status', 'success');
                     });
                 }
             });

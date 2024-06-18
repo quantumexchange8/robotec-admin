@@ -109,7 +109,7 @@ const closeModal = () => {
 
 <template>
     <!-- <div class="w-full py-3 justify-between items-center inline-flex">
-        <div class="text-white text-base font-semibold font-sans leading-normal">Total: $ {{ formatAmount(totalAmount) }}</div>
+        <div class="text-white text-base font-semibold font-sans leading-normal">Total: $&nbsp;{{ formatAmount(totalAmount) }}</div>
     </div> -->
 
     <div v-if="transactions.data.length == 0" >
@@ -138,9 +138,9 @@ const closeModal = () => {
                             <div class="flex justify-between items-center gap-3">
                                 <div>
                                     <div class="text-gray-300 text-xs font-normal font-sans leading-[24px]">{{ formatDateTime(transaction.created_at) }}</div>
-                                    <div class="text-white text-sm font-medium font-sans leading-tight">{{ transaction.user.name }}</div>
+                                    <div class="text-white text-sm font-medium font-sans leading-tight break-all">{{ transaction.user.name }}</div>
                                 </div>
-                                <div class="text-success-500 text-right text-md font-medium font-sans leading-normal">$ {{ formatAmount(transaction.transaction_amount) }}</div>
+                                <div class="text-success-500 text-right text-md font-medium font-sans leading-normal">$&nbsp;{{ formatAmount(transaction.transaction_amount) }}</div>
                             </div>
                         </td>
                     </tr>
@@ -163,7 +163,7 @@ const closeModal = () => {
             <div class="w-full justify-start items-center gap-3 inline-flex">
                 <img class="w-9 h-9 rounded-full" :src="transactionDetails.user.profile_photo || 'https://img.freepik.com/free-icon/user_318-159711.jpg'" alt="Client profile picture"/>
                 <div class="w-full flex-col justify-start items-start inline-flex">
-                    <div class="self-stretch text-white text-base font-medium font-sans leading-normal">{{ transactionDetails.user.name }}</div>
+                    <div class="self-stretch text-white text-base font-medium font-sans leading-normal break-all">{{ transactionDetails.user.name }}</div>
                     <div class="text-gray-300 text-xs font-normal font-sans leading-[18px]">{{ $t('public.id') }}: {{ transactionDetails.user.id_number }}</div>
                 </div>
             </div>
@@ -171,7 +171,7 @@ const closeModal = () => {
 
             <div class="grid grid-cols-2 items-center mb-2">
                 <div class="col-span-1 text-gray-300 text-xs font-normal font-sans leading-[18px]">{{ $t('public.transaction_id') }}</div>
-                <div class="col-span-1 text-white text-xs font-normal font-sans leading-tight">{{ transactionDetails.transaction_number }}</div>
+                <div class="col-span-1 text-white text-xs font-normal font-sans leading-tight break-all">{{ transactionDetails.transaction_number }}</div>
             </div>
             <div class="grid grid-cols-2 items-center mb-2">
                 <div class="col-span-1 text-gray-300 text-xs font-normal font-sans leading-[18px]">{{ $t('public.transaction_date') }}</div>
@@ -180,17 +180,20 @@ const closeModal = () => {
 
             <div class="grid grid-cols-2 items-center">
                 <div class="col-span-1 text-gray-300 text-xs font-normal font-sans leading-[18px]">{{ $t('public.deposit_amount') }}</div>
-                <div class="col-span-1 text-white text-xs font-normal font-sans leading-tight">$ {{ formatAmount(transactionDetails.transaction_amount) }}</div>
+                <div class="col-span-1 text-white text-xs font-normal font-sans leading-tight">$&nbsp;{{ formatAmount(transactionDetails.transaction_amount) }}</div>
             </div>
 
             <div class="w-full h-px bg-gray-700 my-4"></div>
 
             <div class="grid grid-cols-2 items-center mb-2">
                 <div class="col-span-1 text-gray-300 text-xs font-normal font-sans leading-[18px]">{{ $t('public.txn_hash') }}</div>
-                <div class="col-span-1 text-white text-xs font-normal font-sans leading-tight">{{ transactionDetails.txn_hash }}</div>
+                <div class="col-span-1 flex items-start">
+                    <div class="text-white text-xs font-normal font-sans leading-tight break-all">{{ transactionDetails.txn_hash }}
+                    </div>
+                </div>
             </div>
 
-            <div class="grid grid-cols-2 items-center mb-2">
+            <!-- <div class="grid grid-cols-2 items-center mb-2">
                 <div class="col-span-1 text-gray-300 text-xs font-normal font-sans leading-[18px]">{{ $t('public.sent_address') }}</div>
                 <div class="col-span-1 flex items-start">
                     <div class="text-white text-xs font-normal font-sans leading-tight break-all">
@@ -201,7 +204,7 @@ const closeModal = () => {
                     </div>
                 </div>
             </div>
-
+ -->
             <div class="grid grid-cols-2 items-center">
                 <div class="col-span-1 text-gray-300 text-xs font-normal font-sans leading-[18px]">
                     {{ $t('public.receiving_address') }}

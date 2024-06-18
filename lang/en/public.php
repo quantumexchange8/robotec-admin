@@ -62,6 +62,8 @@ return [
     'withdrawal_transactions' => 'Withdrawal Transactions',
     'approved' => 'Approved',
     'rejected' => 'Rejected',
+    'success' => 'Success',
+    'failed' => 'Failed',
     'requested_date' => 'Requested Date',
     'approval_date' => 'Approval Date',
     'withdrawal_amount' => 'Withdrawal Amount',

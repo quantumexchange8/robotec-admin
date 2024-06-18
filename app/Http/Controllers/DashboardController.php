@@ -14,7 +14,7 @@ class DashboardController extends Controller
     {
         $totalClient = User::whereNull('deleted_at')->where('role','user')->count();
         $totalDeposit = Transaction::where('transaction_type', 'deposit')->where('status', 'success')->sum('transaction_amount');
-        $totalWithdrawal = Transaction::where('transaction_type', 'withdrawal')->where('status', 'approved')->sum('transaction_amount');
+        $totalWithdrawal = Transaction::where('transaction_type', 'withdrawal')->where('status', 'success')->sum('transaction_amount');
         $totalPurchasesEA = Transaction::where('transaction_type', 'robotec_purchase')->where('status', 'success')->sum('transaction_amount');
         $totalPammFundIn = Transaction::where('transaction_type', 'pamm_funding')->where('status', 'success')->sum('transaction_amount');
 
@@ -36,12 +36,12 @@ class DashboardController extends Controller
     {
         $currentMonth = Carbon::now()->startOfMonth();
         $totalApprovedResult = Transaction::where('transaction_type', 'withdrawal')
-            ->where('status', 'Approved')
+            ->where('status', 'success')
             ->where('created_at', '>=', $currentMonth)
             ->count();
     
         $totalRejectedResult = Transaction::where('transaction_type', 'withdrawal')
-            ->where('status', 'Rejected')
+            ->where('status', 'failed')
             ->where('created_at', '>=', $currentMonth)
             ->count();
     
