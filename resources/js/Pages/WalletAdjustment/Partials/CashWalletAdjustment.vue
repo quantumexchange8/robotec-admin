@@ -182,7 +182,7 @@ const toggleExpanded = (history) => {
             </div>
         </div>
 
-        <div class="w-full mt-2 px-4 py-2 flex flex-col justify-start items-center gap-3">
+        <div class="w-full mt-2 flex flex-col justify-start items-center gap-3">
             <div class="w-full justify-start items-center">
                 <div class="text-white text-base font-semibold">{{ $t('public.adjustment_history') }}</div>
             </div>
@@ -250,18 +250,18 @@ const toggleExpanded = (history) => {
                 <Label for="amount" class="text-xs font-medium font-sans leading-[18px]" :invalid="form.errors.amount">{{ $t('public.adjustment_amount') }}</Label>
 
                 <InputIconWrapper class="col-span-2">
-                <template #icon>
-                    <span class='text-white'>{{ isDeduction ? '-$' : '+$' }}</span>
-                </template>
+                    <template #icon>
+                        <span class='text-white'>{{ isDeduction ? '-$' : '+$' }}</span>
+                    </template>
 
-                <Input
-                    withIcon
-                    id="amount"
-                    class="block w-full py-3 px-4 bg-transparent text-white"
-                    :invalid="form.errors.amount"
-                    v-model="form.amount"
-                    required
-                />
+                    <Input
+                        withIcon
+                        id="amount"
+                        class="block w-full py-3 px-4 bg-transparent text-white"
+                        :invalid="form.errors.amount"
+                        v-model="form.amount"
+                        required
+                    />
                 </InputIconWrapper>
 
                 <InputError class="mt-1.5" :message="form.errors.amount" />

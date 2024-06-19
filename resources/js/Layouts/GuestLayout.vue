@@ -112,10 +112,10 @@ let removeFinishEventListener = Inertia.on("finish", () => {
             <ToastList />
             <slot />
         </div>
-        <div class="w-full sm:max-w-[360px] fixed bottom-0 bg-gray-900 z-[6]">
+        <!-- <div class="w-full sm:max-w-[360px] fixed bottom-0 bg-gray-900 z-[6]">
             <div class="w-full mx-auto h-6 px-[126px] justify-center items-center inline-flex">
                 <div class="w-[108px] h-1 bg-white rounded-xl"></div>
             </div>
-        </div>
+        </div> -->
     </div>
 </template>

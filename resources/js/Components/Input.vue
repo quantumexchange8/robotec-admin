@@ -18,6 +18,10 @@ const props = defineProps({
         default: false
     },
     placeholderText: String,
+    variant: {
+        type: String,
+        default: ''
+    }
 })
 
 defineEmits(['update:modelValue'])
@@ -69,10 +73,13 @@ const classes = computed(() => [
     },
     {
         'bg-gray-900 text-white': props.modelValue && !isFocused,
-        'bg-transparent text-white': !props.modelValue || isFocused
+        'text-white': !props.modelValue || isFocused
     },
     {
         'w-full pr-12': props.is_password
+    },
+    {
+        'bg-gray-700': props.variant === 'search'
     }
 ])
 </script>

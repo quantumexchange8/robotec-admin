@@ -4,9 +4,10 @@ import { Head } from '@inertiajs/vue3';
 import { ref, defineProps, watchEffect } from "vue";
 import Input from '@/Components/Input.vue';
 import InputIconWrapper from '@/Components/InputIconWrapper.vue';
-import { SearchIcon } from '@/Components/Icons/outline';
 import VueTailwindDatepicker from "vue-tailwind-datepicker";
 import DepositTable from "@/Pages/Dashboard/Partials/DepositTable.vue"
+import { SearchIcon } from '@/Components/Icons/outline';
+import Search from '@/Components/Search.vue';
 
 const formatter = ref({
     date: 'YYYY-MM-DD',
@@ -31,19 +32,14 @@ const date = ref(`${formattedStartDate} - ${formattedEndDate}`);
     <Head :title="$t('public.deposit_transactions')" />
     <AuthenticatedLayout>
         <template #header>
-            <h2 class="font-semibold text-xl text-white leading-loose">{{ $t('public.deposit_transactions') }}</h2>
+            <h2 class="font-semibold text-xl text-white leading-loose mb-3">{{ $t('public.deposit_transactions') }}</h2>
         </template>
 
         <div class="rounded-md shadow-md pb- sticky top-2 bg-gray-900 z-[5]">
             <div class="w-full">
                 <div class="mb-3">
                     <div>
-                        <InputIconWrapper>
-                            <template #icon>
-                                <SearchIcon aria-hidden="true" class="w-5 h-5 text-white" />
-                            </template>
-                            <Input withIcon id="search" variant="search" type="text" class="block w-full rounded-lg" :placeholder="$t('public.search')" v-model="search" />
-                        </InputIconWrapper>
+                        <Search v-model="search" :placeholder="$t('public.search')" />
                     </div>
                 </div>
 
@@ -58,7 +54,7 @@ const date = ref(`${formattedStartDate} - ${formattedEndDate}`);
             </div>
         </div>
 
-        <div class="p-3">
+        <div class="py-3">
             <DepositTable 
                 :search="search" 
                 :date="date" 

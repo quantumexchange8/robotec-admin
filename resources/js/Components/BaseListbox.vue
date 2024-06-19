@@ -75,7 +75,7 @@ const labelWithValue = computed(() => labelWithImg.value.map(item => item.value)
             :class="[
                 {
                       'border-error-300 focus-within:ring-error-300 hover:border-error-300 focus-within:border-error-300 focus-within:shadow-error-light': error,
-                      'border-gray-800 focus:ring-primary-500 hover:border-primary-500 focus-within:border-primary-500 focus-within:shadow-primary-light': !error,
+                      'border-gray-600 focus:ring-primary-500 hover:border-primary-500 focus-within:border-primary-500 focus-within:shadow-primary-light': !error,
                 }
             ]"
         >
@@ -83,8 +83,8 @@ const labelWithValue = computed(() => labelWithImg.value.map(item => item.value)
                 class="relative w-full cursor-default rounded-lg shadow-xs bg-gray-800 py-4 px-3 text-left focus:ring-1 focus:outline-none"
                 :class="[
                     {
-                        'border-transparent focus-within:ring-error-300 focus:border-error-300 focus:shadow-error-light': error,
-                        'border-transparent focus-within:ring-primary-500 focus-within:border-primary-500 focus-within:shadow-primary-light': !error
+                        'border-gray-600 focus-within:ring-error-300 focus:border-error-300 focus:shadow-error-light': error,
+                        'border-gray-600 focus-within:ring-primary-500 focus-within:border-primary-500 focus-within:shadow-primary-light': !error
                     }
                 ]"
             >
@@ -119,7 +119,7 @@ const labelWithValue = computed(() => labelWithImg.value.map(item => item.value)
                 leave-to-class="opacity-0"
             >
                 <ListboxOptions
-                    class="z-10 absolute border border-gray-800 mt-2 max-h-52 w-full overflow-auto rounded-lg bg-gray-800 p-2 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm"
+                    class="z-10 absolute border border-gray-600 mt-2 max-h-52 w-full overflow-auto rounded-lg bg-gray-800 p-2 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm"
                     :style="{ width: isPhoneCode ? '360px' : '' }"
                 >
                     <ListboxOption

@@ -14,6 +14,7 @@ import { SearchIcon, FilterIcon } from '@/Components/Icons/outline'
 import ClientTable from '@/Pages/ClientListing/ClientTable.vue';
 import Modal from "@/Components/Modal.vue";
 import AddNewClient from "@/Pages/ClientListing/Partials/AddNewClient.vue";
+import Search from '@/Components/Search.vue';
 
 const user = usePage().props.auth.user;
 const profile_photo = usePage().props.auth.user.profile_photo;
@@ -122,20 +123,15 @@ watchEffect(() => {
     <Head :title="$t('public.client_listing')" />
     <AuthenticatedLayout>
         <template #header>
-            <h2 class="font-semibold text-xl text-white leading-loose">{{ $t('public.client_listing') }}</h2>
+            <h2 class="font-semibold text-xl text-white leading-loose mb-3">{{ $t('public.client_listing') }}</h2>
         </template>
 
         <div class="sticky top-2 bg-gray-900 z-[5]">
             <div class="pb-3">
-                <InputIconWrapper class="col-span-2">
-                    <template #icon>
-                        <SearchIcon aria-hidden="true" class="w-5 h-5 text-white" />
-                    </template>
-                    <Input withIcon id="search" variant="search" type="text" class="block w-full rounded-lg" :placeholder="$t('public.search')" v-model="search" />
-                </InputIconWrapper>
+                <Search v-model="search" :placeholder="$t('public.search')" />
             </div>
-            <div class="pb-3 grid grid-cols-3 gap-3">
-                <Button variant="transparent" class="relative w-full border border-gray-600 focus:border-primary-500" @click.prevent="openFilterModal()">
+            <div class="pb-3 w-full inline-flex items-center gap-3">
+                <Button variant="transparent" class="relative w-full h-[58px] min-w-20 border border-gray-600 focus:border-primary-500" @click.prevent="openFilterModal()">
                     <span class="inline-flex items-center">
                         <span class="mr-2">
                             <FilterIcon aria-hidden="true" class="w-5 h-5" />
@@ -147,11 +143,11 @@ watchEffect(() => {
                             </div>
                         </span>
                     </span>
-            </Button>
-                <BaseListbox class="w-full col-span-2" :options="sortTypes" v-model="sortType" />
+                </Button>
+                <BaseListbox class="w-full min-w-60" :options="sortTypes" v-model="sortType" />
             </div>
         </div>
-        <div class="pb-3 flex items-center justify-between">
+        <div class="py-3 flex items-center justify-between">
             <div class="text-white">{{ totalClient }} {{ $t('public.results') }} </div>
             <AddNewClient />
         </div>

@@ -21,7 +21,7 @@ const props = defineProps({
 const { formatDateTime, formatAmount } = transactionFormat();
 
 const transactions = ref({ data: [] });
-const transaction_type = 'robotec_purchase'
+const transaction_type = 'purchase_robotec'
 const totalAmount = ref(0);
 const currentPage = ref(1);
 const transactionModal = ref(false);

@@ -24,12 +24,13 @@ const totalAmount = ref(0);
 const currentPage = ref(1);
 const commissionModal = ref(false);
 const commissionDetails = ref(null);
-const totalCommission = ref();
+const totalPending = ref();
+const totalHistory = ref();
 const emit = defineEmits(['update:totalCommissionHistory']);
 
 watchEffect(() => {
     // Emit the totalCommissionHistory value whenever it changes
-    emit('update:totalCommissionHistory', totalCommission.value);
+    emit('update:totalCommissionHistory', totalPending.value, totalHistory.value);
 });
 
 watch(
@@ -58,7 +59,8 @@ const getResults = async (page = 1, search = '', date = '', type = '') => {
         const response = await axios.get(url);
         commissions.value = response.data.transactions;
         totalAmount.value = response.data.totalAmount;
-        totalCommission.value = response.data.totalCommission;
+        totalPending.value = response.data.totalPending;
+        totalHistory.value = response.data.totalHistory;
     } catch (error) {
         console.error(error);
     }
@@ -69,12 +71,6 @@ getResults(1, props.search, props.date, props.type);
 const handlePageChange = (newPage) => {
     if (newPage >= 1) {
         currentPage.value = newPage;
-        if (isAllSelected.value !== false) {
-            const selectAllCheckbox = document.getElementById('selectAllCheckbox');
-            if (selectAllCheckbox) {
-                selectAllCheckbox.click(); // Trigger click event to reset "Select All" checkbox
-            }
-        }
         getResults(currentPage.value, props.search, props.date, props.type);
     }
 };
@@ -162,8 +158,8 @@ const closeModal = () => {
             <div class="grid grid-cols-2 items-center mb-2">
                 <div class="col-span-1 text-gray-300 text-xs font-normal font-sans leading-[18px]">{{ $t('public.referee') }}</div>
                 <div class="col-span-1 flex items-center">
-                    <!-- <img class="w-5 h-5 rounded-full mr-2" :src="commissionDetails.user.upline.profile_photo || 'https://img.freepik.com/free-icon/user_318-159711.jpg'" alt="Client upline profile picture"/>
-                    <div class="text-white text-xs font-normal font-sans leading-tight break-all">{{ commissionDetails.user.upline.name }}</div> -->
+                    <img class="w-5 h-5 rounded-full mr-2" :src="commissionDetails.to_wallet.user.profile_photo || 'https://img.freepik.com/free-icon/user_318-159711.jpg'" alt="Client upline profile picture"/>
+                    <div class="text-white text-xs font-normal font-sans leading-tight break-all">{{ commissionDetails.to_wallet.user.name }}</div>
                 </div>
             </div>
             <div class="grid grid-cols-2 items-center mb-2">

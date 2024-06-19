@@ -20,7 +20,7 @@ const props = defineProps({
 
 const form = useForm({
     id: '',
-    usdt_address: '',
+    from_wallet_address: '',
     txn_hash: '',
     remarks: '',
 });

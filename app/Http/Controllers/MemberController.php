@@ -41,7 +41,7 @@ class MemberController extends Controller
             ->leftJoin('transactions', function($join) {
                 $join->on('transactions.user_id', '=', 'users.id')
                     ->where('transactions.transaction_type', '=', 'commission')
-                    ->where('transactions.status', '=', 'approved')
+                    ->where('transactions.status', '=', 'success')
                     ->whereColumn('transactions.to_wallet_id', '=', 'wallets.id');
             })
             ->selectRaw('users.*, 
@@ -65,12 +65,12 @@ class MemberController extends Controller
             $query->where(function ($q) use ($purchasedEA) {
                 if ($purchasedEA === 'yes') {
                     $q->whereHas('transactions', function ($q) {
-                        $q->where('transaction_type', 'robotec_purchase')
+                        $q->where('transaction_type', 'purchase_robotec')
                             ->where('status', 'success');
                     });
                 } elseif ($purchasedEA === 'no') {
                     $q->whereDoesntHave('transactions', function ($q) {
-                        $q->where('transaction_type', 'robotec_purchase')
+                        $q->where('transaction_type', 'purchase_robotec')
                             ->where('status', 'success');
                     });
                 }
@@ -132,13 +132,13 @@ class MemberController extends Controller
             // Calculate total withdrawal
             $user->totalWithdrawal = Transaction::where('user_id', $user->id)
                 ->where('transaction_type', 'withdrawal')
-                ->where('status', 'approved')
+                ->where('status', 'success')
                 ->sum('transaction_amount');
 
             // // Calculate total commission
             // $user->totalCommission = Transaction::where('to_wallet_id', $user->wallets()->where('type', 'commission_wallet')->value('id'))
             //     ->where('transaction_type', 'commission')
-            //     ->where('status', 'approved')
+            //     ->where('status', 'success')
             //     ->sum('transaction_amount');
 
             // Calculate total funded PAMM

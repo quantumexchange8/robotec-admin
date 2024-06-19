@@ -8,6 +8,7 @@ import { SearchIcon } from '@/Components/Icons/outline';
 import VueTailwindDatepicker from "vue-tailwind-datepicker";
 import WithdrawalTable from "@/Pages/Dashboard/Partials/WithdrawalTable.vue"
 import { Tab, TabGroup, TabList, TabPanel, TabPanels } from "@headlessui/vue";
+import Search from '@/Components/Search.vue';
 
 const props = defineProps({
     totalApprovedResult: [String, Number],
@@ -43,7 +44,7 @@ const updateStatus = (newStatus) => {
     <Head :title="$t('public.withdrawal_transactions')" />
     <AuthenticatedLayout>
         <template #header>
-            <h2 class="font-semibold text-xl text-white leading-loose">{{ $t('public.withdrawal_transactions') }}</h2>
+            <h2 class="font-semibold text-xl text-white leading-loose mb-3">{{ $t('public.withdrawal_transactions') }}</h2>
         </template>
 
         <div class="rounded-md shadow-md pb-3 sticky top-2 bg-gray-900 z-[5]">
@@ -89,22 +90,16 @@ const updateStatus = (newStatus) => {
                     </TabList>
                     <div class="mb-3 sticky top-16 bg-gray-900 z-[5]">
                         <div>
-                            <InputIconWrapper>
-                                <template #icon>
-                                    <SearchIcon aria-hidden="true" class="w-5 h-5 text-white" />
-                                </template>
-                                <Input withIcon id="search" variant="search" type="text" class="block w-full rounded-lg" :placeholder="$t('public.search')" v-model="search" />
-                            </InputIconWrapper>
+                            <Search v-model="search" :placeholder="$t('public.search')" />
                         </div>
-                    </div>
-
-                    <div class="mb-3 sticky top-32 bg-gray-900 z-[5]">
-                        <vue-tailwind-datepicker
-                            :formatter="formatter"
-                            separator=" - "
-                            v-model="date"
-                            input-classes="py-3 px-4 w-full rounded-lg placeholder:text-gray-500 focus:ring-primary-500 hover:border-primary-500 focus:border-primary-500 bg-gray-800 text-white border border-gray-600"
-                        />
+                        <div class="mt-3">
+                            <vue-tailwind-datepicker
+                                :formatter="formatter"
+                                separator=" - "
+                                v-model="date"
+                                input-classes="py-3 px-4 w-full rounded-lg placeholder:text-gray-500 focus:ring-primary-500 hover:border-primary-500 focus:border-primary-500 bg-gray-800 text-white border border-gray-600"
+                            />
+                        </div>
                     </div>
 
                     <TabPanels>
@@ -113,7 +108,6 @@ const updateStatus = (newStatus) => {
                                 :search="search" 
                                 :date="date" 
                                 :status="status"
-                                @update:totalResult="totalApprovedResult = $event"
                             />
                         </TabPanel>
                         <TabPanel>
@@ -121,7 +115,6 @@ const updateStatus = (newStatus) => {
                                 :search="search" 
                                 :date="date" 
                                 :status="status"
-                                @update:totalResult="totalRejectedResult = $event"
                             />
                         </TabPanel>
                     </TabPanels>

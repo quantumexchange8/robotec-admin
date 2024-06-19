@@ -59,7 +59,7 @@ const getActiveChildren = () => {
 
     <AuthenticatedLayout>
         <template #header>
-            <h2 class="font-semibold text-xl text-white leading-loose">{{ $t('public.network') }}</h2>
+            <h2 class="font-semibold text-xl text-white leading-loose mb-3">{{ $t('public.network') }}</h2>
         </template>
 
         <div class="w-full px-4 py-3 bg-gray-800 rounded-2xl justify-start items-center gap-3 inline-flex">

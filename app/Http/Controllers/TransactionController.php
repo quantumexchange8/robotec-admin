@@ -187,13 +187,8 @@ class TransactionController extends Controller
             'txn_hash' => $request->txn_hash,
             'status' => 'success',
             'approved_at' => now(),
+            'remarks' => $request->remarks,
         ]);
-
-        if ($request->remarks) {
-            $withdrawalRequest->update([
-                'remarks' => $request->remarks,
-            ]);    
-        }
 
         return redirect()->back()->with('toast', [
             'title' => trans('public.withdrawal_request_approved_title'),
@@ -204,9 +199,9 @@ class TransactionController extends Controller
 
     public function reject_withdrawal_request(Request $request)
     {
-        $request->validate([
-            'remarks' => ['required'],
-        ]);
+        // $request->validate([
+        //     'remarks' => ['required'],
+        // ]);
 
         $withdrawalRequest = Transaction::where('id', $request->id)
             ->where('transaction_type', 'withdrawal')
@@ -219,7 +214,7 @@ class TransactionController extends Controller
         $withdrawalRequest->update([
             'status' => 'failed',
             'old_wallet_amount' => $withdrawalRequest->from_wallet->balance,
-            'new_wallet_amount' => $withdrawalRequest->from_wallet->balance + $withdrawalRequest->transaction_amount,
+            'new_wallet_amount' => $withdrawalRequest->from_wallet->balance + $withdrawalRequest->amount,
         ]);
 
         if ($request->remarks) {
@@ -229,11 +224,11 @@ class TransactionController extends Controller
         }
 
         // Update wallet balance
-        $withdrawalRequest->from_wallet->increment('balance', $withdrawalRequest->transaction_amount);
+        $withdrawalRequest->from_wallet->increment('balance', $withdrawalRequest->amount);
 
         return redirect()->back()->with('toast', [
             'title' => trans('public.withdrawal_request_rejected_title'),
-            'message' => trans('public.withdrawal_request_rejected_message', ['amount' => $withdrawalRequest->transaction_amount]),
+            'message' => trans('public.withdrawal_request_rejected_message', ['amount' => $withdrawalRequest->amount]),
             'type' => 'success'
         ]);
     }
@@ -285,7 +280,6 @@ class TransactionController extends Controller
         return response()->json([
             'transactions' => $transactions,
             'totalAmount' => $totalAmount,
-            'totalResult' => $transactions->total(),
         ]);
         
     }

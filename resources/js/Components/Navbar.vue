@@ -46,13 +46,7 @@ const changeLanguage = async (langVal) => {
 
 <template>
     <div
-        :class="[
-            'relative flex items-center justify-between px-4 py-4 h-[72px] transition-transform duration-500 w-full',
-            {
-                'translate-y-full': scrolling.down,
-                'translate-y-0': scrolling.up,
-            },
-        ]"
+        class="relative flex items-center justify-between px-4 py-4 h-[72px] w-full shadow"
     >
         <Button
             iconOnly

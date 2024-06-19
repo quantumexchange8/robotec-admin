@@ -1,5 +1,5 @@
 <script setup>
-import { computed } from 'vue';
+import { defineProps, defineEmits, computed } from 'vue';
 
 const emit = defineEmits(['update:checked']);
 

@@ -92,7 +92,7 @@ const updatePamm = () => {
     <Head :title="$t('public.pamm_return')" />
     <AuthenticatedLayout>
         <template #header>
-            <h2 class="font-semibold text-xl text-white leading-loose">{{ $t('public.pamm_return') }}</h2>
+            <h2 class="font-semibold text-xl text-white leading-loose mb-3">{{ $t('public.pamm_return') }}</h2>
         </template>
 
         <div class="flex justify-center items-center h-full my-3">
@@ -111,7 +111,7 @@ const updatePamm = () => {
                         <span v-if="props.pamm.value > 0">+</span>{{ (props.pamm.value) }} %
                     </div>
                 </div>
-                <Button variant="primary" class="w-full" @click="openModal">{{ $t('public.update_pamm_return') }}</Button>
+                <Button variant="primary" class="w-full text-center text-white text-sm font-semibold font-sans leading-tight" @click="openModal">{{ $t('public.update_pamm_return') }}</Button>
             </div>
         </div>
 

@@ -32,12 +32,13 @@ const totalAmount = ref(0);
 const currentPage = ref(1);
 const commissionModal = ref(false);
 const commissionDetails = ref(null);
-const totalCommission = ref();
+const totalPending = ref();
+const totalHistory = ref();
 const emit = defineEmits(['update:totalCommissionRequest']);
 
 watchEffect(() => {
     // Emit the totalCommissionRequest value whenever it changes
-    emit('update:totalCommissionRequest', totalCommission.value);
+    emit('update:totalCommissionRequest', totalPending.value, totalHistory.value);
 });
 
 watch(
@@ -65,7 +66,8 @@ const getResults = async (page = 1, search = '', date = '', type = '') => {
 
         const response = await axios.get(url);
         commissions.value = response.data.transactions;
-        totalCommission.value = response.data.totalCommission;
+        totalPending.value = response.data.totalPending;
+        totalHistory.value = response.data.totalHistory;
     } catch (error) {
         console.error(error);
     }
@@ -77,10 +79,8 @@ const handlePageChange = (newPage) => {
     if (newPage >= 1) {
         currentPage.value = newPage;
         if (isAllSelected.value !== false) {
-            const selectAllCheckbox = document.getElementById('selectAllCheckbox');
-            if (selectAllCheckbox) {
-                selectAllCheckbox.click(); // Trigger click event to reset "Select All" checkbox
-            }
+            const checkbox = document.getElementById('selectAllCheckbox');
+            checkbox.click(); // Trigger click on the checkbox's native DOM element
         }
         getResults(currentPage.value, props.search, props.date, props.type);
     }
@@ -98,14 +98,8 @@ const handleSelectAll = () => {
     isAllSelected.value = !isAllSelected.value;
     if (isAllSelected.value) {
         const commissionData = commissions.value.data;
-
-        for (const commission of commissionData) {
-            const id = commission.id;
-            if (!isChecked.value.includes(id)) {
-                isChecked.value.push(id);
-                totalAmount.value += parseFloat(commission.transaction_amount);
-            }
-        }
+        isChecked.value = commissionData.map(commission => commission.id);
+        totalAmount.value = commissionData.reduce((total, commission) => total + parseFloat(commission.transaction_amount), 0);
     } else {
         isChecked.value = [];
         totalAmount.value = 0;
@@ -129,10 +123,7 @@ const updateChecked = (id, transaction_amount) => {
 };
 
 function isItemSelected(id, transaction_amount) {
-    return isChecked.value.some(commission =>
-        commission.id === id &&
-        commission.transaction_amount === transaction_amount
-    );
+    return isChecked.value.includes(id);
 }
 
 const selectAllLabel = computed(() => isAllSelected.value ? trans('public.deselect_all') : trans('public.select_all'));
@@ -166,12 +157,14 @@ const approveCommission = () => {
 
     // Send the approval request for all commissions in the ids array
     form.ids = ids;
-    form.post(route('commission.approve_commission'), {
+    form.post('/commission/approve_commission', {
         onSuccess: () => {
             closeModal();
             getResults(1, props.search, props.date, props.type);
-            isChecked.value = [];
-            totalAmount.value = 0;
+            if (isAllSelected.value !== false) {
+                const checkbox = document.getElementById('selectAllCheckbox');
+                checkbox.click(); // Trigger click on the checkbox's native DOM element
+            }
         },
         onError: (errors) => {
             // Handle any errors
@@ -209,11 +202,11 @@ const approveCommission = () => {
                 <thead>
                 <tr class="bg-gray-800 text-xs font-normal border-b border-gray-700">
                     <th class="py-2">
-                    <Checkbox
-                        v-model="isAllSelected"
-                        @click.prevent="handleSelectAll"
-                        id="selectAllCheckbox"
-                    />
+                        <Checkbox
+                            v-model="isAllSelected"
+                            @click.native="handleSelectAll"
+                            id="selectAllCheckbox"
+                        />
                     </th>
                     <th class="text-white text-sm font-normal font-sans leading-tight">
                         {{ selectAllLabel }}
@@ -264,8 +257,8 @@ const approveCommission = () => {
                 <div class="grid grid-cols-2 items-center mb-2">
                     <div class="col-span-1 text-gray-300 text-xs font-normal font-sans leading-[18px]">{{ $t('public.referee') }}</div>
                     <div class="col-span-1 flex items-center">
-                        <!-- <img class="w-5 h-5 rounded-full mr-2" :src="commissionDetails.user.upline.profile_photo || 'https://img.freepik.com/free-icon/user_318-159711.jpg'" alt="Client upline profile picture"/>
-                        <div class="text-white text-xs font-normal font-sans leading-tight break-all">{{ commissionDetails.user.upline.name }}</div> -->
+                        <img class="w-5 h-5 rounded-full mr-2" :src="commissionDetails.to_wallet.user.profile_photo || 'https://img.freepik.com/free-icon/user_318-159711.jpg'" alt="Client upline profile picture"/>
+                        <div class="text-white text-xs font-normal font-sans leading-tight break-all">{{ commissionDetails.to_wallet.user.name }}</div>
                     </div>
                 </div>
                 <div class="grid grid-cols-2 items-center mb-2">

@@ -63,7 +63,7 @@ const date = ref(`${formattedStartDate} - ${formattedEndDate}`);
             </div>
         </div>
 
-        <div class="p-3">
+        <div class="py-3">
             <WithdrawalTable 
                 :search="search" 
                 :date="date" 

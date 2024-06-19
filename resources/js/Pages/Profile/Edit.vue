@@ -57,7 +57,7 @@ function handleFileUpload(event) {
 
     <AuthenticatedLayout>
         <template #header>
-            <div class="flex-1 text-white text-xl">{{ $t('public.my_profile') }}</div>
+            <div class="flex-1 text-white text-xl mb-3">{{ $t('public.my_profile') }}</div>
         </template>
 
         <div class="flex py-3 px-4 flex-col items-center gap-3">

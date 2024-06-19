@@ -24,17 +24,10 @@ const { formatDateTime, formatAmount } = transactionFormat();
 const transactions = ref({ data: [] });
 const transaction_type = 'withdrawal'
 const totalAmount = ref(0);
-const totalResult = ref();
 const currentPage = ref(1);
 const transactionModal = ref(false);
 const transactionDetails = ref(null);
 const tooltipContent = ref('copy');
-const emit = defineEmits(['update:totalResult']);
-
-watchEffect(() => {
-    // Emit the totalResult value whenever it changes
-    emit('update:totalResult', totalResult.value);
-});
 
 function copyTestingCode(walletAddress) {
     const textField = document.createElement('textarea');
@@ -82,7 +75,6 @@ const getResults = async (page = 1, search = '', date = '', status = '') => {
         const response = await axios.get(url);
         transactions.value = response.data.transactions;
         totalAmount.value = response.data.totalAmount;
-        totalResult.value = response.data.totalResult;
     } catch (error) {
         console.error(error);
     }
@@ -117,10 +109,6 @@ const closeModal = () => {
 </script>
 
 <template>
-    <!-- <div class="w-full py-3 justify-between items-center inline-flex">
-        <div class="text-white text-base font-semibold font-sans leading-normal">Total: $&nbsp;{{ formatAmount(totalAmount) }}</div>
-    </div> -->
-
     <div v-if="transactions.data.length == 0" >
         <div class="w-full h-[360px] p-3 bg-gray-800 rounded-xl flex-col justify-center items-center inline-flex">
             <div class="self-stretch h-[212px] py-5 flex-col justify-start items-center gap-3 flex">
@@ -169,7 +157,7 @@ const closeModal = () => {
 
     <Modal :show="transactionModal" :title="$t('public.withdrawal_details')" @close="closeModal" max-width="sm">
         <div v-if="transactionDetails">
-            <div class="w-full justify-start items-center gap-3 border-b border-gray-700 inline-flex">
+            <div class="w-full justify-start items-center gap-3 inline-flex">
                 <img class="w-9 h-9 rounded-full" :src="transactionDetails.user.profile_photo || 'https://img.freepik.com/free-icon/user_318-159711.jpg'" alt="Client profile picture"/>
                 <div class="w-full flex-col justify-start items-start inline-flex">
                     <div class="self-stretch text-white text-base font-medium font-sans leading-normal break-all">{{ transactionDetails.user.name }}</div>

@@ -32,24 +32,20 @@ class CommissionController extends Controller
     public function commission_request_data(Request $request)
     {
         // Start building the query
-        $query = Transaction::query()->with('user')->where('transaction_type', 'commission');
+        $query = Transaction::query()->with('user','to_wallet.user')->where('transaction_type', 'commission');
     
-        // Apply type filter
-        $query->when($request->type == 'Pending', function ($query) {
-            $query->where('status', 'processing');
-        })->when($request->type == 'History', function ($query) {
-            $query->where('status', '!=', 'processing');
-        });
         
         // Apply search filter if provided
         $query->when($request->search, function ($query) use ($request) {
-            $query->where(function($q) use ($request) {
+            $query->where(function ($q) use ($request) {
                 $q->whereHas('user', function ($query) use ($request) {
                     $query->where('name', 'like', '%'.$request->search.'%');
-                })->orWhere('transaction_amount', 'like', '%'.$request->search.'%');
-            });
+                })->orWhereHas('to_wallet.user', function ($query) use ($request) {
+                    $query->where('name', 'like', '%'.$request->search.'%');
+                });
+            })->orWhere('transaction_amount', 'like', '%'.$request->search.'%');
         });
-    
+            
         // Apply date range filter if provided
         $query->when($request->filled('date'), function ($query) use ($request) {
             [$start_date, $end_date] = explode(' - ', $request->input('date'));
@@ -57,6 +53,13 @@ class CommissionController extends Controller
                 Carbon::createFromFormat('Y-m-d', $start_date)->startOfDay(),
                 Carbon::createFromFormat('Y-m-d', $end_date)->endOfDay()
             ]);
+        });
+        
+        // Apply type filter
+        $query->when($request->type == 'Pending', function ($query) {
+            $query->where('status', 'processing');
+        })->when($request->type == 'History', function ($query) {
+            $query->where('status', '!=', 'processing');
         });
         
         // Fetch the transactions
@@ -68,13 +71,16 @@ class CommissionController extends Controller
         // Transform each transaction to include profile_photo for user and upline
         $transactions->getCollection()->transform(function ($transaction) {
             $transaction->user->profile_photo = $transaction->user->getFirstMediaUrl('profile_photo');
+            $transaction->to_wallet->user->profile_photo = $transaction->to_wallet->user->getFirstMediaUrl('profile_photo');
             return $transaction;
         });
     
+
         return response()->json([
             'transactions' => $transactions,
             'totalAmount' => $totalAmount,
-            'totalCommission' => $transactions->total(),
+            'totalPending' => Transaction::where('transaction_type', 'commission')->where('status', 'processing')->count(),
+            'totalHistory' => Transaction::where('transaction_type', 'commission')->where('status', '!=', 'processing')->count(),
         ]);
     }
 
