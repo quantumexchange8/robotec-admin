@@ -215,13 +215,8 @@ class TransactionController extends Controller
             'status' => 'failed',
             'old_wallet_amount' => $withdrawalRequest->from_wallet->balance,
             'new_wallet_amount' => $withdrawalRequest->from_wallet->balance + $withdrawalRequest->amount,
+            'remarks' => $request->remarks,
         ]);
-
-        if ($request->remarks) {
-            $withdrawalRequest->update([
-                'remarks' => $request->remarks,
-            ]);    
-        }
 
         // Update wallet balance
         $withdrawalRequest->from_wallet->increment('balance', $withdrawalRequest->amount);

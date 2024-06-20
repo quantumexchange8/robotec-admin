@@ -5,6 +5,7 @@ namespace App\Models;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use App\Models\Wallet;
 use App\Models\SettingRank;
+use Illuminate\Support\Str;
 use App\Models\TradingAccount;
 use Laravel\Sanctum\HasApiTokens;
 use Spatie\MediaLibrary\HasMedia;
@@ -59,6 +60,14 @@ class User extends Authenticatable implements HasMedia
         $this->referral_code = $randomString;
         $this->save();
     }
+
+    public function setIdNumber(): void
+    {
+        $id_no = Str::padLeft($this->id, 6, "0");
+        $this->id_number = $id_no;
+        $this->save();
+    }
+
 
     public function getChildrenIds(): array
     {

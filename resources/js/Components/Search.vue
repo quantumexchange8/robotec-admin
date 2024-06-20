@@ -54,7 +54,7 @@ watch(isFocused, (newValue) => {
 
 // Define computed classes for dynamic styling
 const baseClasses = [
-    'py-3 rounded-lg text-sm font-normal shadow-xs border placeholder:text-gray-500 caret-primary-500 bg-gray-700',
+    'py-3 rounded-lg text-sm font-normal shadow-xs border-none placeholder:text-gray-300 caret-primary-500 bg-gray-700',
     'disabled:bg-gray-700 disabled:cursor-not-allowed dark:disabled:bg-gray-800 disabled:text-gray-300 dark:disabled:text-gray-500',
 ];
 
@@ -62,10 +62,6 @@ const classes = computed(() => [
     ...baseClasses,
     {
         'w-full pl-11 pr-11': true,
-    },
-    {
-        'border-gray-600 focus:ring-primary-500 hover:border-primary-500 focus:border-primary-500': !props.invalid,
-        'border-error-500 focus:ring-error-500 hover:border-error-500 focus:border-error-500': props.invalid,
     },
     {
         'bg-gray-900 text-white': props.modelValue && isFocused.value,
@@ -99,7 +95,7 @@ defineExpose({
             />
 
             <!-- Clear input icon at the end for search -->
-            <div class="absolute top-3 right-4 flex items-center space-x-2 hover:cursor-pointer" @click="clearInput">
+            <div v-show="modelValue" class="absolute top-3 right-4 flex items-center space-x-2 hover:cursor-pointer" @click="clearInput">
                 <XCircleIcon class="h-5 w-5 text-gray-600" /> <!-- Adjust size and color as needed -->
             </div>
         </div>

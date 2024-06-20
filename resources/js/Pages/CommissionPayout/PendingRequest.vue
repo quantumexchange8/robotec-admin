@@ -114,12 +114,22 @@ const updateChecked = (id, transaction_amount) => {
 
     const index = isChecked.value.indexOf(id);
     if (index !== -1) {
+        // Item exists, remove it
         isChecked.value.splice(index, 1);
-        totalAmount.value = parseFloat(totalAmount.value) - parseFloat(transaction_amount);
+        totalAmount.value -= parseFloat(transaction_amount);
     } else {
+        // Item does not exist, add it
         isChecked.value.push(id);
-        totalAmount.value = parseFloat(totalAmount.value) + parseFloat(transaction_amount);
+        totalAmount.value += parseFloat(transaction_amount);
     }
+
+    // Determine if all items are checked
+    const allChecked = isChecked.value.length === commissions.value.data.length;
+    isAllSelected.value = allChecked;
+
+    // Manually update the selectAllCheckbox checked state
+    const selectAllCheckbox = document.getElementById('selectAllCheckbox');
+    selectAllCheckbox.checked = allChecked;
 };
 
 function isItemSelected(id, transaction_amount) {
@@ -138,13 +148,31 @@ const closeModal = () => {
     commissionModal.value = false;
 };
 
+// Function to approve a specific commission
 const approveCommission = () => {
-    let ids = [];
-
-    // If commissionDetails is available, add its ID to the ids array
-    if (commissionDetails.value) {
-        ids.push(commissionDetails.value.id);
+    if (!commissionDetails.value || !commissionDetails.value.id) {
+        console.error("No specific commission details available.");
+        return;
     }
+
+    const id = commissionDetails.value.id;
+    const transaction_amount = commissionDetails.value.transaction_amount;
+
+    // Send the approval request for the specific commission
+    form.ids = [id]; // Set form.ids as an array with only the specific ID
+    sendApprovalRequest(() => {
+        // Remove the approved commission from isChecked and adjust totalAmount
+        const index = isChecked.value.indexOf(id);
+        if (index !== -1) {
+            isChecked.value.splice(index, 1);
+            totalAmount.value = parseFloat(totalAmount.value) - parseFloat(transaction_amount);
+        }
+    });
+};
+
+// Function to approve multiple commissions
+const approveCommissions = () => {
+    let ids = [];
 
     // Add all checked commissions to the ids array
     ids.push(...isChecked.value);
@@ -157,6 +185,15 @@ const approveCommission = () => {
 
     // Send the approval request for all commissions in the ids array
     form.ids = ids;
+    sendApprovalRequest(() => {
+        // Clear checked items and reset total amount
+        isChecked.value = [];
+        totalAmount.value = 0;
+    });
+};
+
+// Function to send approval request
+const sendApprovalRequest = (onSuccessCallback) => {
     form.post('/commission/approve_commission', {
         onSuccess: () => {
             closeModal();
@@ -164,6 +201,12 @@ const approveCommission = () => {
             if (isAllSelected.value !== false) {
                 const checkbox = document.getElementById('selectAllCheckbox');
                 checkbox.click(); // Trigger click on the checkbox's native DOM element
+            }
+            form.reset();
+            commissionDetails.value = null; // Clear commission details
+
+            if (typeof onSuccessCallback === 'function') {
+                onSuccessCallback();
             }
         },
         onError: (errors) => {
@@ -177,7 +220,7 @@ const approveCommission = () => {
 <template>
     <div class="w-full py-3 justify-between items-center inline-flex">
         <div class="text-white text-base font-semibold font-sans leading-normal">{{ $t('public.total') }}: $&nbsp;{{ formatAmount(totalAmount) }}</div>
-        <Button variant="success" :disabled="!isAnyCheckboxChecked || form.processing" @click="approveCommission">{{ $t('public.approve') }}</Button>
+        <Button variant="success" :disabled="!isAnyCheckboxChecked || form.processing" @click="approveCommissions">{{ $t('public.approve') }}</Button>
     </div>
 
     <div v-if="commissions.data.length == 0" >
@@ -225,7 +268,7 @@ const approveCommission = () => {
                         </td>
                         <td>
                             <div class="text-gray-300 text-xs font-normal font-sans leading-[24px]">{{ formatDateTime(commission.created_at) }}</div>
-                            <div class="text-white text-sm font-medium font-sans leading-tight break-all">{{ commission.user.name }}</div>
+                            <div class="text-white text-sm font-medium font-sans leading-tight break-all">{{ commission.to_wallet.user.name }}</div>
                         </td>
                         <td class="text-white text-md flex items-center justify-center py-3">$&nbsp;{{ formatAmount(commission.transaction_amount) }}</td>
                     </tr>
@@ -247,18 +290,18 @@ const approveCommission = () => {
         <div v-if="commissionDetails">
             <form>
                 <div class="w-full justify-start items-center gap-3 my-5 pb-3 border-b border-gray-700 inline-flex">
-                    <img class="w-9 h-9 rounded-full" :src="commissionDetails.user.profile_photo || 'https://img.freepik.com/free-icon/user_318-159711.jpg'" alt="Client profile picture"/>
+                    <img class="w-9 h-9 rounded-full" :src="commissionDetails.to_wallet.user.profile_photo || 'https://img.freepik.com/free-icon/user_318-159711.jpg'" alt="Client profile picture"/>
                     <div class="w-full flex-col justify-start items-start inline-flex">
-                        <div class="self-stretch text-white text-base font-medium font-sans leading-normal break-all">{{ commissionDetails.user.name }}</div>
-                        <div class="text-gray-300 text-xs font-normal font-sans leading-[18px]">{{ $t('public.id') }}: {{ commissionDetails.user.id_number }}</div>
+                        <div class="self-stretch text-white text-base font-medium font-sans leading-normal break-all">{{ commissionDetails.to_wallet.user.name }}</div>
+                        <div class="text-gray-300 text-xs font-normal font-sans leading-[18px]">{{ $t('public.id') }}: {{ commissionDetails.to_wallet.user.id_number }}</div>
                     </div>
                 </div>
 
                 <div class="grid grid-cols-2 items-center mb-2">
                     <div class="col-span-1 text-gray-300 text-xs font-normal font-sans leading-[18px]">{{ $t('public.referee') }}</div>
                     <div class="col-span-1 flex items-center">
-                        <img class="w-5 h-5 rounded-full mr-2" :src="commissionDetails.to_wallet.user.profile_photo || 'https://img.freepik.com/free-icon/user_318-159711.jpg'" alt="Client upline profile picture"/>
-                        <div class="text-white text-xs font-normal font-sans leading-tight break-all">{{ commissionDetails.to_wallet.user.name }}</div>
+                        <img class="w-5 h-5 rounded-full mr-2" :src="commissionDetails.user.profile_photo || 'https://img.freepik.com/free-icon/user_318-159711.jpg'" alt="Client downline profile picture"/>
+                        <div class="text-white text-xs font-normal font-sans leading-tight break-all">{{ commissionDetails.user.name }}</div>
                     </div>
                 </div>
                 <div class="grid grid-cols-2 items-center mb-2">

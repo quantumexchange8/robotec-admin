@@ -249,7 +249,7 @@ const toggleExpanded = (history) => {
             <div class="w-full flex-col justify-start items-start gap-1.5 mb-5 inline-flex">
                 <Label for="amount" class="text-xs font-medium font-sans leading-[18px]" :invalid="form.errors.amount">{{ $t('public.adjustment_amount') }}</Label>
 
-                <InputIconWrapper class="col-span-2">
+                <InputIconWrapper class="w-full">
                     <template #icon>
                         <span class='text-white'>{{ isDeduction ? '-$' : '+$' }}</span>
                     </template>

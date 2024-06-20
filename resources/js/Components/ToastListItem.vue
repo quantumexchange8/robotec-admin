@@ -49,7 +49,7 @@ const textColor = {
 
 </script>
 <template>
-    <div class="flex items-center p-4 text-gray-500 rounded-lg shadow" :style="alertStyle" role="alert">
+    <div class="mx-4 flex items-center p-3 text-gray-700 rounded-lg shadow" :style="alertStyle" role="alert">
         <div class="inline-flex items-center justify-center flex-shrink-0 w-10 h-10 bg-gray-500 rounded-full">
             <component :is="iconComponent" class="h-8 w-8 bg-transparent" :class="textColor" />
             <span class="sr-only">Check icon</span>

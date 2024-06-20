@@ -55,6 +55,14 @@ class CommissionController extends Controller
             ]);
         });
         
+        // Clone the query for totalPending
+        $totalPendingQuery = clone $query;
+        $totalPending = $totalPendingQuery->where('status', 'processing')->count();
+
+        // Clone the query for totalHistory
+        $totalHistoryQuery = clone $query;
+        $totalHistory = $totalHistoryQuery->where('status', '!=', 'processing')->count();
+        
         // Apply type filter
         $query->when($request->type == 'Pending', function ($query) {
             $query->where('status', 'processing');
@@ -79,8 +87,8 @@ class CommissionController extends Controller
         return response()->json([
             'transactions' => $transactions,
             'totalAmount' => $totalAmount,
-            'totalPending' => Transaction::where('transaction_type', 'commission')->where('status', 'processing')->count(),
-            'totalHistory' => Transaction::where('transaction_type', 'commission')->where('status', '!=', 'processing')->count(),
+            'totalPending' => $totalPending,
+            'totalHistory' => $totalHistory,
         ]);
     }
 

@@ -100,7 +100,7 @@ const handleRedirectTo = (pending) => {
                     <div class="text-success-500 text-xl font-semibold font-sans leading-loose">{{ formatAmount(props.totalPurchasesEA) }}</div>
                 </div>
             </div>
-            <div class="self-stretch px-4 pt-5 pb-11 bg-gray-800 rounded-tl-3xl rounded-tr-3xl shadow flex-col justify-start items-start gap-2 flex -mb-8" @click.prevent="handleRedirectTo('pamm')">
+            <div class="self-stretch px-4 pt-5 pb-[60px] bg-gray-800 rounded-tl-3xl rounded-tr-3xl shadow flex-col justify-start items-start gap-2 flex -mb-8" @click.prevent="handleRedirectTo('pamm')">
                 <div class="self-stretch justify-between items-start inline-flex">
                     <div class="w-9 h-9 p-2 bg-gray-900 rounded-[50px] justify-center items-center flex">
                         <PammFundInIcon class="w-5 h-5 relative flex-col justify-start items-start flex text-white" />
