@@ -9,6 +9,7 @@ use App\Models\Country;
 use App\Models\Transaction;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use App\Services\CTraderService;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Services\RunningNumberService;
@@ -217,7 +218,7 @@ class MemberController extends Controller
         // Generate a random password with 8 characters
         $password = Str::random(8);
         
-        $user = User::create([
+        $userData = [
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($password),
@@ -226,14 +227,17 @@ class MemberController extends Controller
             'upline_id' => $upline_id,
             'hierarchyList' => $hierarchyList,
             'role' => 'user',
-        ]);
+        ];
     
-        $id_number = str_pad($user->id, 6, '0', STR_PAD_LEFT);
+        $user = User::create($userData);
 
-        // Update the user with id_number
-        $user->update(['id_number' => $id_number]);
+        // create ct id to link ctrader account
+        $ctUser = (new CTraderService)->CreateCTID($user->email);
+        $user->ct_user_id = $ctUser['userId'];
+        $user->save();
 
         $user->setReferralId();
+        $user->setIdNumber();
     
         // Create cash wallet
         Wallet::create([

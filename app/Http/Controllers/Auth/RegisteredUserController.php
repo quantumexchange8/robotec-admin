@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Country;
 use App\Models\User;
 use App\Models\Wallet;
+use App\Services\CTraderService;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -139,7 +140,14 @@ class RegisteredUserController extends Controller
         }
 
         $user = User::create($userData);
+
+        // create ct id to link ctrader account
+        $ctUser = (new CTraderService)->CreateCTID($user->email);
+        $user->ct_user_id = $ctUser['userId'];
+        $user->save();
+
         $user->setReferralId();
+        $user->setIdNumber();
 
         Wallet::create([
             'user_id' => $user->id,
