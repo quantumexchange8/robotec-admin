@@ -112,20 +112,15 @@ class PammController extends Controller
                 $record->save();
 
                 // Create a transaction record
-                $this->createTransactionRecord($record->user_id, $meta_login, $amount, $tradeType);
+                $this->createTransactionRecord($record->user_id, $meta_login, $amount, $tradeType, $trade->getTicket());
     
                 // Update status to "matured" if matured_at is less than or equal to today
                 if ($record->matured_at->toDateString() <= $today) {
                     $record->update(['status' => 'matured']);
                 }
                 
-                // Optionally, log or handle the trade result
-                Log::info('Trade created successfully and record updated', [
-                    'trade' => $trade,
-                    'autoTradingRecord' => $record,
-                ]);
             } catch (\Exception $e) {
-                Log::error('Error creating trade in createPAMMTradesForAutoTrading', ['message' => $e->getMessage(), 'trace' => $e->getTraceAsString()]);
+                Log::error($e->getMessage() . " " . $meta_login);
             }
         }
 
@@ -136,7 +131,7 @@ class PammController extends Controller
 
     }
 
-    private function createTransactionRecord($user_id, $meta_login, $amount, $tradeType)
+    private function createTransactionRecord($user_id, $meta_login, $amount, $tradeType, $ticket)
     {
         try {
             // Find the commission wallet of the user
@@ -156,9 +151,10 @@ class PammController extends Controller
                 'user_id' => $user_id,
                 'category' => 'trading_account',
                 'transaction_type' => $transactionType,
-                'to_wallet_id' => $commissionWallet->id, // To be updated later
+                'to_wallet_id' => $commissionWallet->id,
                 'from_meta_login' => null,
                 'to_meta_login' => $meta_login,
+                'ticket' => $ticket,
                 'transaction_number' => RunningNumberService::getID('auto_trading'),
                 'amount' => $amount,
                 'transaction_amount' => $amount,
@@ -170,10 +166,8 @@ class PammController extends Controller
                 'approved_at' => now(),
             ]);
 
-            // Log successful transaction creation
-            Log::info('Transaction created successfully for AutoTrading', ['transaction' => $transaction]);
         } catch (\Exception $e) {
-            Log::error('Error creating transaction record for AutoTrading', ['message' => $e->getMessage(), 'trace' => $e->getTraceAsString()]);
+            Log::error($e->getMessage() . " " . $transaction->ticket);
         }
     }
 }
