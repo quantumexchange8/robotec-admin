@@ -22,6 +22,8 @@ return new class extends Migration
             $table->unsignedBigInteger('upline_id')->nullable();
             $table->string('hierarchyList')->nullable();
             $table->string('referral_code')->nullable();
+            $table->string('id_number')->nullable();
+            $table->integer('ct_user_id')->nullable();
             $table->string('usdt_address')->nullable();
             $table->string('role')->default('user');
             $table->string('status')->default('Active');

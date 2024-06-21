@@ -80,7 +80,7 @@ const labelWithValue = computed(() => labelWithImg.value.map(item => item.value)
             ]"
         >
             <ListboxButton
-                class="relative w-full cursor-default rounded-lg shadow-xs bg-gray-800 py-4 px-3 text-left focus:ring-1 focus:outline-none"
+                class="relative w-full cursor-default rounded-lg shadow-xs bg-gray-900 py-3 px-4 text-left focus:ring-1 focus:outline-none"
                 :class="[
                     {
                         'border-gray-600 focus-within:ring-error-300 focus:border-error-300 focus:shadow-error-light': error,
@@ -88,7 +88,7 @@ const labelWithValue = computed(() => labelWithImg.value.map(item => item.value)
                     }
                 ]"
             >
-                <div class="flex gap-2 text-gray-50 items-center">
+                <div class="flex gap-2 text-gray-50 items-center text-sm font-semibold">
                     <template v-if="shouldShowLabelWithImg && withImg && isPhoneCode">
                         <img v-for="item in labelWithImg" :key="item.label" :src="item.imgUrl" width="24" alt="img">
                         <span class="block truncate">{{ labelWithValue }}</span>
@@ -119,7 +119,7 @@ const labelWithValue = computed(() => labelWithImg.value.map(item => item.value)
                 leave-to-class="opacity-0"
             >
                 <ListboxOptions
-                    class="z-10 absolute border border-gray-600 mt-2 max-h-52 w-full overflow-auto rounded-lg bg-gray-800 p-2 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm"
+                    class="z-10 absolute text-smi border border-gray-600 mt-2 max-h-52 w-full overflow-auto rounded-lg bg-gray-900 p-2 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm"
                     :style="{ width: isPhoneCode ? '360px' : '' }"
                 >
                     <ListboxOption

@@ -84,7 +84,7 @@ const classes = computed(() => [
             },
     variantClasses(variant),
     {
-        'rounded-md': !squared && !pill,
+        'rounded-lg': !squared && !pill,
         'rounded-full': pill,
     },
     {

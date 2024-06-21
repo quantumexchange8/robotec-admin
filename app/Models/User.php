@@ -117,9 +117,9 @@ class User extends Authenticatable implements HasMedia
         return $this->hasMany(Wallet::class, 'user_id', 'id');
     }
 
-    public function rank(): \Illuminate\Database\Eloquent\Relations\HasOne
+    public function auto_tradings(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
-        return $this->hasOne(SettingRank::class, 'id', 'setting_rank_id');
+        return $this->hasMany(AutoTrading::class, 'user_id', 'id');
     }
 
     public function transactions(): \Illuminate\Database\Eloquent\Relations\HasMany

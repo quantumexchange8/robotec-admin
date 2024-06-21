@@ -28,40 +28,32 @@ class MemberController extends Controller
 
     public function client_data(Request $request)
     {
-        // Get query parameters from the request
         $search = $request->input('search');
         $sortField = $request->input('sortField');
         $sortDirection = $request->input('sortDirection');
         $upline = $request->input('upline');
         $purchasedEA = $request->input('purchasedEA');
         $fundedPAMM = $request->input('fundedPAMM');
-    
+
         // Start building the query
-        $query = User::where('role', 'user')
-            ->leftJoin('wallets', 'users.id', '=', 'wallets.user_id')
-            ->leftJoin('transactions', function($join) {
-                $join->on('transactions.user_id', '=', 'users.id')
-                    ->where('transactions.transaction_type', '=', 'commission')
-                    ->where('transactions.status', '=', 'success')
-                    ->whereColumn('transactions.to_wallet_id', '=', 'wallets.id');
-            })
-            ->selectRaw('users.*, 
-                        COALESCE(SUM(transactions.transaction_amount), 0) AS totalCommission')
-            ->groupBy('users.id');
+        $query = User::query()
+            ->with(['upline'])
+            ->where('role', 'user');
 
         // Apply search filter if provided
         if ($search) {
             $query->where(function($q) use ($search) {
                 $q->where('name', 'like', '%'.$search.'%')
-                  ->orWhere('id', 'like', '%'.$search.'%');
+                    ->orWhere('email', 'like', '%'.$search.'%')
+                    ->orWhere('id_number', 'like', '%'.$search.'%');
             });
         }
-    
+
         // Apply other filters if provided
         if ($upline) {
             $query->where('upline_id', $upline);
         }
-    
+
         if ($purchasedEA) {
             $query->where(function ($q) use ($purchasedEA) {
                 if ($purchasedEA === 'yes') {
@@ -77,30 +69,34 @@ class MemberController extends Controller
                 }
             });
         }
-        
+
         if ($fundedPAMM) {
             $query->where(function ($q) use ($fundedPAMM) {
                 if ($fundedPAMM === 'yes') {
                     $q->whereHas('transactions', function ($q) {
-                        $q->where('transaction_type', 'pamm_funding')
+                        $q->where('transaction_type', 'fund_in')
                             ->where('status', 'success');
                     });
                 } elseif ($fundedPAMM === 'no') {
                     $q->whereDoesntHave('transactions', function ($q) {
-                        $q->where('transaction_type', 'pamm_funding')
+                        $q->where('transaction_type', 'fund_in')
                             ->where('status', 'success');
                     });
                 }
             });
         }
-            
+
         // Apply sorting if provided
         if ($sortField && $sortDirection) {
             if ($sortField === 'commission') {
-                // Order by totalCommission
-                $query->orderBy('totalCommission', $sortDirection);
+                $query->leftJoin('wallets', function ($join) {
+                    $join->on('users.id', '=', 'wallets.user_id')
+                        ->where('wallets.type', 'commission_wallet');
+                })->orderBy('wallets.balance', $sortDirection);
+
+                // Select appropriate fields to avoid column ambiguity
+                $query->select('users.*');
             } else {
-                // Order by the specified field
                 $query->orderBy($sortField, $sortDirection);
             }
         } elseif ($sortDirection) {
@@ -110,45 +106,41 @@ class MemberController extends Controller
                 $query->oldest();
             }
         }
-    
-        // Paginate the initial query
+
+        // Eager load and aggregate data
+        $query->with([
+            'wallets' => function ($q) {
+                $q->where('type', 'commission_wallet');
+            },
+            'transactions' => function ($q) {
+                $q->where('status', 'success');
+            },
+            'children'
+        ])->withCount(['children as total_referee'])
+            ->withSum(
+                ['transactions as total_deposit' => function($query) {
+                    $query->where('transaction_type', 'deposit');
+                }],
+                'transaction_amount'
+            )
+            ->withSum(['transactions as total_withdrawal' => function ($q) {
+                $q->where('transaction_type', 'withdrawal');
+            }], 'amount')
+            ->withSum(['transactions as total_commission' => function ($q) {
+                $q->where('transaction_type', 'commission');
+            }], 'transaction_amount')
+            ->withSum(['auto_tradings as pamm_fund_in_amount'], 'investment_amount')
+            ->withSum(['wallets as commission' => function ($q) {
+                $q->where('type', 'commission_wallet');
+            }], 'balance');
+
         $clients = $query->paginate(10);
 
-        // Transform each paginated user
-        $clients->getCollection()->transform(function ($user) {
-            $user->profile_photo = $user->getFirstMediaUrl('profile_photo');
-            $user->upline = $user->upline()->first();
-            if ($user->upline) {
-                $user->upline->profile_photo = $user->upline->getFirstMediaUrl('profile_photo');
-            }
-            $user->referee = $this->countDescendants($user);
-            unset($user->children); // Unset the 'children' attribute
-
-            // Calculate total deposit
-            $user->totalDeposit = Transaction::where('user_id', $user->id)
-                ->where('transaction_type', 'deposit')
-                ->where('status', 'success')
-                ->sum('transaction_amount');
-
-            // Calculate total withdrawal
-            $user->totalWithdrawal = Transaction::where('user_id', $user->id)
-                ->where('transaction_type', 'withdrawal')
-                ->where('status', 'success')
-                ->sum('transaction_amount');
-
-            // // Calculate total commission
-            // $user->totalCommission = Transaction::where('to_wallet_id', $user->wallets()->where('type', 'commission_wallet')->value('id'))
-            //     ->where('transaction_type', 'commission')
-            //     ->where('status', 'success')
-            //     ->sum('transaction_amount');
-
-            // Calculate total funded PAMM
-            $user->totalFundedPAMM = Transaction::where('user_id', $user->id)
-                ->where('transaction_type', 'pamm_funding')
-                ->where('status', 'success')
-                ->sum('transaction_amount');
-
-            return $user;
+        // Add profile photo URLs
+        $clients->getCollection()->transform(function ($client) {
+            $client->profile_photo = $client->getFirstMediaUrl('profile_photo');
+            $client->upline->profile_photo = $client->upline->getFirstMediaUrl('profile_photo');
+            return $client;
         });
 
         // Return paginated results as JSON
@@ -162,32 +154,32 @@ class MemberController extends Controller
     {
         // Initialize the count with the direct children count
         $count = $user->children()->count();
-    
+
         // Recursively count descendants of children
         foreach ($user->children as $child) {
             $count += $this->countDescendants($child);
         }
-    
+
         return $count;
     }
-    
+
     public function addClient(AddClientRequest $request)
     {
         $upline_id = null;
         $hierarchyList = null;
-    
-        if ($request->upline !== null) 
+
+        if ($request->upline !== null)
         {
             $upline_id = $request->upline['value'];
             $upline = User::find($upline_id);
-        
+
             if(empty($upline->hierarchyList || $upline == null)) {
                 $hierarchyList = "-" . $upline_id . "-";
             } else {
                 $hierarchyList = $upline->hierarchyList . $upline_id . "-";
-            }    
+            }
         }
-        
+
         $user = Auth::user();
         $dial_code = $request->dial_code['value'];
         $phone = $request->phone;
@@ -208,7 +200,7 @@ class MemberController extends Controller
         }
 
         $users = User::where('dial_code', $request->dial_code['value'])->get();
-        
+
         foreach ($users as $user) {
             if ($user->phone == $phone_number) {
                 throw ValidationException::withMessages(['phone' => trans('public.invalid_mobile_phone')]);
@@ -217,7 +209,7 @@ class MemberController extends Controller
 
         // Generate a random password with 8 characters
         $password = Str::random(8);
-        
+
         $userData = [
             'name' => $request->name,
             'email' => $request->email,
@@ -228,7 +220,9 @@ class MemberController extends Controller
             'hierarchyList' => $hierarchyList,
             'role' => 'user',
         ];
-    
+
+        $id_number = str_pad($user->id, 6, '0', STR_PAD_LEFT);
+
         $user = User::create($userData);
 
         // create ct id to link ctrader account
@@ -238,7 +232,7 @@ class MemberController extends Controller
 
         $user->setReferralId();
         $user->setIdNumber();
-    
+
         // Create cash wallet
         Wallet::create([
             'user_id' => $user->id,
@@ -255,13 +249,13 @@ class MemberController extends Controller
 
         // Send a notification to the user with their password and email
         $user->notify(new NewClientNotification($password, $request->email));
-    
+
         return redirect()->back()->with('toast', [
             'title' => trans('public.add_client_success_title'),
             'type' => 'success'
         ]);
     }
-    
+
     public function getDialCodes(Request $request)
     {
         $locale = app()->getLocale();
@@ -350,22 +344,22 @@ class MemberController extends Controller
         $request->validate([
             'id' => 'required|exists:users,id',
         ]);
-    
+
         // Find the client by id
         $client = User::findOrFail($request->id);
-    
+
         // Delete the client's wallets
         $client->wallets()->delete();
-    
+
         // Delete the client
         $client->delete();
-    
+
         return redirect()->back()->with('toast', [
             'title' => trans('public.delete_client_success_title'),
             'type' => 'success'
         ]);
     }
-    
+
     public function getAllClients(Request $request)
     {
         $users = User::query()
@@ -386,6 +380,6 @@ class MemberController extends Controller
         });
 
         return response()->json($users);
-    
+
     }
 }

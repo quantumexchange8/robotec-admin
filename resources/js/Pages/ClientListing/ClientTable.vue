@@ -14,6 +14,7 @@ import Combobox from "@/Components/Combobox.vue";
 import toast from "@/Composables/toast.js";
 import NoClient from "@/Components/NoClient.vue";
 import CountryLists from '/public/data/countries.json'
+import Loading from "@/Components/Loading.vue";
 
 const props = defineProps({
     // refresh: Boolean,
@@ -90,7 +91,6 @@ const getResults = async (page = 1, search = props.search, sortField = props.sor
         const response = await axios.get(url);
         members.value = response.data.clients;
         totalClient.value = response.data.totalClient;
-        // console.log(members);
     } catch (error) {
         console.error(error);
     } finally {
@@ -207,63 +207,61 @@ const updateClient = (clientDetails) => {
 </script>
 
 <template>
-    <div class="relative overflow-x-auto rounded-lg">
-        <div v-if="members.data.length <= 0" class="w-full flex justify-center my-8">
-            <div>
-                <div class="p-3 flex flex-col items-center justify-center bg-gray-800 w-full h-[360px]">
-                    <div class="flex flex-col items-center mb-3 p-5">
-                        <NoClient class="w-40 h-[120px]" />
-                        <div class="w-full text-center text-gray-300 text-sm font-normal font-sans leading-tight mt-3">
-                            {{ $t('public.no_client_message_1') }}
-                        </div>
-                    </div>
-                </div>
-                <div class="px-4 py-5 flex items-center justify-center">
-                    <div class="rounded-full bg-primary-500 w-9 h-9 flex items-center justify-center">
-                        <div class="text-center text-white text-sm font-medium font-sans leading-tight">1</div>
+    <div class="relative overflow-x-auto rounded-xl p-3 bg-gray-800">
+        <div v-if="isLoading" class="flex items-center justify-center py-8">
+            <Loading />
+        </div>
+        <div v-else-if="members.data.length === 0" class="w-full flex justify-center">
+            <div class="p-3 flex flex-col items-center justify-center bg-gray-800 w-full h-[360px]">
+                <div class="flex flex-col items-center mb-3 p-5">
+                    <NoClient class="w-40 h-[120px]" />
+                    <div class="w-full text-center text-gray-300 text-sm font-normal font-sans leading-tight mt-3">
+                        {{ $t('public.no_client_message_1') }}
                     </div>
                 </div>
             </div>
         </div>
-        <div v-else>
-            <table class="w-full text-sm text-left text-gray-500 mt-5">
+        <div v-else class="flex justify-center items-center">
+            <table class="w-full text-sm text-left text-gray-500">
                 <tbody>
-                    <tr
-                        v-for="member in members.data"
-                        :key="member.id"
-                        class="bg-gray-800 text-xs font-normal text-white border-b border-gray-700"
-                        @click="openClientModal(member)"
-                    >
-                        <td class="px-3 py-2.5" colspan="4">
-                            <div class="inline-flex items-center gap-2 mr-3">
-                                <img :src="member.profile_photo ? member.profile_photo : 'https://img.freepik.com/free-icon/user_318-159711.jpg'" class="w-8 h-8 rounded-full" alt="">
-                                <div class="flex flex-col">
-                                    <div class="break-all">
-                                        {{ member.name }}
-                                    </div>
-                                    <div class="flex">
-                                        <div class="text-gray-300 text-xs font-normal font-sans leading-[18px] mr-2">{{ $t('public.id') }}: {{ member.id_number }}</div>
-                                        <div class="flex items-center text-xs font-normal font-sans leading-[18px]">
-                                            <div class="text-gray-300">{{ $t('public.commission') }}:&nbsp;</div>
-                                            <div class="text-success-300">{{ formatAmount(member.totalCommission) }}</div>
-                                        </div>
-                                    </div>
+                <tr
+                    v-for="(member, index) in members.data"
+                    :key="member.id"
+                    class="text-xs font-normal text-white border-b border-gray-700"
+                    :class="{
+                            'border-transparent': index === members.data.length - 1
+                        }"
+                    @click="openClientModal(member)"
+                >
+                    <td class="py-2 flex gap-3 items-center self-stretch">
+                        <img :src="member.profile_photo ? member.profile_photo : 'https://img.freepik.com/free-icon/user_318-159711.jpg'" class="w-8 h-8 rounded-full" alt="">
+                        <div class="flex flex-col">
+                            <div class="font-medium text-sm">
+                                {{ member.name }}
+                            </div>
+                            <div class="flex gap-2 items-center self-stretch">
+                                <div class="text-gray-300 text-xs">{{ $t('public.id') }}: {{ member.id_number }}</div>
+                                <div class="flex items-center text-xs">
+                                    <div class="text-gray-300">{{ $t('public.commission') }}:&nbsp;</div>
+                                    <div class="text-success-500 font-medium">$ {{ formatAmount(member.commission) }}</div>
                                 </div>
                             </div>
-                        </td>
-                    </tr>
+                        </div>
+                    </td>
+                </tr>
                 </tbody>
             </table>
-            <div class="flex justify-center mt-4" v-if="!isLoading">
-                <TailwindPagination
-                    :item-classes="paginationClass"
-                    :active-classes="paginationActiveClass"
-                    :data="members"
-                    :limit="2"
-                    @pagination-change-page="handlePageChange"
-                />
-            </div>
         </div>
+    </div>
+
+    <div class="flex justify-center py-5 px-4" v-if="!isLoading">
+        <TailwindPagination
+            :item-classes="paginationClass"
+            :active-classes="paginationActiveClass"
+            :data="members"
+            :limit="2"
+            @pagination-change-page="handlePageChange"
+        />
     </div>
 
     <Modal :show="clientDetailModal" :title="$t('public.client_details')" @close="closeClientModal" max-width="sm">
@@ -279,49 +277,49 @@ const updateClient = (clientDetails) => {
             <div class="w-full h-px bg-gray-700 my-4"></div>
 
             <div class="grid grid-cols-2 items-center mb-2">
-                <div class="col-span-1 text-gray-300 text-xs font-normal font-sans leading-[18px] break-all">{{ $t('public.email') }}</div>
-                <div class="col-span-1 text-white text-xs font-normal font-sans leading-tight break-all">{{ clientDetails.email }}</div>
+                <div class="text-gray-300 text-xs leading-[18px] break-all">{{ $t('public.email') }}</div>
+                <div class="text-white text-sm leading-tight break-all">{{ clientDetails.email }}</div>
             </div>
             <div class="grid grid-cols-2 items-center mb-2">
-                <div class="col-span-1 text-gray-300 text-xs font-normal font-sans leading-[18px]">{{ $t('public.phone_number') }}</div>
-                <div class="col-span-1 text-white text-xs font-normal font-sans leading-tight break-all">{{ clientDetails.phone }}</div>
+                <div class="text-gray-300 text-xs leading-[18px]">{{ $t('public.phone_number') }}</div>
+                <div class="text-white text-sm leading-tight break-all">{{ clientDetails.phone }}</div>
             </div>
             <div class="grid grid-cols-2 items-center">
-                <div class="col-span-1 text-gray-300 text-xs font-normal font-sans leading-[18px]">{{ $t('public.upline') }}</div>
-                <div v-if="clientDetails.upline" class="col-span-1 flex items-center">
+                <div class="text-gray-300 text-xs leading-[18px]">{{ $t('public.upline') }}</div>
+                <div v-if="clientDetails.upline" class="flex items-center">
                     <img class="w-5 h-5 rounded-full mr-2" :src="clientDetails.upline.profile_photo || 'https://img.freepik.com/free-icon/user_318-159711.jpg'" alt="Client upline profile picture"/>
-                    <div class="text-white text-xs font-normal font-sans leading-tight break-all">{{ clientDetails.upline.name }}</div>
+                    <div class="text-white text-sm leading-tight break-all">{{ clientDetails.upline.name }}</div>
                 </div>
             </div>
 
             <div class="w-full h-px bg-gray-700 my-4"></div>
 
             <div class="grid grid-cols-2 items-center mb-2">
-                <div class="col-span-1 text-gray-300 text-xs font-normal font-sans leading-[18px]">{{ $t('public.total_deposit') }}</div>
-                <div class="col-span-1 text-white text-xs font-normal font-sans leading-tight">{{ formatAmount(clientDetails.totalDeposit) }}</div>
+                <div class="text-gray-300 text-xs font-normal leading-[18px]">{{ $t('public.total_deposit') }}</div>
+                <div class="text-white text-sm font-medium leading-tight">$ {{ formatAmount(clientDetails.total_deposit ? clientDetails.total_deposit : 0) }}</div>
             </div>
             <div class="grid grid-cols-2 items-center mb-2">
-                <div class="col-span-1 text-gray-300 text-xs font-normal font-sans leading-[18px]">{{ $t('public.total_withdrawal') }}</div>
-                <div class="col-span-1 text-white text-xs font-normal font-sans leading-tight">{{ formatAmount(clientDetails.totalWithdrawal) }}</div>
+                <div class="text-gray-300 text-xs font-normal leading-[18px]">{{ $t('public.total_withdrawal') }}</div>
+                <div class="text-white text-sm font-medium leading-tight">$ {{ formatAmount(clientDetails.total_withdrawal ? clientDetails.total_withdrawal : 0) }}</div>
             </div>
             <div class="grid grid-cols-2 items-center mb-2">
-                <div class="col-span-1 text-gray-300 text-xs font-normal font-sans leading-[18px]">{{ $t('public.referee') }}</div>
-                <div class="col-span-1 text-white text-xs font-normal font-sans leading-tight">{{ clientDetails.referee }}</div>
+                <div class="text-gray-300 text-xs font-normal leading-[18px]">{{ $t('public.referee') }}</div>
+                <div class="text-white text-sm font-medium leading-tight">{{ clientDetails.total_referee ? clientDetails.total_referee : 0 }}</div>
             </div>
             <div class="grid grid-cols-2 items-center mb-2">
-                <div class="col-span-1 text-gray-300 text-xs font-normal font-sans leading-[18px]">{{ $t('public.total_commission') }}</div>
-                <div class="col-span-1 text-white text-xs font-normal font-sans leading-tight">{{ formatAmount(clientDetails.totalCommission) }}</div>
+                <div class="text-gray-300 text-xs font-normal leading-[18px]">{{ $t('public.total_commission') }}</div>
+                <div class="text-white text-sm font-medium leading-tight">$ {{ formatAmount(clientDetails.total_commission ? clientDetails.total_commission : 0) }}</div>
             </div>
             <div class="grid grid-cols-2 items-center">
-                <div class="col-span-1 text-gray-300 text-xs font-normal font-sans leading-[18px]">{{ $t('public.pamm_fund_in_amount') }}</div>
-                <div class="col-span-1 text-white text-xs font-normal font-sans leading-tight">{{ formatAmount(clientDetails.totalFundedPAMM) }}</div>
+                <div class="text-gray-300 text-xs font-normal leading-[18px]">{{ $t('public.pamm_fund_in_amount') }}</div>
+                <div class="text-white text-sm font-medium leading-tight">$ {{ formatAmount(clientDetails.pamm_fund_in_amount ? clientDetails.pamm_fund_in_amount : 0) }}</div>
             </div>
 
             <div class="w-full h-px bg-gray-700 my-4"></div>
 
             <div class="items-center mb-5">
                 <div class="text-gray-300 text-xs font-normal font-sans leading-[18px] mb-1">{{ $t('public.usdt_address') }}</div>
-                <div class="text-white text-xs font-normal font-sans leading-tight overflow-x-auto">{{ clientDetails.usdt_address }}</div>
+                <div class="text-white text-xs font-normal font-sans leading-tight overflow-x-auto">{{ clientDetails.usdt_address ?? 'No USDT Address' }}</div>
             </div>
 
             <div class="items-center pt-8 flex gap-3">
@@ -364,11 +362,11 @@ const updateClient = (clientDetails) => {
                 </div>
                 <div>
                     <Label for="phone_number" :value="$t('public.phone_number')" class="mb-1.5" :invalid="form.errors.phone || form.errors.dial_code" />
-                            
+
                     <div class="grid grid-cols-5">
                         <div class="col-span-2">
                             <div class="mr-1.5">
-                                <Combobox 
+                                <Combobox
                                     :load-options="loadDialCodes"
                                     id="dial_code"
                                     class="block w-full"

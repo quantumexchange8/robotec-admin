@@ -123,30 +123,45 @@ watchEffect(() => {
     <Head :title="$t('public.client_listing')" />
     <AuthenticatedLayout>
         <template #header>
-            <h2 class="font-semibold text-xl text-white leading-loose mb-3">{{ $t('public.client_listing') }}</h2>
+            <h2 class="font-semibold text-xl text-white leading-loose">{{ $t('public.client_listing') }}</h2>
         </template>
 
-        <div class="sticky top-2 bg-gray-900 z-[5]">
-            <div class="pb-3">
-                <Search v-model="search" :placeholder="$t('public.search')" />
-            </div>
-            <div class="pb-3 w-full inline-flex items-center gap-3">
-                <Button variant="transparent" class="relative w-full h-[58px] min-w-20 border border-gray-600 focus:border-primary-500" @click.prevent="openFilterModal()">
+        <div class="py-3 sticky top-0 bg-gray-900 z-[5]">
+            <div class="flex flex-col gap-3 items-center">
+                <Search
+                    v-model="search"
+                    class="w-full"
+                    :placeholder="$t('public.search')"
+                />
+                <div class="flex gap-3 items-center w-full">
+                    <Button
+                        variant="outline"
+                        class="w-1/3 relative"
+                        size="lg"
+                        @click.prevent="openFilterModal()"
+                    >
                     <span class="inline-flex items-center">
                         <span class="mr-2">
                             <FilterIcon aria-hidden="true" class="w-5 h-5" />
                         </span>
                         <span>{{ $t('public.filter') }}</span>
-                        <span v-if="filterCount > 0" class="absolute -top-1 -right-1">
+                        <span v-if="filterCount > 0" class="absolute -top-2 -right-2">
                             <div class="w-5 h-5 px-1 bg-error-500 rounded-full border border-gray-900 flex items-center justify-center">
                                 <div class="text-white text-xs font-medium">{{ filterCount }}</div>
                             </div>
                         </span>
                     </span>
-                </Button>
-                <BaseListbox class="w-full min-w-60" :options="sortTypes" v-model="sortType" />
+                    </Button>
+
+                    <BaseListbox
+                        class="w-full"
+                        :options="sortTypes"
+                        v-model="sortType"
+                    />
+                </div>
             </div>
         </div>
+
         <div class="py-3 flex items-center justify-between">
             <div class="text-white">{{ totalClient }} {{ $t('public.results') }} </div>
             <AddNewClient />
@@ -157,7 +172,7 @@ watchEffect(() => {
             :sort-field="parseSortField(sortType)"
             :sort-direction="parseSortDirection(sortType)"
             :upline="selectedUpline"
-            :purchasedEA="selectedPurchasedEA" 
+            :purchasedEA="selectedPurchasedEA"
             :fundedPAMM="selectedFundedPAMM"
             @update:totalClient="totalClient = $event"
         />
