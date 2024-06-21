@@ -144,9 +144,10 @@ const updatePamm = () => {
                 <table class="w-full text-sm text-left mt-5">
                     <tbody>
                         <tr
-                            v-for="history in histories.data"
+                            v-for="(history, index) in histories.data"
                             :key="history.id"
                             class="text-xs font-normal text-white border-b border-gray-700"
+                            :class="{ 'border-transparent': index === histories.data.length - 1 }"
                         >
                         <td class="py-2 flex justify-between items-center">
                             <div>

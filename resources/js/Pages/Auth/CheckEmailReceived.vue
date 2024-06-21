@@ -51,47 +51,43 @@ const openEmailApp = () => {
     <GuestLayout>
         <Head :title="$t('public.check_your_email')" />
 
-        <div class="text-center my-10">
-            <div class="mb-2 text-xl text-white font-semibold">
-                {{ $t('public.check_your_email') }}
+        <div class="flex flex-col items-center gap-10 px-4">
+            <div class="flex flex-col items-center justify-center self-stretch gap-2 mt-10">
+                <div class="text-center text-lg text-white font-semibold">
+                    {{ $t('public.check_your_email') }}
+                </div>
+
+                <div class="text-center text-sm text-gray-300">
+                    {{ $t('public.check_email_message') }}
+                    <div class="font-bold">
+                        {{ props.email }}
+                    </div>
+                </div>
             </div>
 
-            <div class="text-sm text-gray-300">
-                {{ $t('public.check_email_message') }}
-            </div>
+            <div class="flex flex-col items-center justify-center self-stretch gap-3 w-full">
+                <!-- Didn't receive the email? and Click to resend -->
+                    <Button @click.prevent="openEmailApp" variant="primary" size="lg" :class="{ 'opacity-25': form.processing }" :disabled="form.processing" class="w-full text-sm font-semibold">
+                        {{ $t('public.open_email_app') }}
+                    </Button>
+                    
 
-            <div class="text-sm text-gray-300 font-bold">
-                {{ props.email }}
-            </div>
-        </div>
+                    <div class="flex justify-between items-center self-stretch w-auto">
+                        <!-- Didn't receive the email? -->
+                        <div class="text-sm text-gray-300">
+                            {{ $t('public.not_received_email') }}
+                        </div>
 
-        <!-- Didn't receive the email? and Click to resend -->
-            <div>
-                <Button @click.prevent="openEmailApp" variant="primary" size="lg" :class="{ 'opacity-25': form.processing }" :disabled="form.processing" class="w-full">
-                    {{ $t('public.open_email_app') }}
+                        <Button @click.prevent="resendEmail(props.email)" variant="transparent" :class="{ 'opacity-25': form.processing }" :disabled="form.processing" class="py-2 gap-2.5">
+                            {{ $t('public.click_resend') }}
+                        </Button>
+                    </div>
+
+                <!-- Back to Log In -->
+                <Button @click.prevent="goToLoginPage" variant="transparent" :class="{ 'opacity-25': form.processing }" :disabled="form.processing" class="gap-2 text-sm font-semibold">
+                    <ArrowLeftIcon class="w-5 h-5"/>{{ $t('public.back_to_login') }}
                 </Button>
             </div>
-            
-            <div class="grid grid-cols-6 gap-2.5 my-3 w-full">
-
-            <!-- Didn't receive the email? -->
-            <div class="col-span-3 text-sm text-gray-300 flex items-center justify-start">
-                {{ $t('public.not_received_email') }}
-            </div>
-
-            <!-- Click to resend -->
-            <div class="col-span-3">
-                <Button @click.prevent="resendEmail(props.email)" variant="transparent" :class="{ 'opacity-25': form.processing }" :disabled="form.processing" class="w-full">
-                    {{ $t('public.click_resend') }}
-                </Button>
-            </div>
-        </div>
-
-        <!-- Back to Log In -->
-        <div class="col-span-6 mt-4">
-            <Button @click.prevent="goToLoginPage" variant="transparent" :class="{ 'opacity-25': form.processing }" :disabled="form.processing" class="w-full">
-                <ArrowLeftIcon class="w-5 h-5 mr-2"/>{{ $t('public.back_to_login') }}
-            </Button>
         </div>
     </GuestLayout>
 </template>

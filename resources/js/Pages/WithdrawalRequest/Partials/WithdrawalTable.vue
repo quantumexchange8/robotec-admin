@@ -189,7 +189,7 @@ const rejectRequest = (requestDetails) => {
         <div class="w-full px-4 py-3 bg-gray-800 rounded-xl flex-col justify-start items-start inline-flex">
             <table class="w-full text-sm text-left text-gray-500">
                 <tbody>
-                    <tr v-for="request in requests.data" :key="request.id" class="py-2 bg-gray-800 text-xs font-normal border-b border-gray-700" @click="openModal(request)">
+                    <tr v-for="(request, index) in requests.data" :key="request.id" class="py-2 bg-gray-800 text-xs font-normal border-b border-gray-700" :class="{ 'border-transparent': index === requests.data.length - 1 }" @click="openModal(request)">
                         <td>
                             <div class="flex justify-between items-center gap-3">
                                 <div>

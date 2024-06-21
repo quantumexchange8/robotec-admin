@@ -76,11 +76,8 @@ const classes = computed(() => [
         'text-white': !props.modelValue || isFocused
     },
     {
-        'w-full pr-12': props.is_password
+        'w-full pr-12 bg-transparent text-white': props.is_password
     },
-    {
-        'bg-gray-700': props.variant === 'search'
-    }
 ])
 </script>
 

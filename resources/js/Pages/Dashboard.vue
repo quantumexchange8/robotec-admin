@@ -43,16 +43,17 @@ const handleRedirectTo = (pending) => {
 
     <AuthenticatedLayout dashboard>
         <template #header>
-            <h2 class="font-semibold text-xl text-white leading-loose px-4 py-2">{{ $t('public.dashboard') }}</h2>
+            <h2 class="font-semibold text-xl text-white px-4 py-2">{{ $t('public.dashboard') }}</h2>
         </template>
 
-        <div class="mb-3 px-4">
-            <div class="text-gray-300 text-sm">{{ $t('public.total_net_balance') }} ($):</div>
-            <div class="text-xl font-semibold text-white">{{ formatAmount(props.totalDeposit - props.totalWithdrawal) }}</div>
-        </div>
+        <div class="flex flex-col justify-end items-center gap-3 self-stretch">
+            <div class="flex flex-col self-stretch items-start px-4">
+                <div class="text-gray-300 text-sm">{{ $t('public.total_net_balance') }} ($):</div>
+                <div class="text-xxl font-semibold text-white">{{ formatAmount(props.totalDeposit - props.totalWithdrawal) }}</div>
+            </div>
 
-        <div class="w-full flex-col justify-start items-center inline-flex">
-            <div class="self-stretch px-4 pt-5 pb-11 bg-gray-400 rounded-tl-3xl rounded-tr-3xl shadow flex-col justify-start items-start gap-2 flex -mb-8" @click.prevent="handleRedirectTo('member')">
+        <div class="w-full flex-col justify-start items-center">
+            <div class="self-stretch pt-5 pr-4 pb-11 pl-4 bg-gray-400 rounded-tl-3xl rounded-tr-3xl shadow flex-col justify-start items-start gap-2 flex -mb-8" @click.prevent="handleRedirectTo('member')">
                 <div class="self-stretch justify-between items-start inline-flex">
                     <div class="w-9 h-9 p-2 bg-gray-900 rounded-[50px] justify-center items-center flex">
                         <ClientIcon class="w-5 h-5 relative flex-col justify-start items-start flex text-white" />
@@ -60,11 +61,11 @@ const handleRedirectTo = (pending) => {
                     <ExpandIcon class="w-4 h-4 relative opacity-50 text-white"/>
                 </div>
                 <div class="self-stretch justify-between items-center inline-flex">
-                    <div class="text-gray-100 text-xs font-medium font-sans leading-[18px]">{{ $t('public.total_clients') }} (pax)</div>
+                    <div class="text-gray-100 text-xs font-medium font-sans leading-[18px]">{{ $t('public.total_clients') }}</div>
                     <div class="text-white text-xl font-semibold font-sans leading-loose">{{ props.totalClient }}</div>
                 </div>
             </div>
-            <div class="self-stretch px-4 pt-5 pb-11 bg-gray-500 rounded-tl-3xl rounded-tr-3xl shadow flex-col justify-start items-start gap-2 flex -mb-8" @click.prevent="handleRedirectTo('deposit')">
+            <div class="self-stretch pt-5 pr-4 pb-11 pl-4 bg-gray-500 rounded-tl-3xl rounded-tr-3xl shadow flex-col justify-start items-start gap-2 flex -mb-8" @click.prevent="handleRedirectTo('deposit')">
                 <div class="self-stretch justify-between items-start inline-flex">
                     <div class="w-9 h-9 p-2 bg-black rounded-[50px] justify-center items-center flex">
                         <DepositIcon class="w-5 h-5 relative flex-col justify-start items-start flex text-white" />
@@ -76,7 +77,7 @@ const handleRedirectTo = (pending) => {
                     <div class="text-success-500 text-xl font-semibold font-sans leading-loose">{{ formatAmount(props.totalDeposit) }}</div>
                 </div>
             </div>
-            <div class="self-stretch px-4 pt-5 pb-11 bg-gray-600 rounded-tl-3xl rounded-tr-3xl shadow flex-col justify-start items-start gap-2 flex -mb-8" @click.prevent="handleRedirectTo('withdrawal')">
+            <div class="self-stretch pt-5 pr-4 pb-11 pl-4 bg-gray-600 rounded-tl-3xl rounded-tr-3xl shadow flex-col justify-start items-start gap-2 flex -mb-8" @click.prevent="handleRedirectTo('withdrawal')">
                 <div class="self-stretch justify-between items-start inline-flex">
                     <div class="w-9 h-9 p-2 bg-gray-900 rounded-[50px] justify-center items-center flex">
                         <WithdrawalIcon class="w-5 h-5 relative flex-col justify-start items-start flex text-white" />
@@ -88,7 +89,7 @@ const handleRedirectTo = (pending) => {
                     <div class="text-white text-xl font-semibold font-sans leading-loose">{{ formatAmount(props.totalWithdrawal) }}</div>
                 </div>
             </div>
-            <div class="self-stretch px-4 pt-5 pb-11 bg-gray-700 rounded-tl-3xl rounded-tr-3xl shadow flex-col justify-start items-start gap-2 flex -mb-8" @click.prevent="handleRedirectTo('purchase_robotec')">
+            <div class="self-stretch pt-5 pr-4 pb-11 pl-4 bg-gray-700 rounded-tl-3xl rounded-tr-3xl shadow flex-col justify-start items-start gap-2 flex -mb-8" @click.prevent="handleRedirectTo('purchase_robotec')">
                 <div class="self-stretch justify-between items-start inline-flex">
                     <div class="w-9 h-9 p-2 bg-gray-900 rounded-[50px] justify-center items-center flex">
                         <PurchaseIcon class="w-5 h-5 relative flex-col justify-start items-start flex text-white" />
@@ -100,7 +101,7 @@ const handleRedirectTo = (pending) => {
                     <div class="text-success-500 text-xl font-semibold font-sans leading-loose">{{ formatAmount(props.totalPurchasesEA) }}</div>
                 </div>
             </div>
-            <div class="self-stretch px-4 pt-5 pb-[60px] bg-gray-800 rounded-tl-3xl rounded-tr-3xl shadow flex-col justify-start items-start gap-2 flex -mb-8" @click.prevent="handleRedirectTo('pamm')">
+            <div class="self-stretch pt-5 pr-4 pb-[60px] pl-4 bg-gray-800 rounded-tl-3xl rounded-tr-3xl shadow flex-col justify-start items-start gap-2 flex -mb-8" @click.prevent="handleRedirectTo('pamm')">
                 <div class="self-stretch justify-between items-start inline-flex">
                     <div class="w-9 h-9 p-2 bg-gray-900 rounded-[50px] justify-center items-center flex">
                         <PammFundInIcon class="w-5 h-5 relative flex-col justify-start items-start flex text-white" />
@@ -113,6 +114,6 @@ const handleRedirectTo = (pending) => {
                 </div>
             </div>
         </div>
-
+    </div>
     </AuthenticatedLayout>
 </template>

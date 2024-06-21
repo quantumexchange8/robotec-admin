@@ -14,24 +14,26 @@ const goToLoginPage = () => {
     <GuestLayout>
         <Head :title="$t('public.reset_password_success')" />
 
-        <div class="flex justify-center mt-10">
-            <Success class="w-12 h-12 mb-3" />
-        </div>
+        <div class="flex flex-col items-center gap-10 px-4">
+            <div class="flex flex-col justify-center items-center gap-3 self-stretch mt-10">
+                <Success class="w-12 h-12" />
 
-        <div class="text-center mb-10">
-            <div class="mb-2 text-xl text-white font-semibold">
-                {{ $t('public.success_1') }}
+                <div class="flex flex-col items-center gap-2 self-stretch">
+                    <div class="text-center text-lg text-white font-semibold">
+                        {{ $t('public.success_1') }}
+                    </div>
+
+                    <div class="text-center text-sm text-gray-300">
+                        {{ $t('public.password_changed_success_message') }}
+                    </div>
+                </div>
+
             </div>
-
-            <div class="text-md text-gray-300">
-                {{ $t('public.password_changed_success_message') }}
-            </div>
-        </div>
-
-        <div class="flex items-center justify-end mt-10">
-            <Button variant="primary" size="lg" class="w-full" @click.prevent="goToLoginPage">
+            
+            <Button variant="primary" size="lg" class="w-full text-sm font-semibold" @click.prevent="goToLoginPage">
                 {{ $t('public.return_login') }}
             </Button>
+
         </div>
     </GuestLayout>
 </template>

@@ -12,6 +12,7 @@ import { SearchIcon } from '@/Components/Icons/outline';
 import Modal from "@/Components/Modal.vue";
 import VueTailwindDatepicker from "vue-tailwind-datepicker";
 import WithdrawalTable from "@/Pages/WithdrawalRequest/Partials/WithdrawalTable.vue"
+import Search from '@/Components/Search.vue';
 
 const formatter = ref({
     date: 'YYYY-MM-DD',
@@ -43,12 +44,7 @@ const date = ref(`${formattedStartDate} - ${formattedEndDate}`);
             <div class="w-full">
                 <div class="mb-3">
                     <div>
-                        <InputIconWrapper>
-                            <template #icon>
-                                <SearchIcon aria-hidden="true" class="w-5 h-5 text-white" />
-                            </template>
-                            <Input withIcon id="search" variant="search" type="text" class="block w-full rounded-lg" :placeholder="$t('public.search')" v-model="search" />
-                        </InputIconWrapper>
+                        <Search v-model="search" :placeholder="$t('public.search')" />
                     </div>
                 </div>
 

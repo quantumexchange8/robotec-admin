@@ -37,10 +37,10 @@ let removeFinishEventListener = Inertia.on("finish", () => {
     }
 });
 
-// Watch for changes in toasts and update the computed property
-watch(() => toast.items.length, (newLength) => {
-    hasActiveToasts.value = newLength > 0;
-});
+// // Watch for changes in toasts and update the computed property
+// watch(() => toast.items.length, (newLength) => {
+//     hasActiveToasts.value = newLength > 0;
+// });
 
 </script>
 
@@ -53,9 +53,15 @@ watch(() => toast.items.length, (newLength) => {
         <div class="flex justify-center w-full sm:max-w-[360px]">
             <div class="w-full" style="transition-property: margin; transition-duration: 150ms">
                 <!-- Navbar -->
-                <nav :class="{ 'h-[72px]': hasActiveToasts }" class="bg-gray-800 w-full">
+                <!-- <nav :class="{ 'h-[72px]': hasActiveToasts }" class="bg-gray-800 w-full">
                     <div class="flex justify-between">
                         <Navbar v-show="!hasActiveToasts" />
+                    </div>
+                </nav> -->
+
+                <nav class="bg-gray-800 w-full">
+                    <div class="flex justify-between">
+                        <Navbar />
                     </div>
                 </nav>
 

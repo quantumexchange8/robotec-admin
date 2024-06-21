@@ -133,7 +133,7 @@ const closeModal = () => {
         <div class="w-full px-4 py-3 bg-gray-800 rounded-xl flex-col justify-start items-start inline-flex">
             <table class="w-full text-sm text-left text-gray-500">
                 <tbody>
-                    <tr v-for="transaction in transactions.data" :key="transaction.id" class="py-2 bg-gray-800 text-xs font-normal border-b border-gray-700" @click="openModal(transaction)">
+                    <tr v-for="(transaction, index) in transactions.data" :key="transaction.id" class="py-2 bg-gray-800 text-xs font-normal border-b border-gray-700" :class="{ 'border-transparent': index === transactions.data.length - 1 }" @click="openModal(transaction)">
                         <td>
                             <div class="flex justify-between items-center gap-3">
                                 <div>
@@ -193,18 +193,6 @@ const closeModal = () => {
                 </div>
             </div>
 
-            <!-- <div class="grid grid-cols-2 items-center mb-2">
-                <div class="col-span-1 text-gray-300 text-xs font-normal font-sans leading-[18px]">{{ $t('public.sent_address') }}</div>
-                <div class="col-span-1 flex items-start">
-                    <div class="text-white text-xs font-normal font-sans leading-tight break-all">
-                        {{ transactionDetails.from_wallet_address }}
-                        <Tooltip :content="$t('public.' + tooltipContent)" placement="bottom">
-                            <DuplicateIcon aria-hidden="true" :class="['w-4 h-4 text-gray-200']" @click.stop.prevent="copyTestingCode(transactionDetails.from_wallet_address)" style="cursor: pointer" />
-                        </Tooltip>
-                    </div>
-                </div>
-            </div>
- -->
             <div class="grid grid-cols-2 items-center">
                 <div class="col-span-1 text-gray-300 text-xs font-normal font-sans leading-[18px]">
                     {{ $t('public.receiving_address') }}

@@ -257,7 +257,7 @@ const sendApprovalRequest = (onSuccessCallback) => {
                 </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="commission in commissions.data" :key="commission.id" class="bg-gray-800 text-xs font-normal border-b border-gray-700" @click.prevent="openModal(commission)">
+                    <tr v-for="(commission, index) in commissions.data" :key="commission.id" class="py-2 bg-gray-800 text-xs font-normal border-b border-gray-700" :class="{ 'border-transparent': index === commissions.data.length - 1 }" @click="openModal(commission)">
                         <td class="py-2">
                             <Checkbox
                                 :checked="isAllSelected || isItemSelected(commission.id, commission.amount)"

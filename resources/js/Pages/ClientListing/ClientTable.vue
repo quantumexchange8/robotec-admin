@@ -332,36 +332,36 @@ const updateClient = (clientDetails) => {
 
     <Modal :show="editModal" :title="$t('public.edit_client')" @close="closeEditModal" max-width="sm">
         <form>
-            <div class="my-5 px-1">
-                <div>
-                    <Label for="name" :value="$t('public.client_name')" class="mb-1.5" :invalid="form.errors.name" />
+            <div class="flex flex-col gap-5">
+                <div class="flex flex-col gap-1.5">
+                    <Label for="name" :value="$t('public.client_name')" :invalid="form.errors.name" />
                     <Input
                         id="name"
-                        class="block w-full mb-5 bg-transparent text-white"
+                        class="block w-full bg-transparent text-white"
                         :invalid="form.errors.name"
                         v-model="form.name"
                         required
                     />
 
-                    <InputError class="mt-1.5" :message="form.errors.name" />
+                    <InputError :message="form.errors.name" />
                 </div>
 
-                <div>
-                    <Label for="email" :value="$t('public.email')" class="mb-1.5" :invalid="form.errors.email" />
+                <div class="flex flex-col gap-1.5">
+                    <Label for="email" :value="$t('public.email')" :invalid="form.errors.email" />
 
                     <Input
                         id="email"
                         type="email"
-                        class="block w-full mb-5 bg-transparent text-white"
+                        class="block w-full bg-transparent text-white"
                         :invalid="form.errors.email"
                         v-model="form.email"
                         required
                     />
 
-                    <InputError class="mt-1.5" :message="form.errors.email" />
+                    <InputError :message="form.errors.email" />
                 </div>
-                <div>
-                    <Label for="phone_number" :value="$t('public.phone_number')" class="mb-1.5" :invalid="form.errors.phone || form.errors.dial_code" />
+                <div class="flex flex-col gap-1.5">
+                    <Label for="phone_number" :value="$t('public.phone_number')" :invalid="form.errors.phone || form.errors.dial_code" />
 
                     <div class="grid grid-cols-5">
                         <div class="col-span-2">
@@ -390,10 +390,10 @@ const updateClient = (clientDetails) => {
                         </div>
                     </div>
 
-                <InputError class="mt-1.5" :message="form.errors.phone" />
+                <InputError :message="form.errors.phone" />
                 </div>
-                <div>
-                    <Label for="usdt_address" class="mb-1.5" :invalid="form.errors.usdt_address">{{ $t('public.usdt_address') }}</Label>
+                <div class="flex flex-col gap-1.5">
+                    <Label for="usdt_address" :invalid="form.errors.usdt_address">{{ $t('public.usdt_address') }}</Label>
 
                     <Input
                         id="usdt_address"
@@ -403,12 +403,13 @@ const updateClient = (clientDetails) => {
                         required
                     />
 
-                    <InputError class="mt-1.5" :message="form.errors.usdt_address" />
+                    <InputError :message="form.errors.usdt_address" />
                 </div>
-            </div>
-            <div class="w-full flex justify-end pt-8 gap-3">
-                <Button variant="transparent" class="w-full border border-gray-600" @click.prevent="closeEditModal">{{ $t('public.cancel') }}</Button>
-                <Button variant="primary" class="w-full" :disabled="form.processing" @click.prevent="updateClient(clientDetails)">{{ $t('public.save_changes') }}</Button>
+
+                <div class="w-full flex justify-end pt-8 gap-3">
+                    <Button variant="transparent" class="w-full border border-gray-600" @click.prevent="closeEditModal">{{ $t('public.cancel') }}</Button>
+                    <Button variant="primary" class="w-full" :disabled="form.processing" @click.prevent="updateClient(clientDetails)">{{ $t('public.save_changes') }}</Button>
+                </div>
             </div>
         </form>
     </Modal>
