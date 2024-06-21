@@ -65,7 +65,7 @@ const getResults = async (page = 1, search = '', date = '', type = '') => {
         }
 
         const response = await axios.get(url);
-        commissions.value = response.data.transactions;
+        commissions.value = response.data.commissions;
         totalPending.value = response.data.totalPending;
         totalHistory.value = response.data.totalHistory;
     } catch (error) {
@@ -99,16 +99,16 @@ const handleSelectAll = () => {
     if (isAllSelected.value) {
         const commissionData = commissions.value.data;
         isChecked.value = commissionData.map(commission => commission.id);
-        totalAmount.value = commissionData.reduce((total, commission) => total + parseFloat(commission.transaction_amount), 0);
+        totalAmount.value = commissionData.reduce((total, commission) => total + parseFloat(commission.amount), 0);
     } else {
         isChecked.value = [];
         totalAmount.value = 0;
     }
 };
 
-const updateChecked = (id, transaction_amount) => {
-    if (isNaN(transaction_amount)) {
-        console.error(`Invalid amount: ${transaction_amount}`);
+const updateChecked = (id, amount) => {
+    if (isNaN(amount)) {
+        console.error(`Invalid amount: ${amount}`);
         return;
     }
 
@@ -116,11 +116,11 @@ const updateChecked = (id, transaction_amount) => {
     if (index !== -1) {
         // Item exists, remove it
         isChecked.value.splice(index, 1);
-        totalAmount.value -= parseFloat(transaction_amount);
+        totalAmount.value -= parseFloat(amount);
     } else {
         // Item does not exist, add it
         isChecked.value.push(id);
-        totalAmount.value += parseFloat(transaction_amount);
+        totalAmount.value += parseFloat(amount);
     }
 
     // Determine if all items are checked
@@ -132,7 +132,7 @@ const updateChecked = (id, transaction_amount) => {
     selectAllCheckbox.checked = allChecked;
 };
 
-function isItemSelected(id, transaction_amount) {
+function isItemSelected(id, amount) {
     return isChecked.value.includes(id);
 }
 
@@ -156,7 +156,7 @@ const approveCommission = () => {
     }
 
     const id = commissionDetails.value.id;
-    const transaction_amount = commissionDetails.value.transaction_amount;
+    const amount = commissionDetails.value.amount;
 
     // Send the approval request for the specific commission
     form.ids = [id]; // Set form.ids as an array with only the specific ID
@@ -165,7 +165,7 @@ const approveCommission = () => {
         const index = isChecked.value.indexOf(id);
         if (index !== -1) {
             isChecked.value.splice(index, 1);
-            totalAmount.value = parseFloat(totalAmount.value) - parseFloat(transaction_amount);
+            totalAmount.value = parseFloat(totalAmount.value) - parseFloat(amount);
         }
     });
 };
@@ -260,17 +260,17 @@ const sendApprovalRequest = (onSuccessCallback) => {
                     <tr v-for="commission in commissions.data" :key="commission.id" class="bg-gray-800 text-xs font-normal border-b border-gray-700" @click.prevent="openModal(commission)">
                         <td class="py-2">
                             <Checkbox
-                                :checked="isAllSelected || isItemSelected(commission.id, commission.transaction_amount)"
+                                :checked="isAllSelected || isItemSelected(commission.id, commission.amount)"
                                 :model-value="isChecked.includes(commission.id)"
-                                @update:model-value="updateChecked(commission.id, commission.transaction_amount)"
+                                @update:model-value="updateChecked(commission.id, commission.amount)"
                                 @click.stop
                             />
                         </td>
                         <td>
                             <div class="text-gray-300 text-xs font-normal font-sans leading-[24px]">{{ formatDateTime(commission.created_at) }}</div>
-                            <div class="text-white text-sm font-medium font-sans leading-tight break-all">{{ commission.to_wallet.user.name }}</div>
+                            <div class="text-white text-sm font-medium font-sans leading-tight break-all">{{ commission.upline.name }}</div>
                         </td>
-                        <td class="text-white text-md flex items-center justify-center py-3">$&nbsp;{{ formatAmount(commission.transaction_amount) }}</td>
+                        <td class="text-white text-md flex items-center justify-center py-3">$&nbsp;{{ formatAmount(commission.amount) }}</td>
                     </tr>
                 </tbody>
             </table>
@@ -290,18 +290,18 @@ const sendApprovalRequest = (onSuccessCallback) => {
         <div v-if="commissionDetails">
             <form>
                 <div class="w-full justify-start items-center gap-3 my-5 pb-3 border-b border-gray-700 inline-flex">
-                    <img class="w-9 h-9 rounded-full" :src="commissionDetails.to_wallet.user.profile_photo || 'https://img.freepik.com/free-icon/user_318-159711.jpg'" alt="Client profile picture"/>
+                    <img class="w-9 h-9 rounded-full" :src="commissionDetails.upline.profile_photo || 'https://img.freepik.com/free-icon/user_318-159711.jpg'" alt="Client profile picture"/>
                     <div class="w-full flex-col justify-start items-start inline-flex">
-                        <div class="self-stretch text-white text-base font-medium font-sans leading-normal break-all">{{ commissionDetails.to_wallet.user.name }}</div>
-                        <div class="text-gray-300 text-xs font-normal font-sans leading-[18px]">{{ $t('public.id') }}: {{ commissionDetails.to_wallet.user.id_number }}</div>
+                        <div class="self-stretch text-white text-base font-medium font-sans leading-normal break-all">{{ commissionDetails.upline.name }}</div>
+                        <div class="text-gray-300 text-xs font-normal font-sans leading-[18px]">{{ $t('public.id') }}: {{ commissionDetails.upline.id_number }}</div>
                     </div>
                 </div>
 
                 <div class="grid grid-cols-2 items-center mb-2">
                     <div class="col-span-1 text-gray-300 text-xs font-normal font-sans leading-[18px]">{{ $t('public.referee') }}</div>
                     <div class="col-span-1 flex items-center">
-                        <img class="w-5 h-5 rounded-full mr-2" :src="commissionDetails.user.profile_photo || 'https://img.freepik.com/free-icon/user_318-159711.jpg'" alt="Client downline profile picture"/>
-                        <div class="text-white text-xs font-normal font-sans leading-tight break-all">{{ commissionDetails.user.name }}</div>
+                        <img class="w-5 h-5 rounded-full mr-2" :src="commissionDetails.downline.profile_photo || 'https://img.freepik.com/free-icon/user_318-159711.jpg'" alt="Client downline profile picture"/>
+                        <div class="text-white text-xs font-normal font-sans leading-tight break-all">{{ commissionDetails.downline.name }}</div>
                     </div>
                 </div>
                 <div class="grid grid-cols-2 items-center mb-2">
@@ -311,7 +311,7 @@ const sendApprovalRequest = (onSuccessCallback) => {
 
                 <div class="grid grid-cols-2 items-center mb-5">
                     <div class="col-span-1 text-gray-300 text-xs font-normal font-sans leading-[18px]">{{ $t('public.commission_amount') }}</div>
-                    <div class="col-span-1 text-white text-xs font-normal font-sans leading-tight">{{ formatAmount(commissionDetails.transaction_amount) }}</div>
+                    <div class="col-span-1 text-white text-xs font-normal font-sans leading-tight">{{ formatAmount(commissionDetails.amount) }}</div>
                 </div>
 
                 <div class="items-center pt-8 flex gap-3">

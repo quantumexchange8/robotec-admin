@@ -13,7 +13,6 @@ return new class extends Migration
     {
         Schema::create('commission_payouts', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('upline_id');
             $table->unsignedBigInteger('downline_id');
             $table->unsignedBigInteger('transaction_id')->nullable();

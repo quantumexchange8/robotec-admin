@@ -34,8 +34,8 @@ const toggle = () => {
 <template>
     <!-- Use the `checked` state to conditionally style the button. -->
     <Switch v-model="enabled" as="template" v-slot="{ checked }">
-        <button class="relative inline-flex h-8 w-16 items-center rounded-full":class="checked ? 'bg-primary-500 hover:bg-primary-800' : 'bg-gray-500 hover:bg-gray-700'" @click="toggle">
-            <span :class="checked ? 'translate-x-9' : 'translate-x-1'"class="inline-block h-6 w-6 transform rounded-full bg-white hover:bg-gray-200 transition" />
+        <button class="relative inline-flex w-[42px] h-6 items-center rounded-full":class="checked ? 'bg-primary-500 hover:bg-primary-800' : 'bg-gray-500 hover:bg-gray-700'" @click="toggle">
+            <span :class="checked ? 'translate-x-5' : 'translate-x-0.5'"class="inline-block h-5 w-5 transform rounded-full bg-white hover:bg-gray-200 transition" />
         </button>
     </Switch>
 </template>

@@ -4,22 +4,23 @@ namespace App\Http\Controllers;
 
 use Carbon\Carbon;
 use Inertia\Inertia;
-use App\Models\Transaction;
 use App\Models\Wallet;
+use App\Models\Transaction;
 use Illuminate\Http\Request;
+use App\Models\CommissionPayout;
+use Illuminate\Support\Facades\Auth;
+use App\Services\RunningNumberService;
 
 class CommissionController extends Controller
 {
     public function commission_payout()
     {
         $currentMonth = Carbon::now()->startOfMonth();
-        $totalCommissionRequest = Transaction::where('transaction_type', 'commission')
-            ->where('status', 'processing')
+        $totalCommissionRequest = CommissionPayout::where('status', 'processing')
             ->where('created_at', '>=', $currentMonth)
             ->count();
     
-        $totalCommissionHistory = Transaction::where('transaction_type', 'commission')
-            ->where('status', '!=', 'processing')
+        $totalCommissionHistory = CommissionPayout::where('status', '!=', 'processing')
             ->where('created_at', '>=', $currentMonth)
             ->count();
             
@@ -32,18 +33,19 @@ class CommissionController extends Controller
     public function commission_request_data(Request $request)
     {
         // Start building the query
-        $query = Transaction::query()->with('user','to_wallet.user')->where('transaction_type', 'commission');
+        $query = CommissionPayout::query()->with('upline','downline');
     
         
         // Apply search filter if provided
         $query->when($request->search, function ($query) use ($request) {
             $query->where(function ($q) use ($request) {
-                $q->whereHas('user', function ($query) use ($request) {
-                    $query->where('name', 'like', '%'.$request->search.'%');
-                })->orWhereHas('to_wallet.user', function ($query) use ($request) {
-                    $query->where('name', 'like', '%'.$request->search.'%');
+                $q->whereHas('upline', function ($query) use ($request) {
+                    $query->where('name', 'like', '%' . $request->search . '%');
                 });
-            })->orWhere('transaction_amount', 'like', '%'.$request->search.'%');
+                // ->orWhereHas('downline', function ($query) use ($request) {
+                //     $query->where('name', 'like', '%' . $request->search . '%');
+                // });
+            })->orWhere('transaction_amount', 'like', '%' . $request->search . '%');
         });
             
         // Apply date range filter if provided
@@ -70,22 +72,22 @@ class CommissionController extends Controller
             $query->where('status', '!=', 'processing');
         });
         
-        // Fetch the transactions
-        $transactions = $query->latest()->paginate(10);
+        // Fetch the commissions
+        $commissions = $query->latest()->paginate(10);
     
         // Calculate total amount
-        $totalAmount = $transactions->sum('transaction_amount');
+        $totalAmount = $commissions->sum('amount');
 
         // Transform each transaction to include profile_photo for user and upline
-        $transactions->getCollection()->transform(function ($transaction) {
-            $transaction->user->profile_photo = $transaction->user->getFirstMediaUrl('profile_photo');
-            $transaction->to_wallet->user->profile_photo = $transaction->to_wallet->user->getFirstMediaUrl('profile_photo');
-            return $transaction;
+        $commissions->getCollection()->transform(function ($commission) {
+            $commission->upline->profile_photo = $commission->upline->getFirstMediaUrl('profile_photo');
+            $commission->downline->profile_photo = $commission->downline->getFirstMediaUrl('profile_photo');
+            return $commission;
         });
     
 
         return response()->json([
-            'transactions' => $transactions,
+            'commissions' => $commissions,
             'totalAmount' => $totalAmount,
             'totalPending' => $totalPending,
             'totalHistory' => $totalHistory,
@@ -97,19 +99,34 @@ class CommissionController extends Controller
         $commissionIds = $request->input('ids');
     
         foreach ($commissionIds as $commissionId) {
-            $transaction = Transaction::findOrFail($commissionId);
-            $commissionWallet = Wallet::findOrFail($transaction->to_wallet_id);
+            $commission = CommissionPayout::findOrFail($commissionId);
+            $commissionWallet = Wallet::where('user_id', $commission->upline_id)->where('type', 'commission_wallet')->first();
+
+            $transaction = Transaction::create([
+                'user_id' => $commission->upline_id,
+                'category' => 'wallet',
+                'transaction_type' => 'commission',
+                'to_wallet_id' => $commissionWallet->id,
+                'transaction_number' => RunningNumberService::getID('transaction'),
+                'amount' => $commission->amount,
+                'transaction_amount' => $commission->amount,
+                'old_wallet_amount' => $commissionWallet->balance,
+                'new_wallet_amount' => $commissionWallet->balance + $commission->amount,
+                'status' => 'success',
+                'approved_at' => Carbon::now(),
+                'handle_by' => Auth::id(),
+            ]);
     
             // Update the transaction's status and new_wallet_amount
-            $transaction->update([
+            $commission->update([
+                'transaction_id' => $transaction->id,
                 'status' => 'success',
-                'old_wallet_amount' => $commissionWallet->balance,
-                'new_wallet_amount' => $commissionWallet->balance + $transaction->amount,
                 'approved_at' => Carbon::now(),
+                'handle_by' => Auth::id(),
             ]);
     
             // Update the commission wallet's balance directly
-            $commissionWallet->balance += $transaction->amount;
+            $commissionWallet->balance += $commission->amount;
             $commissionWallet->save();
         }
     
