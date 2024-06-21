@@ -21,4 +21,10 @@ class CommissionPayout extends Model
         'approved_at',
         'handle_by',
     ];
+
+    public function transaction(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    {
+        return $this->belongsTo(Transaction::class, 'transaction_id', 'id');
+    }
+
 }
