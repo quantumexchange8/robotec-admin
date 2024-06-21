@@ -32,32 +32,30 @@ const date = ref(`${formattedStartDate} - ${formattedEndDate}`);
     <Head :title="$t('public.deposit_transactions')" />
     <AuthenticatedLayout>
         <template #header>
-            <h2 class="font-semibold text-xl text-white leading-loose mb-3">{{ $t('public.deposit_transactions') }}</h2>
+            <h2 class="font-semibold text-xl text-white leading-loose">{{ $t('public.deposit_transactions') }}</h2>
         </template>
 
-        <div class="rounded-md shadow-md pb- sticky top-2 bg-gray-900 z-[5]">
-            <div class="w-full">
-                <div class="mb-3">
-                    <div>
-                        <Search v-model="search" :placeholder="$t('public.search')" />
-                    </div>
-                </div>
+        <div class="rounded-md shadow-md py-3 sticky top-0 bg-gray-900 z-[5]">
+            <div class="flex flex-col gap-3 items-center">
+                <Search
+                    v-model="search"
+                    class="w-full"
+                    :placeholder="$t('public.search')"
+                />
 
-                <div>
-                    <vue-tailwind-datepicker
-                        :formatter="formatter"
-                        separator=" - "
-                        v-model="date"
-                        input-classes="py-3 px-4 w-full rounded-lg placeholder:text-gray-500 focus:ring-primary-500 hover:border-primary-500 focus:border-primary-500 bg-gray-800 text-white border border-gray-600"
-                    />
-                </div>
+                <vue-tailwind-datepicker
+                    :formatter="formatter"
+                    separator=" - "
+                    v-model="date"
+                    input-classes="py-3 px-4 w-full rounded-lg placeholder:text-gray-500 focus:ring-primary-500 hover:border-primary-500 focus:border-primary-500 bg-gray-800 text-white border border-gray-600"
+                />
             </div>
         </div>
 
-        <div class="py-3">
-            <DepositTable 
-                :search="search" 
-                :date="date" 
+        <div class="pb-3">
+            <DepositTable
+                :search="search"
+                :date="date"
             />
         </div>
     </AuthenticatedLayout>
