@@ -22,6 +22,16 @@ class CommissionPayout extends Model
         'handle_by',
     ];
 
+    public function upline(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    {
+        return $this->belongsTo(User::class, 'upline_id', 'id');
+    }
+
+    public function downline(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    {
+        return $this->belongsTo(User::class, 'downline_id', 'id');
+    }
+
     public function transaction(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo(Transaction::class, 'transaction_id', 'id');
