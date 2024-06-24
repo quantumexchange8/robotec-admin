@@ -84,10 +84,6 @@ const closeModal = () => {
 </script>
 
 <template>
-    <!-- <div class="w-full py-3 justify-between items-center inline-flex">
-        <div class="text-white text-base font-semibold">Total: $&nbsp;{{ formatAmount(totalAmount) }}</div>
-    </div> -->
-
     <div v-if="transactions.data.length == 0" >
         <div class="w-full h-[360px] p-3 bg-gray-800 rounded-xl flex-col justify-center items-center inline-flex">
             <div class="self-stretch h-[212px] py-5 flex-col justify-start items-center gap-3 flex">

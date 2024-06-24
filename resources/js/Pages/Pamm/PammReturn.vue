@@ -115,9 +115,9 @@ const updatePamm = () => {
             </div>
         </div>
 
-        <span class="text-white font-semibold py-2">
+        <div class="text-white font-semibold py-2">
             {{ $t('public.update_history') }}
-        </span>
+        </div>
 
         <div v-if="histories.data.length <= 0">
             <div class="flex justify-center items-center h-full p-3">
@@ -141,7 +141,7 @@ const updatePamm = () => {
         </div>
         <div v-else>
             <div class="p-3 bg-gray-800">
-                <table class="w-full text-sm text-left mt-5">
+                <table class="w-full text-sm text-left">
                     <tbody>
                         <tr
                             v-for="(history, index) in histories.data"
@@ -149,19 +149,19 @@ const updatePamm = () => {
                             class="text-xs text-white border-b border-gray-700"
                             :class="{ 'border-transparent': index === histories.data.length - 1 }"
                         >
-                        <td class="py-2 flex justify-between items-center">
-                            <div>
-                                <div class="text-gray-300 text-xs gap-3">
-                                    {{ formatDateTime(history.created_at) }}
+                            <td class="py-2 flex justify-between items-center">
+                                <div>
+                                    <div class="text-gray-300 text-xs gap-3">
+                                        {{ formatDateTime(history.created_at) }}
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="text-right">
-                                <div class="font-medium text-md"
-                                    :class="{ 'text-success-500': history.setting_new_value > 0, 'text-error-500': history.setting_new_value < 0, 'text-white': history.setting_new_value === 0 }">
-                                    {{ history.setting_new_value > 0 ? '+' + (history.setting_new_value) : (history.setting_new_value) }}
+                                <div class="text-right">
+                                    <div class="font-medium text-md"
+                                        :class="{ 'text-success-500': history.setting_new_value > 0, 'text-error-500': history.setting_new_value < 0, 'text-white': history.setting_new_value === 0 }">
+                                        {{ history.setting_new_value > 0 ? '+' + (history.setting_new_value) : (history.setting_new_value) }}
+                                    </div>
                                 </div>
-                            </div>
-                        </td>
+                            </td>
                         </tr>
                     </tbody>
                 </table>
