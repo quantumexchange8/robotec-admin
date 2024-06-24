@@ -96,21 +96,21 @@ const closeModal = () => {
 
 <template>
     <div class="w-full py-3 justify-between items-center inline-flex">
-        <div class="text-white text-base font-semibold font-sans leading-normal">{{ $t('public.total') }}: $&nbsp;{{ formatAmount(totalAmount) }}</div>
+        <div class="text-white font-semibold">{{ $t('public.total') }}: $&nbsp;{{ formatAmount(totalAmount) }}</div>
     </div>
 
     <div v-if="commissions.data.length == 0" >
         <div class="w-full h-[360px] p-3 bg-gray-800 rounded-xl flex-col justify-center items-center inline-flex">
             <div class="self-stretch h-[212px] py-5 flex-col justify-start items-center gap-3 flex">
                 <NoHistory class="w-40 h-[120px] relative" />
-                <div class="self-stretch text-center text-gray-300 text-sm font-normal font-sans leading-tight">
+                <div class="self-stretch text-center text-gray-300 text-sm">
                     {{ $t('public.no_history_message') }}
                 </div>
             </div>
         </div>
         <div class="px-4 py-5 flex items-center justify-center">
             <div class="rounded-full bg-primary-500 w-9 h-9 flex items-center justify-center">
-                <div class="text-center text-white text-sm font-medium font-sans leading-tight">1</div>
+                <div class="text-center text-white text-sm font-medium">1</div>
             </div>
         </div>
     </div>
@@ -120,14 +120,14 @@ const closeModal = () => {
         <div class="w-full px-4 py-3 bg-gray-800 rounded-xl flex-col justify-start items-start inline-flex">
             <table class="w-full text-sm text-left text-gray-500">
                 <tbody>
-                    <tr v-for="(commission, index) in commissions.data" :key="commission.id" class="py-2 bg-gray-800 text-xs font-normal border-b border-gray-700" :class="{ 'border-transparent': index === commissions.data.length - 1 }" @click="openModal(commission)">
+                    <tr v-for="(commission, index) in commissions.data" :key="commission.id" class="bg-gray-800 text-xs border-b border-gray-700" :class="{ 'border-transparent': index === commissions.data.length - 1 }" @click="openModal(commission)">
                         <td>
-                            <div class="flex justify-between items-center gap-3">
+                            <div class="flex justify-between items-center gap-3 py-2">
                                 <div>
-                                    <div class="text-gray-300 text-xs font-normal font-sans leading-[24px]">{{ formatDateTime(commission.created_at) }}</div>
-                                    <div class="text-white text-sm font-medium font-sans leading-tight break-all">{{ commission.upline.name }}</div>
+                                    <div class="text-gray-300 text-xs">{{ formatDateTime(commission.created_at) }}</div>
+                                    <div class="text-white text-sm font-medium break-all">{{ commission.upline.name }}</div>
                                 </div>
-                                <div class="text-white text-right text-md font-medium font-sans leading-normal">$&nbsp;{{ formatAmount(commission.amount) }}</div>
+                                <div class="text-white text-right text-md font-medium">$&nbsp;{{ formatAmount(commission.amount) }}</div>
                             </div>
                         </td>
                     </tr>
@@ -150,31 +150,31 @@ const closeModal = () => {
             <div class="w-full justify-start items-center gap-3 my-5 pb-3 border-b border-gray-700 inline-flex">
                 <img class="w-9 h-9 rounded-full" :src="commissionDetails.upline.profile_photo || '/data/profile_photo.svg'" alt="Client profile picture"/>
                 <div class="w-full flex-col justify-start items-start inline-flex">
-                    <div class="self-stretch text-white text-base font-medium font-sans leading-normal break-all">{{ commissionDetails.upline.name }}</div>
-                    <div class="text-gray-300 text-xs font-normal font-sans leading-[18px]">{{ $t('public.id') }}: {{ commissionDetails.upline.id_number }}</div>
+                    <div class="self-stretch text-white font-medium break-all">{{ commissionDetails.upline.name }}</div>
+                    <div class="text-gray-300 text-xs">{{ $t('public.id') }}: {{ commissionDetails.upline.id_number }}</div>
                 </div>
             </div>
 
             <div class="grid grid-cols-2 items-center mb-2">
-                <div class="col-span-1 text-gray-300 text-xs font-normal font-sans leading-[18px]">{{ $t('public.referee') }}</div>
+                <div class="col-span-1 text-gray-300 text-xs">{{ $t('public.referee') }}</div>
                 <div class="col-span-1 flex items-center">
                     <img class="w-5 h-5 rounded-full mr-2" :src="commissionDetails.downline.profile_photo || '/data/profile_photo.svg'" alt="Client downline profile picture"/>
-                    <div class="text-white text-xs font-normal font-sans leading-tight break-all">{{ commissionDetails.downline.name }}</div>
+                    <div class="text-white text-sm font-medium break-all">{{ commissionDetails.downline.name }}</div>
                 </div>
             </div>
             <div class="grid grid-cols-2 items-center mb-2">
-                <div class="col-span-1 text-gray-300 text-xs font-normal font-sans leading-[18px]">{{ $t('public.requested_date') }}</div>
-                <div class="col-span-1 text-white text-xs font-normal font-sans leading-tight">{{ formatDateTime(commissionDetails.created_at) }}</div>
+                <div class="col-span-1 text-gray-300 text-xs">{{ $t('public.requested_date') }}</div>
+                <div class="col-span-1 text-white text-sm font-medium">{{ formatDateTime(commissionDetails.created_at) }}</div>
             </div>
 
             <div class="grid grid-cols-2 items-center mb-2">
-                <div class="col-span-1 text-gray-300 text-xs font-normal font-sans leading-[18px]">{{ $t('public.approved_date') }}</div>
-                <div class="col-span-1 text-white text-xs font-normal font-sans leading-tight">{{ formatDateTime(commissionDetails.approved_at) }}</div>
+                <div class="col-span-1 text-gray-300 text-xs">{{ $t('public.approved_date') }}</div>
+                <div class="col-span-1 text-white text-sm font-medium">{{ formatDateTime(commissionDetails.approved_at) }}</div>
             </div>
 
             <div class="grid grid-cols-2 items-center mb-5">
-                <div class="col-span-1 text-gray-300 text-xs font-normal font-sans leading-[18px]">{{ $t('public.commission_amount') }}</div>
-                <div class="col-span-1 text-white text-xs font-normal font-sans leading-tight">{{ formatAmount(commissionDetails.amount) }}</div>
+                <div class="col-span-1 text-gray-300 text-xs">{{ $t('public.commission_amount') }}</div>
+                <div class="col-span-1 text-white text-sm font-medium">{{ formatAmount(commissionDetails.amount) }}</div>
             </div>
 
         </div>

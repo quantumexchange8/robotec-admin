@@ -219,7 +219,7 @@ const sendApprovalRequest = (onSuccessCallback) => {
 
 <template>
     <div class="w-full py-3 justify-between items-center inline-flex">
-        <div class="text-white text-base font-semibold font-sans leading-normal">{{ $t('public.total') }}: $&nbsp;{{ formatAmount(totalAmount) }}</div>
+        <div class="text-white font-semibold">{{ $t('public.total') }}: $&nbsp;{{ formatAmount(totalAmount) }}</div>
         <Button variant="success" :disabled="!isAnyCheckboxChecked || form.processing" @click="approveCommissions">{{ $t('public.approve') }}</Button>
     </div>
 
@@ -227,14 +227,14 @@ const sendApprovalRequest = (onSuccessCallback) => {
         <div class="w-full h-[360px] p-3 bg-gray-800 rounded-xl flex-col justify-center items-center inline-flex">
             <div class="self-stretch h-[212px] py-5 flex-col justify-start items-center gap-3 flex">
                 <NoRequest class="w-40 h-[120px] relative" />
-                <div class="self-stretch text-center text-gray-300 text-sm font-normal font-sans leading-tight">
+                <div class="self-stretch text-center text-gray-300 text-sm">
                     {{ $t('public.no_commission_request_message') }}
                 </div>
             </div>
         </div>
         <div class="px-4 py-5 flex items-center justify-center">
             <div class="rounded-full bg-primary-500 w-9 h-9 flex items-center justify-center">
-                <div class="text-center text-white text-sm font-medium font-sans leading-tight">1</div>
+                <div class="text-center text-white text-sm font-medium">1</div>
             </div>
         </div>
     </div>
@@ -243,7 +243,7 @@ const sendApprovalRequest = (onSuccessCallback) => {
         <div class="w-full px-4 py-3 bg-gray-800 rounded-xl flex-col justify-start items-start inline-flex">
             <table class="w-full text-sm text-left text-gray-500">
                 <thead>
-                <tr class="bg-gray-800 text-xs font-normal border-b border-gray-700">
+                <tr class="bg-gray-800 text-xs border-b border-gray-700">
                     <th class="py-2">
                         <Checkbox
                             v-model="isAllSelected"
@@ -251,14 +251,14 @@ const sendApprovalRequest = (onSuccessCallback) => {
                             id="selectAllCheckbox"
                         />
                     </th>
-                    <th class="text-white text-sm font-normal font-sans leading-tight">
+                    <th class="text-white text-sm">
                         {{ selectAllLabel }}
                     </th>
                 </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="(commission, index) in commissions.data" :key="commission.id" class="py-2 bg-gray-800 text-xs font-normal border-b border-gray-700" :class="{ 'border-transparent': index === commissions.data.length - 1 }" @click="openModal(commission)">
-                        <td class="py-2">
+                    <tr v-for="(commission, index) in commissions.data" :key="commission.id" class="py-2 bg-gray-800 text-xs border-b border-gray-700" :class="{ 'border-transparent': index === commissions.data.length - 1 }" @click="openModal(commission)">
+                        <td>
                             <Checkbox
                                 :checked="isAllSelected || isItemSelected(commission.id, commission.amount)"
                                 :model-value="isChecked.includes(commission.id)"
@@ -266,11 +266,11 @@ const sendApprovalRequest = (onSuccessCallback) => {
                                 @click.stop
                             />
                         </td>
-                        <td>
-                            <div class="text-gray-300 text-xs font-normal font-sans leading-[24px]">{{ formatDateTime(commission.created_at) }}</div>
-                            <div class="text-white text-sm font-medium font-sans leading-tight break-all">{{ commission.upline.name }}</div>
+                        <td class="py-2">
+                            <div class="text-gray-300 text-xs">{{ formatDateTime(commission.created_at) }}</div>
+                            <div class="text-white text-sm font-medium break-all">{{ commission.upline.name }}</div>
                         </td>
-                        <td class="text-white text-md flex items-center justify-center py-3">$&nbsp;{{ formatAmount(commission.amount) }}</td>
+                        <td class="text-white text-md font-medium flex items-center justify-center py-3">$&nbsp;{{ formatAmount(commission.amount) }}</td>
                     </tr>
                 </tbody>
             </table>
@@ -290,28 +290,28 @@ const sendApprovalRequest = (onSuccessCallback) => {
         <div v-if="commissionDetails">
             <form>
                 <div class="w-full justify-start items-center gap-3 my-5 pb-3 border-b border-gray-700 inline-flex">
-                    <img class="w-9 h-9 rounded-full" :src="commissionDetails.upline.profile_photo || '/data/profile_photo.svg'" alt="Client profile picture"/>
+                    <img class="w-9 h-9 rounded-full" :src="commissionDetails.upline.profile_photo || 'https://img.freepik.com/free-icon/user_318-159711.jpg'" alt="Client profile picture"/>
                     <div class="w-full flex-col justify-start items-start inline-flex">
-                        <div class="self-stretch text-white text-base font-medium font-sans leading-normal break-all">{{ commissionDetails.upline.name }}</div>
-                        <div class="text-gray-300 text-xs font-normal font-sans leading-[18px]">{{ $t('public.id') }}: {{ commissionDetails.upline.id_number }}</div>
+                        <div class="self-stretch text-white font-medium break-all">{{ commissionDetails.upline.name }}</div>
+                        <div class="text-gray-300 text-xs">{{ $t('public.id') }}: {{ commissionDetails.upline.id_number }}</div>
                     </div>
                 </div>
 
                 <div class="grid grid-cols-2 items-center mb-2">
-                    <div class="col-span-1 text-gray-300 text-xs font-normal font-sans leading-[18px]">{{ $t('public.referee') }}</div>
+                    <div class="col-span-1 text-gray-300 text-xs">{{ $t('public.referee') }}</div>
                     <div class="col-span-1 flex items-center">
-                        <img class="w-5 h-5 rounded-full mr-2" :src="commissionDetails.downline.profile_photo || '/data/profile_photo.svg'" alt="Client downline profile picture"/>
-                        <div class="text-white text-xs font-normal font-sans leading-tight break-all">{{ commissionDetails.downline.name }}</div>
+                        <img class="w-5 h-5 rounded-full mr-2" :src="commissionDetails.downline.profile_photo || 'https://img.freepik.com/free-icon/user_318-159711.jpg'" alt="Client downline profile picture"/>
+                        <div class="text-white text-sm font-medium break-all">{{ commissionDetails.downline.name }}</div>
                     </div>
                 </div>
                 <div class="grid grid-cols-2 items-center mb-2">
-                    <div class="col-span-1 text-gray-300 text-xs font-normal font-sans leading-[18px]">{{ $t('public.requested_date') }}</div>
-                    <div class="col-span-1 text-white text-xs font-normal font-sans leading-tight">{{ formatDateTime(commissionDetails.created_at) }}</div>
+                    <div class="col-span-1 text-gray-300 text-xs">{{ $t('public.requested_date') }}</div>
+                    <div class="col-span-1 text-white text-sm font-medium">{{ formatDateTime(commissionDetails.created_at) }}</div>
                 </div>
 
                 <div class="grid grid-cols-2 items-center mb-5">
-                    <div class="col-span-1 text-gray-300 text-xs font-normal font-sans leading-[18px]">{{ $t('public.commission_amount') }}</div>
-                    <div class="col-span-1 text-white text-xs font-normal font-sans leading-tight">{{ formatAmount(commissionDetails.amount) }}</div>
+                    <div class="col-span-1 text-gray-300 text-xs">{{ $t('public.commission_amount') }}</div>
+                    <div class="col-span-1 text-white text-sm font-medium">{{ formatAmount(commissionDetails.amount) }}</div>
                 </div>
 
                 <div class="items-center pt-8 flex gap-3">

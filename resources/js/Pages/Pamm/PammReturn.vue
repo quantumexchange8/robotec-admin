@@ -92,7 +92,7 @@ const updatePamm = () => {
     <Head :title="$t('public.pamm_return')" />
     <AuthenticatedLayout>
         <template #header>
-            <h2 class="font-semibold text-xl text-white leading-loose mb-3">{{ $t('public.pamm_return') }}</h2>
+            <h2 class="font-semibold text-xl text-white mb-3">{{ $t('public.pamm_return') }}</h2>
         </template>
 
         <div class="flex justify-center items-center h-full my-3">
@@ -100,22 +100,22 @@ const updatePamm = () => {
                 class="w-full my-3 px-5 py-8 bg-gray-800 rounded-2xl flex-col justify-center items-center gap-8 inline-flex">
                 <div class="flex-col justify-center items-center gap-3 flex mb-8">
                     <div class="flex-col justify-start items-center flex mb-3">
-                        <div class="text-center text-white text-base font-semibold font-sans leading-normal">
+                        <div class="text-center text-white font-semibold">
                             {{ $t('public.current_pamm_return') }}
                         </div>
-                        <div class="text-center text-gray-300 text-xs font-normal font-sans leading-[18px]">
+                        <div class="text-center text-gray-300 text-xs">
                             {{ $t('public.last_updated_at') }} {{ formatDateTime(props.pamm.updated_at, true) }}
                         </div>
                     </div>
-                    <div class="text-center text-white text-xxl font-semibold font-sans leading-[42px]">
+                    <div class="text-center text-white text-xxl font-semibold">
                         <span v-if="props.pamm.value > 0">+</span>{{ (props.pamm.value) }} %
                     </div>
                 </div>
-                <Button variant="primary" class="w-full text-center text-white text-sm font-semibold font-sans leading-tight" @click="openModal">{{ $t('public.update_pamm_return') }}</Button>
+                <Button variant="primary" class="w-full text-center text-white text-sm font-semibold" @click="openModal">{{ $t('public.update_pamm_return') }}</Button>
             </div>
         </div>
 
-        <span class="text-white text-base font-semibold font-sans leading-normal py-2">
+        <span class="text-white font-semibold py-2">
             {{ $t('public.update_history') }}
         </span>
 
@@ -126,7 +126,7 @@ const updatePamm = () => {
                     <div class="flex flex-col items-center">
                         <NoHistory class="w-40 h-[120px]" />
                         <div
-                            class="w-[328px] text-center text-gray-300 text-sm font-normal font-sans leading-tight mt-3">
+                            class="w-[328px] text-center text-gray-300 text-sm mt-3">
                             {{ $t('public.no_history_message') }}
                         </div>
                     </div>
@@ -135,7 +135,7 @@ const updatePamm = () => {
             </div>
             <div class="px-4 py-5 flex items-center justify-center">
                 <div class="rounded-full bg-primary-500 w-9 h-9 flex items-center justify-center">
-                    <div class="text-center text-white text-sm font-medium font-sans leading-tight">1</div>
+                    <div class="text-center text-white text-sm font-medium">1</div>
                 </div>
             </div>
         </div>
@@ -146,17 +146,17 @@ const updatePamm = () => {
                         <tr
                             v-for="(history, index) in histories.data"
                             :key="history.id"
-                            class="text-xs font-normal text-white border-b border-gray-700"
+                            class="text-xs text-white border-b border-gray-700"
                             :class="{ 'border-transparent': index === histories.data.length - 1 }"
                         >
                         <td class="py-2 flex justify-between items-center">
                             <div>
-                                <div class="text-gray-300 text-xs font-normal font-sans leading-[18px] gap-3">
+                                <div class="text-gray-300 text-xs gap-3">
                                     {{ formatDateTime(history.created_at) }}
                                 </div>
                             </div>
                             <div class="text-right">
-                                <div class="font-medium font-sans leading-normal text-md"
+                                <div class="font-medium text-md"
                                     :class="{ 'text-success-500': history.setting_new_value > 0, 'text-error-500': history.setting_new_value < 0, 'text-white': history.setting_new_value === 0 }">
                                     {{ history.setting_new_value > 0 ? '+' + (history.setting_new_value) : (history.setting_new_value) }}
                                 </div>
@@ -191,7 +191,7 @@ const updatePamm = () => {
                         required
                     />
 
-                    <div class="text-gray-300 text-xs font-normal font-sans leading-[18px] ">{{ $t('public.pamm_return_rule') }}</div>
+                    <div class="text-gray-300 text-xs">{{ $t('public.pamm_return_rule') }}</div>
                     <InputError :message="form.errors.pamm" />
                 </div>
                 <div class="w-full flex justify-end pt-8 gap-3">

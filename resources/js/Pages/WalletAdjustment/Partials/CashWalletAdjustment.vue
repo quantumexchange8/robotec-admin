@@ -189,11 +189,11 @@ const toggleExpanded = (history) => {
 
             <div v-if="!props.client" class="py-5">
                 <NoClientSelected class="w-40 h-[120px] relative mb-3" />
-                <div class="text-gray-300 text-sm text-center font-normal mt-3">{{ $t('public.no_client_selected_message') }}</div>
+                <div class="text-gray-300 text-sm text-center mt-3">{{ $t('public.no_client_selected_message') }}</div>
             </div>
             <div v-else-if="histories && histories.data == ''" class="py-5">
                 <NoHistory class="w-40 h-[120px] relative" />
-                <div class="text-gray-300 text-sm text-center font-normal mt-3">{{ $t('public.no_history_message') }}</div>
+                <div class="text-gray-300 text-sm text-center mt-3">{{ $t('public.no_history_message') }}</div>
             </div>
             <div v-else class="w-full justify-start items-center">
                 <div class="w-full px-4 py-3 bg-gray-800 rounded-xl flex-col justify-start items-start inline-flex">
@@ -202,25 +202,25 @@ const toggleExpanded = (history) => {
                             <tr
                                 v-for="(history, index) in histories.data"
                                 :key="history.id"
-                                class="text-xs font-normal text-white border-b border-gray-700"
+                                class="text-xs text-white border-b border-gray-700"
                                 :class="{ 'border-transparent': index === histories.data.length - 1 }"
                             >
                                 <td class="w-full py-2 flex justify-between items-center" @click="toggleExpanded(history)">
                                     <div class="w-full flex-row">
                                         <div class="w-full flex justify-between">
-                                            <div class="text-gray-300 text-xs font-normal font-sans leading-[18px] gap-3 justify-start">
+                                            <div class="text-gray-300 text-xs gap-3 justify-start">
                                                 {{ formatDateTime(history.created_at) }}
                                             </div>
-                                            <div class="font-medium font-sans leading-normal text-md justify-end"
+                                            <div class="font-medium leading-normal text-md justify-end"
                                                 :class="{'text-success-500': history.to_wallet_id,'text-error-500': history.from_wallet_id,'text-white': !history.from_wallet_id && !history.to_wallet_id}">
                                                 {{ history.to_wallet_id ? '+' + formatAmount(history.transaction_amount) : (history.from_wallet_id ? '-' + formatAmount(history.transaction_amount) : formatAmount(history.transaction_amount))}}
                                             </div>
                                         </div>
                                         <div v-if="history.isExpanded" class="mt-2 w-full flex justify-between">
-                                            <div class="text-gray-300 text-xxs font-normal font-sans leading-[18px] gap-3 justify-start">
+                                            <div class="text-gray-300 text-xxs font-medium gap-3 justify-start">
                                                 {{ $t('public.previous_balance') }}: <span class="text-white">$&nbsp;{{ formatAmount(history.old_wallet_amount) }}</span>
                                             </div>
-                                            <div class="text-gray-300 text-xxs font-normal font-sans leading-[18px] gap-3 justify-start">
+                                            <div class="text-gray-300 text-xxs font-medium gap-3 justify-start">
                                                 {{ $t('public.current_balance') }}: <span class="text-white">$&nbsp;{{ formatAmount(history.new_wallet_amount) }}</span>
                                             </div>
                                         </div>
@@ -248,7 +248,7 @@ const toggleExpanded = (history) => {
     <Modal :show="WalletAdjustmentModal" :title="isDeduction ? $t('public.wallet_adjustment_deduction') : $t('public.wallet_adjustment_addition')" @close="closeModal" max-width="sm">
         <form @submit.prevent="confirm">
             <div class="w-full flex-col justify-start items-start gap-1.5 mb-5 inline-flex">
-                <Label for="amount" class="text-xs font-medium font-sans leading-[18px]" :invalid="form.errors.amount">{{ $t('public.adjustment_amount') }}</Label>
+                <Label for="amount" class="text-xs font-medium" :invalid="form.errors.amount">{{ $t('public.adjustment_amount') }}</Label>
 
                 <InputIconWrapper class="w-full">
                     <template #icon>
@@ -269,25 +269,25 @@ const toggleExpanded = (history) => {
             </div>
 
             <div class="grid grid-cols-2 items-center mb-2">
-                <div class="col-span-1 text-gray-300 text-xs font-normal font-sans leading-[18px]">{{ $t('public.client') }}</div>
+                <div class="col-span-1 text-gray-300 text-xs">{{ $t('public.client') }}</div>
                 <div class="col-span-1 flex items-center">
                 <img class="w-5 h-5 rounded-full mr-2" :src="client.img ? client.img : '/data/profile_photo.svg'" alt="Client upline profile picture" />
-                <div class="text-white text-xs font-normal font-sans leading-tight">{{ client ? client.label : '' }}</div>
+                <div class="text-white text-sm font-medium">{{ client ? client.label : '' }}</div>
                 </div>
             </div>
             <div class="grid grid-cols-2 items-center mb-2">
-                <div class="col-span-1 text-gray-300 text-xs font-normal font-sans leading-[18px]">{{ $t('public.wallet') }}</div>
-                <div class="col-span-1 text-white text-xs font-normal font-sans leading-tight">{{ wallet ? $t('public.' + wallet.type) : '' }}</div>
+                <div class="col-span-1 text-gray-300 text-xs">{{ $t('public.wallet') }}</div>
+                <div class="col-span-1 text-white text-sm font-medium">{{ wallet ? $t('public.' + wallet.type) : '' }}</div>
             </div>
 
             <div class="grid grid-cols-2 items-center mb-2">
-                <div class="col-span-1 text-gray-300 text-xs font-normal font-sans leading-[18px]">{{ $t('public.current_balance') }}</div>
-                <div class="col-span-1 text-white text-xs font-normal font-sans leading-tight">{{ formatAmount(wallet ? wallet.balance : 0) }}</div>
+                <div class="col-span-1 text-gray-300 text-xs">{{ $t('public.current_balance') }}</div>
+                <div class="col-span-1 text-white text-sm font-medium">{{ formatAmount(wallet ? wallet.balance : 0) }}</div>
             </div>
 
             <div class="grid grid-cols-2 items-center mb-5">
-                <div class="col-span-1 text-gray-300 text-xs font-normal font-sans leading-[18px]">{{ $t('public.after_adjustment') }}</div>
-                <div class="col-span-1 text-white text-xs font-normal font-sans leading-tight">{{ formatAmount(adjustedBalance) }}</div>
+                <div class="col-span-1 text-gray-300 text-xs">{{ $t('public.after_adjustment') }}</div>
+                <div class="col-span-1 text-white text-sm font-medium">{{ formatAmount(adjustedBalance) }}</div>
             </div>
 
             <div class="items-center pt-8 flex gap-3">

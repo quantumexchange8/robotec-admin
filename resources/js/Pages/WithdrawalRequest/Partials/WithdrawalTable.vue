@@ -165,21 +165,21 @@ const rejectRequest = (requestDetails) => {
 
 <template>
     <div class="w-full py-3 justify-between items-center inline-flex">
-        <div class="text-white text-base font-semibold font-sans leading-normal">{{ $t('public.total') }}: $&nbsp;{{ formatAmount(totalAmount) }}</div>
+        <div class="text-white font-semibold">{{ $t('public.total') }}: $&nbsp;{{ formatAmount(totalAmount) }}</div>
     </div>
 
     <div v-if="requests.data.length == 0" >
         <div class="w-full h-[360px] p-3 bg-gray-800 rounded-xl flex-col justify-center items-center inline-flex">
             <div class="self-stretch h-[212px] py-5 flex-col justify-start items-center gap-3 flex">
                 <NoRequest class="w-40 h-[120px] relative" />
-                <div class="self-stretch text-center text-gray-300 text-sm font-normal font-sans leading-tight">
+                <div class="self-stretch text-center text-gray-300 text-sm">
                     {{ $t('public.no_withdrawal_request_message') }}
                 </div>
             </div>
         </div>
         <div class="px-4 py-5 flex items-center justify-center">
             <div class="rounded-full bg-primary-500 w-9 h-9 flex items-center justify-center">
-                <div class="text-center text-white text-sm font-medium font-sans leading-tight">1</div>
+                <div class="text-center text-white text-sm font-medium">1</div>
             </div>
         </div>
     </div>
@@ -189,14 +189,14 @@ const rejectRequest = (requestDetails) => {
         <div class="w-full px-4 py-3 bg-gray-800 rounded-xl flex-col justify-start items-start inline-flex">
             <table class="w-full text-sm text-left text-gray-500">
                 <tbody>
-                    <tr v-for="(request, index) in requests.data" :key="request.id" class="py-2 bg-gray-800 text-xs font-normal border-b border-gray-700" :class="{ 'border-transparent': index === requests.data.length - 1 }" @click="openModal(request)">
+                    <tr v-for="(request, index) in requests.data" :key="request.id" class="bg-gray-800 text-xs border-b border-gray-700" :class="{ 'border-transparent': index === requests.data.length - 1 }" @click="openModal(request)">
                         <td>
-                            <div class="flex justify-between items-center gap-3">
+                            <div class="flex justify-between items-center gap-3 py-2">
                                 <div>
-                                    <div class="text-gray-300 text-xs font-normal font-sans leading-[24px]">{{ formatDateTime(request.created_at) }}</div>
-                                    <div class="text-white text-sm font-medium font-sans leading-tight break-all">{{ request.user.name }}</div>
+                                    <div class="text-gray-300 text-xs leading-[24px]">{{ formatDateTime(request.created_at) }}</div>
+                                    <div class="text-white text-sm font-medium break-all">{{ request.user.name }}</div>
                                 </div>
-                                <div class="text-white text-right text-md font-medium font-sans leading-normal">$&nbsp;{{ formatAmount(request.transaction_amount) }}</div>
+                                <div class="text-white text-right text-md font-medium">$&nbsp;{{ formatAmount(request.transaction_amount) }}</div>
                             </div>
                         </td>
                     </tr>
@@ -219,29 +219,29 @@ const rejectRequest = (requestDetails) => {
             <div class="w-full justify-start items-center gap-3 my-5 pb-3 border-b border-gray-700 inline-flex">
                 <img class="w-9 h-9 rounded-full" :src="requestDetails.user.profile_photo || '/data/profile_photo.svg'" alt="Client profile picture"/>
                 <div class="w-full flex-col justify-start items-start inline-flex">
-                    <div class="self-stretch text-white text-base font-medium font-sans leading-normal break-all">{{ requestDetails.user.name }}</div>
-                    <div class="text-gray-300 text-xs font-normal font-sans leading-[18px]">{{ $t('public.id') }}: {{ requestDetails.user.id_number }}</div>
+                    <div class="self-stretch text-white font-medium break-all">{{ requestDetails.user.name }}</div>
+                    <div class="text-gray-300 text-xs">{{ $t('public.id') }}: {{ requestDetails.user.id_number }}</div>
                 </div>
             </div>
 
             <div class="grid grid-cols-2 items-center mb-2">
-                <div class="col-span-1 text-gray-300 text-xs font-normal font-sans leading-[18px]">{{ $t('public.transaction_id') }}</div>
-                <div class="col-span-1 text-white text-xs font-normal font-sans leading-tight">{{ requestDetails.transaction_number }}</div>
+                <div class="col-span-1 text-gray-300 text-xs">{{ $t('public.transaction_id') }}</div>
+                <div class="col-span-1 text-white text-sm font-medium">{{ requestDetails.transaction_number }}</div>
             </div>
             <div class="grid grid-cols-2 items-center mb-2">
-                <div class="col-span-1 text-gray-300 text-xs font-normal font-sans leading-[18px]">{{ $t('public.requested_date') }}</div>
-                <div class="col-span-1 text-white text-xs font-normal font-sans leading-tight">{{ formatDateTime(requestDetails.created_at) }}</div>
+                <div class="col-span-1 text-gray-300 text-xs">{{ $t('public.requested_date') }}</div>
+                <div class="col-span-1 text-white text-sm font-medium">{{ formatDateTime(requestDetails.created_at) }}</div>
             </div>
 
             <div class="grid grid-cols-2 items-center mb-2">
-                <div class="col-span-1 text-gray-300 text-xs font-normal font-sans leading-[18px]">{{ $t('public.withdrawal_amount') }}</div>
-                <div class="col-span-1 text-white text-xs font-normal font-sans leading-tight">{{ formatAmount(requestDetails.transaction_amount) }}</div>
+                <div class="col-span-1 text-gray-300 text-xs">{{ $t('public.withdrawal_amount') }}</div>
+                <div class="col-span-1 text-white text-sm font-medium">{{ formatAmount(requestDetails.transaction_amount) }}</div>
             </div>
 
             <div class="grid grid-cols-2 items-center mb-5">
-                <div class="col-span-1 text-gray-300 text-xs font-normal font-sans leading-[18px]">{{ $t('public.usdt_address') }}</div>
+                <div class="col-span-1 text-gray-300 text-xs">{{ $t('public.usdt_address') }}</div>
                 <div class="col-span-1 flex items-start">
-                    <div class="text-white text-xs font-normal font-sans leading-tight break-all">
+                    <div class="text-white text-sm font-medium break-all">
                         {{ requestDetails.to_wallet_address }}
                         <Tooltip :content="$t('public.' + tooltipContent)" placement="bottom">
                             <DuplicateIcon aria-hidden="true" :class="['w-4 h-4 text-gray-200']" @click.stop.prevent="copyTestingCode(requestDetails.to_wallet_address)" style="cursor: pointer" />
