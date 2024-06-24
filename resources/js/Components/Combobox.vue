@@ -313,7 +313,7 @@ const dropdownWidthClass = computed(() => {
                             class="relative inline-flex items-center gap-2 w-full cursor-default select-none whitespace-pre p-3 rounded-lg text-sm"
                         >
                             <img v-if="image"
-                                 :src="option.img ? option.img : 'https://img.freepik.com/free-icon/user_318-159711.jpg'"
+                                 :src="option.img ? option.img : '/data/profile_photo.svg'"
                                  class="w-8 h-8 rounded-full" alt="">
                             <span class="block truncate text-white"
                                   :class="{ 'font-medium': selected, 'font-normal': !selected }">

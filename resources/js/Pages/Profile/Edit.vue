@@ -60,10 +60,10 @@ function handleFileUpload(event) {
             <div class="flex-1 text-white text-xl mb-3">{{ $t('public.my_profile') }}</div>
         </template>
 
-        <div class="flex py-3 px-4 flex-col items-center gap-3">
+        <div class="flex flex-col items-center gap-3">
             <div class="flex py-8 px-4 flex-col items-center gap-8 self-stretch rounded-2xl bg-gray-800">
                 <div class="flex flex-col items-center gap-3">
-                    <img :src="props.profileImg || 'https://img.freepik.com/free-icon/user_318-159711.jpg' " class="w-14 h-14 rounded-full" alt="profile_picture" />
+                    <img :src="props.profileImg || '/data/profile_photo.svg' " class="w-14 h-14 rounded-full" alt="profile_picture" />
                     <Dropdown :contentClasses="'p-2 bg-[#252525]'">
                         <template #trigger>
                             <Button

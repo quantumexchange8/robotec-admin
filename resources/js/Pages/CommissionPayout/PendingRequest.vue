@@ -290,7 +290,7 @@ const sendApprovalRequest = (onSuccessCallback) => {
         <div v-if="commissionDetails">
             <form>
                 <div class="w-full justify-start items-center gap-3 my-5 pb-3 border-b border-gray-700 inline-flex">
-                    <img class="w-9 h-9 rounded-full" :src="commissionDetails.upline.profile_photo || 'https://img.freepik.com/free-icon/user_318-159711.jpg'" alt="Client profile picture"/>
+                    <img class="w-9 h-9 rounded-full" :src="commissionDetails.upline.profile_photo || '/data/profile_photo.svg'" alt="Client profile picture"/>
                     <div class="w-full flex-col justify-start items-start inline-flex">
                         <div class="self-stretch text-white text-base font-medium font-sans leading-normal break-all">{{ commissionDetails.upline.name }}</div>
                         <div class="text-gray-300 text-xs font-normal font-sans leading-[18px]">{{ $t('public.id') }}: {{ commissionDetails.upline.id_number }}</div>
@@ -300,7 +300,7 @@ const sendApprovalRequest = (onSuccessCallback) => {
                 <div class="grid grid-cols-2 items-center mb-2">
                     <div class="col-span-1 text-gray-300 text-xs font-normal font-sans leading-[18px]">{{ $t('public.referee') }}</div>
                     <div class="col-span-1 flex items-center">
-                        <img class="w-5 h-5 rounded-full mr-2" :src="commissionDetails.downline.profile_photo || 'https://img.freepik.com/free-icon/user_318-159711.jpg'" alt="Client downline profile picture"/>
+                        <img class="w-5 h-5 rounded-full mr-2" :src="commissionDetails.downline.profile_photo || '/data/profile_photo.svg'" alt="Client downline profile picture"/>
                         <div class="text-white text-xs font-normal font-sans leading-tight break-all">{{ commissionDetails.downline.name }}</div>
                     </div>
                 </div>

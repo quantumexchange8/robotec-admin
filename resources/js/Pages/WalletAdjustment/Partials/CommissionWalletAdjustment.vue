@@ -271,7 +271,7 @@ const toggleExpanded = (history) => {
             <div class="grid grid-cols-2 items-center mb-2">
                 <div class="col-span-1 text-gray-300 text-xs font-normal font-sans leading-[18px]">{{ $t('public.client') }}</div>
                 <div class="col-span-1 flex items-center">
-                <img class="w-5 h-5 rounded-full mr-2" :src="client.img ? client.img : 'https://img.freepik.com/free-icon/user_318-159711.jpg'" alt="Client upline profile picture" />
+                <img class="w-5 h-5 rounded-full mr-2" :src="client.img ? client.img : '/data/profile_photo.svg'" alt="Client upline profile picture" />
                 <div class="text-white text-xs font-normal font-sans leading-tight">{{ client ? client.label : '' }}</div>
                 </div>
             </div>

@@ -63,7 +63,7 @@ const getActiveChildren = () => {
         </template>
 
         <div class="w-full px-4 py-3 bg-gray-800 rounded-2xl justify-start items-center gap-3 inline-flex">
-            <img class="w-8 h-8 rounded-full" :src="profile_photo || 'https://img.freepik.com/free-icon/user_318-159711.jpg'" alt="User profile picture"/>
+            <img class="w-8 h-8 rounded-full" :src="profile_photo || '/data/profile_photo.svg'" alt="User profile picture"/>
             <div class="flex-col justify-start items-start inline-flex">
                 <div class="text-white text-sm font-semibold font-sans leading-tight">{{ user.name }}</div>
                 <div class="text-gray-300 text-xs font-normal font-sans leading-[18px]">{{ $t('public.id') }}: {{ user.id_number }}</div>
@@ -98,7 +98,7 @@ const getActiveChildren = () => {
                     :class="{ 'shadow-inner border border-primary-500': client.children && client.children.length > 0 && client.isActive }"
                     @click="toggleClient(client)"
                 >
-                    <img class="w-7 h-7 rounded-full" :src="client.profile_photo_url || 'https://img.freepik.com/free-icon/user_318-159711.jpg'" />
+                    <img class="w-7 h-7 rounded-full" :src="client.profile_photo_url || '/data/profile_photo.svg'" />
                     <div class="self-stretch flex-col justify-start items-center flex">
                         <div class="self-stretch text-center text-white text-xs w-full overflow-hidden truncate">{{ client.name }}</div>
                         <div class="text-center text-gray-300 text-xxs">{{ $t('public.id') }}: {{ client.id_number }}</div>

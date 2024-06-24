@@ -234,7 +234,7 @@ const updateClient = (clientDetails) => {
                     @click="openClientModal(member)"
                 >
                     <td class="py-2 flex gap-3 items-center self-stretch">
-                        <img :src="member.profile_photo ? member.profile_photo : 'https://img.freepik.com/free-icon/user_318-159711.jpg'" class="w-8 h-8 rounded-full" alt="">
+                        <img :src="member.profile_photo ? member.profile_photo : '/data/profile_photo.svg'" class="w-8 h-8 rounded-full" alt="">
                         <div class="flex flex-col">
                             <div class="font-medium text-sm">
                                 {{ member.name }}
@@ -267,7 +267,7 @@ const updateClient = (clientDetails) => {
     <Modal :show="clientDetailModal" :title="$t('public.client_details')" @close="closeClientModal" max-width="sm">
         <div v-if="clientDetails">
             <div class="w-full justify-start items-center gap-3 inline-flex">
-                <img class="w-9 h-9 rounded-full" :src="clientDetails.profile_photo || 'https://img.freepik.com/free-icon/user_318-159711.jpg'" alt="Client profile picture"/>
+                <img class="w-9 h-9 rounded-full" :src="clientDetails.profile_photo || '/data/profile_photo.svg'" alt="Client profile picture"/>
                 <div class="w-full flex-col justify-start items-start inline-flex">
                     <div class="self-stretch text-white text-base font-medium font-sans leading-normal break-all">{{ clientDetails.name }}</div>
                     <div class="text-gray-300 text-xs font-normal font-sans leading-[18px]">{{ $t('public.id') }}: {{ clientDetails.id_number }}</div>
@@ -287,7 +287,7 @@ const updateClient = (clientDetails) => {
             <div class="grid grid-cols-2 items-center">
                 <div class="text-gray-300 text-xs leading-[18px]">{{ $t('public.upline') }}</div>
                 <div v-if="clientDetails.upline" class="flex items-center">
-                    <img class="w-5 h-5 rounded-full mr-2" :src="clientDetails.upline.profile_photo || 'https://img.freepik.com/free-icon/user_318-159711.jpg'" alt="Client upline profile picture"/>
+                    <img class="w-5 h-5 rounded-full mr-2" :src="clientDetails.upline.profile_photo || '/data/profile_photo.svg'" alt="Client upline profile picture"/>
                     <div class="text-white text-sm leading-tight break-all">{{ clientDetails.upline.name }}</div>
                 </div>
             </div>

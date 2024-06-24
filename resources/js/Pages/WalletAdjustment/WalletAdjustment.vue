@@ -59,7 +59,7 @@ const updateWalletType = (wallet_type) => {
                         image
                     />
                 </div>
-                <div class="text-gray-300 text-xs font-normal font-sans leading-[18px]">{{ $t('public.select_client_message') }}</div>
+                <div class="text-gray-300 text-xs font-normal font-sans leading-[18px] mt-1.5">{{ $t('public.select_client_message') }}</div>
             </div>
             <div class="w-full">
                 <TabGroup>
