@@ -51,7 +51,7 @@ const openEmailApp = () => {
     <GuestLayout>
         <Head :title="$t('public.check_your_email')" />
 
-        <div class="flex flex-col items-center gap-10 px-4">
+        <div class="flex flex-col items-center gap-10">
             <div class="flex flex-col items-center justify-center self-stretch gap-2 mt-10">
                 <div class="text-center text-lg text-white font-semibold">
                     {{ $t('public.check_your_email') }}

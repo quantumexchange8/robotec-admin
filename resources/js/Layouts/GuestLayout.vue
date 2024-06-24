@@ -108,7 +108,7 @@ onMounted(() => {
         </div>
 
         <div
-            class="w-full sm:max-w-md overflow-hidden sm:rounded-lg"
+            class="w-full sm:max-w-md overflow-hidden sm:rounded-lg px-4"
 
         >
             <Alert

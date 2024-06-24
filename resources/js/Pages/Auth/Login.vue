@@ -38,7 +38,7 @@ const submit = () => {
         <div v-if="status" class="mb-4 font-medium text-sm text-green-600">
             {{ status }}
         </div>
-        <div class="flex flex-col items-center px-4 gap-10">
+        <div class="flex flex-col items-center gap-10">
             <div class="flex flex-col items-center self-stretch gap-3">
                 <Link href="/">
                     <ApplicationLogo class="w-20 h-20 fill-current text-gray-500" />

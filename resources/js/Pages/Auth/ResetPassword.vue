@@ -33,7 +33,7 @@ const submit = () => {
     <GuestLayout>
         <Head :title="$t('public.reset_password')" />
 
-        <div class="flex flex-col items-center gap-10 px-4">
+        <div class="flex flex-col items-center gap-10">
             <div class="flex flex-col items-center gap-2 text-center mt-10 w-full">
                 <div class="text-lg text-white font-semibold">
                     {{ $t('public.choose_password') }}
@@ -60,8 +60,10 @@ const submit = () => {
                     />
 
                     <InputError class="mt-1.5" :message="form.errors.password" />
+
+                    <span class="text-gray-300">{{ $t('public.password_rule') }}</span>
+
                 </div>
-                <span class="text-gray-300">{{ $t('public.password_rule') }}</span>
 
                 <div class="w-full">
                     <Label for="password_confirmation" class="font-medium" :invalid="form.errors.password_confirmation">{{ $t('public.confirm_password') }}</Label>

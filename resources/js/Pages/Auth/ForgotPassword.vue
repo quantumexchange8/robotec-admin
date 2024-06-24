@@ -34,7 +34,7 @@ const goToLoginPage = () => {
     <GuestLayout>
         <Head :title="$t('public.forgot_password')" />
 
-        <div class="w-full mt-10 px-4">
+        <div class="w-full mt-10">
             <div class="flex flex-col items-center self-stretch gap-2">
                 <div class="text-center text-lg text-white font-semibold">
                     {{ $t('public.forgot_password_1') }}
