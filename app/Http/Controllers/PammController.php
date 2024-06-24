@@ -69,14 +69,8 @@ class PammController extends Controller
 
     private function createPAMMTradesForAutoTrading(Setting $pamm)
     {
-        $today = Carbon::today()->toDateString(); // Get today's date without time
     
-        $autoTradingRecords = AutoTrading::where('status', 'ongoing')
-            ->where(function ($query) use ($today) {
-                $query->whereDate('created_at', '>', $today)
-                    ->orWhereDate('matured_at', '>=', $today); // Compare only date parts
-            })
-            ->get();
+        $autoTradingRecords = AutoTrading::where('status', 'ongoing')->get();
     
         // Initialize CTraderService
         $cTraderService = new CTraderService();
@@ -86,12 +80,13 @@ class PammController extends Controller
                 $investmentAmount = $record->investment_amount;
                 $updatedValue = $pamm->value / 100; // Convert percentage to decimal
     
+                $pamm_return = abs($pamm->value);
                 // Calculate the amount based on percentage
                 $amount = abs($updatedValue) * $investmentAmount;
 
                 // Assuming you have the user's meta login information and necessary data
                 $meta_login = $record->meta_login;
-                $comment = "PAMM Update Trade";
+                $comment = "PAMM Return Balance";
     
                 // Determine trade type based on updatedValue
                 $tradeType = $updatedValue >= 0 ? ChangeTraderBalanceType::DEPOSIT : ChangeTraderBalanceType::WITHDRAW;
@@ -101,10 +96,10 @@ class PammController extends Controller
     
                 // Update cumulative_pamm_return and cumulative_amount based on tradeType
                 if ($tradeType === ChangeTraderBalanceType::DEPOSIT) {
-                    $record->cumulative_pamm_return += $amount;
+                    $record->cumulative_pamm_return += $pamm_return;
                     $record->cumulative_amount += $amount;
                 } else {
-                    $record->cumulative_pamm_return -= $amount;
+                    $record->cumulative_pamm_return -= $pamm_return;
                     $record->cumulative_amount -= $amount;
                 }
     
@@ -114,52 +109,29 @@ class PammController extends Controller
                 // Create a transaction record
                 $this->createTransactionRecord($record->user_id, $meta_login, $amount, $tradeType, $trade->getTicket());
     
-                // Update status to "matured" if matured_at is less than or equal to today
-                if ($record->matured_at->toDateString() <= $today) {
-                    $record->update(['status' => 'matured']);
-                }
-                
             } catch (\Exception $e) {
-                Log::error($e->getMessage() . " " . $meta_login);
+                Log::error($e->getMessage());
             }
         }
-
-        // Update status to "matured" for records where matured_at is less than or equal to today
-        AutoTrading::where('status', 'ongoing')
-            ->whereDate('matured_at', '<=', $today)
-            ->update(['status' => 'matured']);
-
     }
 
     private function createTransactionRecord($user_id, $meta_login, $amount, $tradeType, $ticket)
     {
         try {
-            // Find the commission wallet of the user
-            $commissionWallet = Wallet::where('user_id', $user_id)
-                ->where('type', 'commission_wallet')
-                ->first();
-
-            if (!$commissionWallet) {
-                throw new \Exception('Commission wallet not found for user.');
-            }
-
             // Determine transaction type text
             $transactionType = $tradeType == ChangeTraderBalanceType::DEPOSIT ? 'deposit' : 'withdrawal';
 
             // Create transaction record
-            $transaction = Transaction::create([
+            Transaction::create([
                 'user_id' => $user_id,
                 'category' => 'trading_account',
                 'transaction_type' => $transactionType,
-                'to_wallet_id' => $commissionWallet->id,
                 'from_meta_login' => null,
                 'to_meta_login' => $meta_login,
                 'ticket' => $ticket,
-                'transaction_number' => RunningNumberService::getID('auto_trading'),
+                'transaction_number' => RunningNumberService::getID('transaction'),
                 'amount' => $amount,
                 'transaction_amount' => $amount,
-                'old_wallet_amount' => $commissionWallet->balance,
-                'new_wallet_amount' => $commissionWallet->balance + $amount,
                 'status' => 'success',
                 'remarks' => 'AutoTrading',
                 'handle_by' => Auth::id(),
@@ -167,7 +139,7 @@ class PammController extends Controller
             ]);
 
         } catch (\Exception $e) {
-            Log::error($e->getMessage() . " " . $transaction->ticket);
+            Log::error($e->getMessage());
         }
     }
 }
