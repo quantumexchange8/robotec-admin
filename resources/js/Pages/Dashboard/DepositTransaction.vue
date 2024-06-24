@@ -35,7 +35,7 @@ const date = ref(`${formattedStartDate} - ${formattedEndDate}`);
             <h2 class="font-semibold text-xl text-white leading-loose">{{ $t('public.deposit_transactions') }}</h2>
         </template>
 
-        <div class="rounded-md shadow-md py-3 sticky top-0 bg-gray-900 z-[5]">
+        <div class="py-3 sticky top-0 bg-gray-900 z-[5]">
             <div class="flex flex-col gap-3 items-center">
                 <Search
                     v-model="search"

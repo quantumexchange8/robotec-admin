@@ -61,7 +61,7 @@ const updateTotalCommission = (pending, history) => {
         <div class="rounded-md shadow-md mb-3">
             <div class="w-full">
                 <TabGroup>
-                    <TabList class="max-w-md flex mb-3 sticky top-2 bg-gray-900 z-[5]">
+                    <TabList class="max-w-md flex py-3 sticky top-0 bg-gray-900 z-[5]">
                         <Tab
                             as="template"
                             v-slot="{ selected }"
@@ -99,7 +99,7 @@ const updateTotalCommission = (pending, history) => {
                             </button>
                         </Tab>
                     </TabList>
-                    <div class="mb-3 sticky top-16 bg-gray-900 z-[5]">
+                    <div class="sticky top-16 bg-gray-900 z-[5]">
                         <div>
                             <Search v-model="search" :placeholder="$t('public.search')" />
                         </div>

@@ -50,8 +50,8 @@ const updateWalletType = (wallet_type) => {
         </template>
 
         <div class="rounded-md shadow-md mb-3">
-            <div class="w-full mb-3 sticky top-2 bg-gray-900 z-[5]">
-                <div class="flex flex-col mb-1.5">
+            <div class="w-full py-3 sticky -top-1 bg-gray-900 z-[5]">
+                <div class="flex flex-col bg-gray-900">
                     <Combobox
                         :load-options="loadClient"
                         v-model="client"
@@ -63,7 +63,7 @@ const updateWalletType = (wallet_type) => {
             </div>
             <div class="w-full">
                 <TabGroup>
-                    <TabList class="max-w-md flex pb-3 sticky top-[82px] bg-gray-900]">
+                    <TabList class="max-w-md flex p-3 sticky top-[82px] bg-gray-900">
                         <Tab
                             as="template"
                             v-slot="{ selected }"

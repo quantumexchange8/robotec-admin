@@ -47,10 +47,10 @@ const updateStatus = (newStatus) => {
             <h2 class="font-semibold text-xl text-white leading-loose mb-3">{{ $t('public.withdrawal_transactions') }}</h2>
         </template>
 
-        <div class="rounded-md shadow-md pb-3 sticky top-2 bg-gray-900 z-[5]">
+        <div class="py-3 sticky top-0 bg-gray-900 z-[5]">
             <div class="w-full">
                 <TabGroup>
-                    <TabList class="max-w-md flex mb-3 sticky top-2 bg-gray-900 z-[5]">
+                    <TabList class="max-w-md flex py-3 sticky top-0 bg-gray-900 z-[5]">
                         <Tab
                             as="template"
                             v-slot="{ selected }"

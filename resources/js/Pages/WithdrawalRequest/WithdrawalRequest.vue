@@ -40,7 +40,7 @@ const date = ref(`${formattedStartDate} - ${formattedEndDate}`);
             <h2 class="font-semibold text-xl text-white leading-loose">{{ $t('public.withdrawal_request') }}</h2>
         </template>
 
-        <div class="rounded-md shadow-md pb-3 sticky top-2 bg-gray-900 z-[5]">
+        <div class="rounded-md shadow-md py-3 sticky top-0 bg-gray-900 z-[5]">
             <div class="w-full">
                 <div class="mb-3">
                     <div>
