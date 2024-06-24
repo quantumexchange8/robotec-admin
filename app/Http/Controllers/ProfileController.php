@@ -65,7 +65,7 @@ class ProfileController extends Controller
     public function upload_profile_photo(Request $request)
     {
         $request->validate([
-            'profile_photo' => ['nullable', 'image', 'max:2048'],
+            'profile_photo' => ['nullable', 'image', 'max:1024'],
         ]);
 
         $user = $request->user();
