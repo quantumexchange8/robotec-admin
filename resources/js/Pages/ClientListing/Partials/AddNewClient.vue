@@ -99,7 +99,7 @@ const addClient = () => {
       <Modal :show="addNewClientModal" :title="$t('public.add_new_client')" @close="closeModal" max-width="sm">
         <form class="my-5 px-1">
           <div class="mb-5">
-            <Label for="name" :value="$t('public.client_name')" class="mb-1.5" :invalid="form.errors.name" />
+            <Label for="name" :value="$t('public.client_name')" class="mb-1.5 font-medium" :invalid="form.errors.name" />
   
             <Input
               id="name"
@@ -114,7 +114,7 @@ const addClient = () => {
           </div>
   
           <div class="mb-5">
-            <Label for="email" :value="$t('public.email')" class="mb-1.5" :invalid="form.errors.email" />
+            <Label for="email" :value="$t('public.email')" class="mb-1.5 font-medium" :invalid="form.errors.email" />
   
             <Input
               id="email"
@@ -130,7 +130,7 @@ const addClient = () => {
           </div>
           
           <div class="mb-5">
-            <Label for="phone_number" :value="$t('public.phone_number')" class="mb-1.5" :invalid="form.errors.phone || form.errors.dial_code" />
+            <Label for="phone_number" :value="$t('public.phone_number')" class="mb-1.5 font-medium" :invalid="form.errors.phone || form.errors.dial_code" />
                         
             <div class="grid grid-cols-5">
                 <div class="col-span-2">
@@ -162,7 +162,7 @@ const addClient = () => {
             <InputError class="mt-1.5" :message="form.errors.phone" />
         </div>
             <div>
-                <Label for="upline" :value="$t('public.assign_upline')" class="mb-1.5" :invalid="form.errors.upline" />
+                <Label for="upline" :value="$t('public.assign_upline')" class="mb-1.5 font-medium" :invalid="form.errors.upline" />
 
                 <Combobox
                     :load-options="loadUpline"

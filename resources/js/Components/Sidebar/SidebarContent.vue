@@ -10,7 +10,6 @@ import {ref} from "vue";
 const page = usePage();
 const pendingCommissionCount = ref(page.props.pendingCommissionCount);
 const pendingWithdrawalCount = ref(page.props.pendingWithdrawalCount);
-
 </script>
 
 <template>
