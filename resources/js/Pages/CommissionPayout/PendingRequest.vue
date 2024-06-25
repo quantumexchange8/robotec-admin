@@ -266,11 +266,13 @@ const sendApprovalRequest = (onSuccessCallback) => {
                                 @click.stop
                             />
                         </td>
-                        <td class="py-2">
-                            <div class="text-gray-300 text-xs">{{ formatDateTime(commission.created_at) }}</div>
-                            <div class="text-white text-sm font-medium break-all">{{ commission.upline.name }}</div>
+                        <td class="py-2 flex items-center justify-between">
+                            <div>
+                                <div class="text-gray-300 text-xs">{{ formatDateTime(commission.created_at) }}</div>
+                                <div class="text-white text-sm font-medium break-all">{{ commission.upline.name }}</div>
+                            </div>
+                            <div class="text-white text-md font-medium flex items-center justify-center">$&nbsp;{{ formatAmount(commission.amount) }}</div>
                         </td>
-                        <td class="text-white text-md font-medium flex items-center justify-center py-3">$&nbsp;{{ formatAmount(commission.amount) }}</td>
                     </tr>
                 </tbody>
             </table>
