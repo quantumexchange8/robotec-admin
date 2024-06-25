@@ -298,20 +298,20 @@ const sendApprovalRequest = (onSuccessCallback) => {
                 </div>
 
                 <div class="grid grid-cols-2 items-center mb-2">
-                    <div class="col-span-1 text-gray-300 text-xs">{{ $t('public.referee') }}</div>
-                    <div class="col-span-1 flex items-center">
+                    <div class="text-gray-300 text-xs">{{ $t('public.referee') }}</div>
+                    <div class="flex items-center">
                         <img class="w-5 h-5 rounded-full mr-2" :src="commissionDetails.downline.profile_photo || 'https://img.freepik.com/free-icon/user_318-159711.jpg'" alt="Client downline profile picture"/>
                         <div class="text-white text-sm font-medium break-all">{{ commissionDetails.downline.name }}</div>
                     </div>
                 </div>
                 <div class="grid grid-cols-2 items-center mb-2">
-                    <div class="col-span-1 text-gray-300 text-xs">{{ $t('public.requested_date') }}</div>
-                    <div class="col-span-1 text-white text-sm font-medium">{{ formatDateTime(commissionDetails.created_at) }}</div>
+                    <div class="text-gray-300 text-xs">{{ $t('public.requested_date') }}</div>
+                    <div class="text-white text-sm font-medium">{{ formatDateTime(commissionDetails.created_at) }}</div>
                 </div>
 
                 <div class="grid grid-cols-2 items-center mb-5">
-                    <div class="col-span-1 text-gray-300 text-xs">{{ $t('public.commission_amount') }}</div>
-                    <div class="col-span-1 text-white text-sm font-medium">{{ formatAmount(commissionDetails.amount) }}</div>
+                    <div class="text-gray-300 text-xs">{{ $t('public.commission_amount') }}</div>
+                    <div class="text-white text-sm font-medium">{{ formatAmount(commissionDetails.amount) }}</div>
                 </div>
 
                 <div class="items-center pt-8 flex gap-3">

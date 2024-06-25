@@ -167,32 +167,32 @@ const closeModal = () => {
             <div class="w-full h-px bg-gray-700 my-4"></div>
 
             <div class="grid grid-cols-2 items-center mb-2">
-                <div class="col-span-1 text-gray-300 text-xs">{{ $t('public.transaction_id') }}</div>
-                <div class="col-span-1 text-white text-sm font-medium">{{ transactionDetails.transaction_number }}</div>
+                <div class="text-gray-300 text-xs">{{ $t('public.transaction_id') }}</div>
+                <div class="text-white text-sm font-medium">{{ transactionDetails.transaction_number }}</div>
             </div>
             <div class="grid grid-cols-2 items-center mb-2">
-                <div class="col-span-1 text-gray-300 text-xs">{{ $t('public.requested_date') }}</div>
-                <div class="col-span-1 text-white text-sm font-medium">{{ formatDateTime(transactionDetails.created_at) }}</div>
-            </div>
-
-            <div class="grid grid-cols-2 items-center mb-2">
-                <div class="col-span-1 text-gray-300 text-xs">{{ $t('public.approval_date') }}</div>
-                <div class="col-span-1 text-white text-sm font-medium">{{ formatDateTime(transactionDetails.approved_at) }}</div>
+                <div class="text-gray-300 text-xs">{{ $t('public.requested_date') }}</div>
+                <div class="text-white text-sm font-medium">{{ formatDateTime(transactionDetails.created_at) }}</div>
             </div>
 
             <div class="grid grid-cols-2 items-center mb-2">
-                <div class="col-span-1 text-gray-300 text-xs">{{ $t('public.withdrawal_amount') }}</div>
-                <div class="col-span-1 text-white text-sm font-medium">$&nbsp;{{ formatAmount(transactionDetails.amount) }}</div>
+                <div class="text-gray-300 text-xs">{{ $t('public.approval_date') }}</div>
+                <div class="text-white text-sm font-medium">{{ formatDateTime(transactionDetails.approved_at) }}</div>
             </div>
 
             <div class="grid grid-cols-2 items-center mb-2">
-                <div class="col-span-1 text-gray-300 text-xs">{{ $t('public.fee_charges') }} (10%)</div>
-                <div class="col-span-1 text-white text-sm font-medium">$&nbsp;{{ formatAmount(transactionDetails.transaction_charges) }}</div>
+                <div class="text-gray-300 text-xs">{{ $t('public.withdrawal_amount') }}</div>
+                <div class="text-white text-sm font-medium">$&nbsp;{{ formatAmount(transactionDetails.amount) }}</div>
+            </div>
+
+            <div class="grid grid-cols-2 items-center mb-2">
+                <div class="text-gray-300 text-xs">{{ $t('public.fee_charges') }} (10%)</div>
+                <div class="text-white text-sm font-medium">$&nbsp;{{ formatAmount(transactionDetails.transaction_charges) }}</div>
             </div>
 
             <div class="grid grid-cols-2 items-center">
-                <div class="col-span-1 text-gray-300 text-xs">{{ $t('public.status') }}</div>
-                <div class="col-span-1 text-sm font-medium"
+                <div class="text-gray-300 text-xs">{{ $t('public.status') }}</div>
+                <div class="text-sm font-medium"
                     :class="{
                         'text-success-500': transactionDetails.status === 'success',
                         'text-error-500': transactionDetails.status === 'failed'
@@ -205,16 +205,16 @@ const closeModal = () => {
                 <div class="w-full h-px bg-gray-700 my-4"></div>
 
                 <div class="grid grid-cols-2 items-center mb-2">
-                    <div class="col-span-1 text-gray-300 text-xs">{{ $t('public.txn_hash') }}</div>
-                    <div class="col-span-1 flex items-start">
+                    <div class="text-gray-300 text-xs">{{ $t('public.txn_hash') }}</div>
+                    <div class="flex items-start">
                         <div class="text-white text-sm font-medium break-all">{{ transactionDetails.txn_hash }}
                         </div>
                     </div>
                 </div>
                 
                 <div class="grid grid-cols-2 items-center mb-2">
-                    <div class="col-span-1 text-gray-300 text-xs">{{ $t('public.sent_address') }}</div>
-                    <div class="col-span-1 flex items-start">
+                    <div class="text-gray-300 text-xs">{{ $t('public.sent_address') }}</div>
+                    <div class="flex items-start">
                         <div class="text-white text-sm font-medium break-all">
                             {{ transactionDetails.from_wallet_address }}
                             <Tooltip :content="$t('public.' + tooltipContent)" placement="bottom">
@@ -225,8 +225,8 @@ const closeModal = () => {
                 </div>
 
                 <div class="grid grid-cols-2 items-center">
-                    <div class="col-span-1 text-gray-300 text-xs">{{ $t('public.receiving_address') }}</div>
-                    <div class="col-span-1 flex items-start">
+                    <div class="text-gray-300 text-xs">{{ $t('public.receiving_address') }}</div>
+                    <div class="flex items-start">
                         <div class="text-white text-sm font-medium break-all">
                             {{ transactionDetails.to_wallet_address }}
                             <Tooltip :content="$t('public.' + tooltipContent)" placement="bottom">
@@ -240,8 +240,8 @@ const closeModal = () => {
             <div class="w-full h-px bg-gray-700 my-4"></div>
 
             <div class="grid grid-cols-2 items-center">
-                <div class="col-span-1 text-gray-300 text-xs">{{ $t('public.description') }}</div>
-                <div class="col-span-1 text-white text-sm font-medium">{{ transactionDetails.remarks ?? '-' }}</div>
+                <div class="text-gray-300 text-xs">{{ $t('public.description') }}</div>
+                <div class="text-white text-sm font-medium">{{ transactionDetails.remarks ?? '-' }}</div>
             </div>
 
         </div>

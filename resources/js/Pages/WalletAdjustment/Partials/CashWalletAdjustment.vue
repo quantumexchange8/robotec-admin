@@ -206,7 +206,7 @@ const toggleExpanded = (history) => {
                                 :class="{ 'border-transparent': index === histories.data.length - 1 }"
                             >
                                 <td class="w-full py-2 flex justify-between items-center" @click="toggleExpanded(history)">
-                                    <div class="w-full flex-row">
+                                    <div class="w-full flex-row gap-2">
                                         <div class="w-full flex justify-between">
                                             <div class="text-gray-300 text-xs gap-3 justify-start">
                                                 {{ formatDateTime(history.created_at) }}
@@ -216,7 +216,7 @@ const toggleExpanded = (history) => {
                                                 {{ history.to_wallet_id ? '+' + formatAmount(history.transaction_amount) : (history.from_wallet_id ? '-' + formatAmount(history.transaction_amount) : formatAmount(history.transaction_amount))}}
                                             </div>
                                         </div>
-                                        <div v-if="history.isExpanded" class="mt-2 w-full flex justify-between">
+                                        <div v-if="history.isExpanded" class="w-full flex justify-between">
                                             <div class="text-gray-300 text-xxs font-medium gap-3 justify-start">
                                                 {{ $t('public.previous_balance') }}: <span class="text-white">$&nbsp;{{ formatAmount(history.old_wallet_amount) }}</span>
                                             </div>
@@ -269,25 +269,25 @@ const toggleExpanded = (history) => {
             </div>
 
             <div class="grid grid-cols-2 items-center mb-2">
-                <div class="col-span-1 text-gray-300 text-xs">{{ $t('public.client') }}</div>
-                <div class="col-span-1 flex items-center">
+                <div class="text-gray-300 text-xs">{{ $t('public.client') }}</div>
+                <div class="flex items-center">
                 <img class="w-5 h-5 rounded-full mr-2" :src="client.img ? client.img : '/data/profile_photo.svg'" alt="Client upline profile picture" />
                 <div class="text-white text-sm font-medium">{{ client ? client.label : '' }}</div>
                 </div>
             </div>
             <div class="grid grid-cols-2 items-center mb-2">
-                <div class="col-span-1 text-gray-300 text-xs">{{ $t('public.wallet') }}</div>
-                <div class="col-span-1 text-white text-sm font-medium">{{ wallet ? $t('public.' + wallet.type) : '' }}</div>
+                <div class="text-gray-300 text-xs">{{ $t('public.wallet') }}</div>
+                <div class="text-white text-sm font-medium">{{ wallet ? $t('public.' + wallet.type) : '' }}</div>
             </div>
 
             <div class="grid grid-cols-2 items-center mb-2">
-                <div class="col-span-1 text-gray-300 text-xs">{{ $t('public.current_balance') }}</div>
-                <div class="col-span-1 text-white text-sm font-medium">{{ formatAmount(wallet ? wallet.balance : 0) }}</div>
+                <div class="text-gray-300 text-xs">{{ $t('public.current_balance') }}</div>
+                <div class="text-white text-sm font-medium">{{ formatAmount(wallet ? wallet.balance : 0) }}</div>
             </div>
 
             <div class="grid grid-cols-2 items-center mb-5">
-                <div class="col-span-1 text-gray-300 text-xs">{{ $t('public.after_adjustment') }}</div>
-                <div class="col-span-1 text-white text-sm font-medium">{{ formatAmount(adjustedBalance) }}</div>
+                <div class="text-gray-300 text-xs">{{ $t('public.after_adjustment') }}</div>
+                <div class="text-white text-sm font-medium">{{ formatAmount(adjustedBalance) }}</div>
             </div>
 
             <div class="items-center pt-8 flex gap-3">

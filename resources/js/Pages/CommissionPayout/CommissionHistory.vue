@@ -156,25 +156,25 @@ const closeModal = () => {
             </div>
 
             <div class="grid grid-cols-2 items-center mb-2">
-                <div class="col-span-1 text-gray-300 text-xs">{{ $t('public.referee') }}</div>
-                <div class="col-span-1 flex items-center">
+                <div class="text-gray-300 text-xs">{{ $t('public.referee') }}</div>
+                <div class="flex items-center">
                     <img class="w-5 h-5 rounded-full mr-2" :src="commissionDetails.downline.profile_photo || '/data/profile_photo.svg'" alt="Client downline profile picture"/>
                     <div class="text-white text-sm font-medium break-all">{{ commissionDetails.downline.name }}</div>
                 </div>
             </div>
             <div class="grid grid-cols-2 items-center mb-2">
-                <div class="col-span-1 text-gray-300 text-xs">{{ $t('public.requested_date') }}</div>
-                <div class="col-span-1 text-white text-sm font-medium">{{ formatDateTime(commissionDetails.created_at) }}</div>
+                <div class="text-gray-300 text-xs">{{ $t('public.requested_date') }}</div>
+                <div class="text-white text-sm font-medium">{{ formatDateTime(commissionDetails.created_at) }}</div>
             </div>
 
             <div class="grid grid-cols-2 items-center mb-2">
-                <div class="col-span-1 text-gray-300 text-xs">{{ $t('public.approved_date') }}</div>
-                <div class="col-span-1 text-white text-sm font-medium">{{ formatDateTime(commissionDetails.approved_at) }}</div>
+                <div class="text-gray-300 text-xs">{{ $t('public.approved_date') }}</div>
+                <div class="text-white text-sm font-medium">{{ formatDateTime(commissionDetails.approved_at) }}</div>
             </div>
 
             <div class="grid grid-cols-2 items-center mb-5">
-                <div class="col-span-1 text-gray-300 text-xs">{{ $t('public.commission_amount') }}</div>
-                <div class="col-span-1 text-white text-sm font-medium">{{ formatAmount(commissionDetails.amount) }}</div>
+                <div class="text-gray-300 text-xs">{{ $t('public.commission_amount') }}</div>
+                <div class="text-white text-sm font-medium">{{ formatAmount(commissionDetails.amount) }}</div>
             </div>
 
         </div>

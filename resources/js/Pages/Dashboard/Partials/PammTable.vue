@@ -142,22 +142,22 @@ const closeModal = () => {
             <div class="w-full h-px bg-gray-700 my-4"></div>
 
             <div class="grid grid-cols-2 items-center mb-2">
-                <div class="col-span-1 text-gray-300 text-xs">{{ $t('public.transaction_id') }}</div>
-                <div class="col-span-1 text-white text-sm font-medium">{{ transactionDetails.transaction_number }}</div>
+                <div class="text-gray-300 text-xs">{{ $t('public.transaction_id') }}</div>
+                <div class="text-white text-sm font-medium">{{ transactionDetails.transaction_number }}</div>
             </div>
             <div class="grid grid-cols-2 items-center mb-2">
-                <div class="col-span-1 text-gray-300 text-xs">{{ $t('public.transaction_date') }}</div>
-                <div class="col-span-1 text-white text-sm font-medium">{{ formatDateTime(transactionDetails.created_at) }}</div>
+                <div class="text-gray-300 text-xs">{{ $t('public.transaction_date') }}</div>
+                <div class="text-white text-sm font-medium">{{ formatDateTime(transactionDetails.created_at) }}</div>
             </div>
 
             <div class="grid grid-cols-2 items-center mb-2">
-                <div class="col-span-1 text-gray-300 text-xs">{{ $t('public.from') }}</div>
-                <div class="col-span-1 text-white text-sm font-medium">{{ transactionDetails.from_wallet.name }}</div>
+                <div class="text-gray-300 text-xs">{{ $t('public.from') }}</div>
+                <div class="text-white text-sm font-medium">{{ transactionDetails.from_wallet.name }}</div>
             </div>
 
             <div class="grid grid-cols-2 items-center">
-                <div class="col-span-1 text-gray-300 text-xs">{{ $t('public.fund_in_amount') }}</div>
-                <div class="col-span-1 text-white text-sm font-medium">$&nbsp;{{ formatAmount(transactionDetails.transaction_amount) }}</div>
+                <div class="text-gray-300 text-xs">{{ $t('public.fund_in_amount') }}</div>
+                <div class="text-white text-sm font-medium">$&nbsp;{{ formatAmount(transactionDetails.transaction_amount) }}</div>
             </div>
 
         </div>
