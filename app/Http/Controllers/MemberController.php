@@ -58,12 +58,14 @@ class MemberController extends Controller
             $query->where(function ($q) use ($purchasedEA) {
                 if ($purchasedEA === 'yes') {
                     $q->whereHas('transactions', function ($q) {
-                        $q->where('transaction_type', 'purchase_robotec')
+                        $q->where('category', 'wallet')
+                            ->where('transaction_type', 'purchase_robotec')
                             ->where('status', 'success');
                     });
                 } elseif ($purchasedEA === 'no') {
                     $q->whereDoesntHave('transactions', function ($q) {
-                        $q->where('transaction_type', 'purchase_robotec')
+                        $q->where('category', 'wallet')
+                            ->where('transaction_type', 'purchase_robotec')
                             ->where('status', 'success');
                     });
                 }
@@ -74,12 +76,14 @@ class MemberController extends Controller
             $query->where(function ($q) use ($fundedPAMM) {
                 if ($fundedPAMM === 'yes') {
                     $q->whereHas('transactions', function ($q) {
-                        $q->where('transaction_type', 'fund_in')
+                        $q->where('category', 'trading_account')
+                            ->where('transaction_type', 'fund_in')
                             ->where('status', 'success');
                     });
                 } elseif ($fundedPAMM === 'no') {
                     $q->whereDoesntHave('transactions', function ($q) {
-                        $q->where('transaction_type', 'fund_in')
+                        $q->where('category', 'trading_account')
+                            ->where('transaction_type', 'fund_in')
                             ->where('status', 'success');
                     });
                 }
@@ -119,17 +123,22 @@ class MemberController extends Controller
         ])->withCount(['children as total_referee'])
             ->withSum(
                 ['transactions as total_deposit' => function($query) {
-                    $query->where('transaction_type', 'deposit');
+                    $query->where('category', 'wallet')
+                        ->where('transaction_type', 'deposit');
                 }],
                 'transaction_amount'
             )
             ->withSum(['transactions as total_withdrawal' => function ($q) {
-                $q->where('transaction_type', 'withdrawal');
+                $q->where('category', 'wallet')
+                ->where('transaction_type', 'withdrawal');
             }], 'amount')
             ->withSum(['transactions as total_commission' => function ($q) {
-                $q->where('transaction_type', 'commission');
+                $q->where('category', 'wallet')
+                ->where('transaction_type', 'commission');
             }], 'transaction_amount')
-            ->withSum(['auto_tradings as pamm_fund_in_amount'], 'investment_amount')
+            ->withSum(['auto_tradings as pamm_fund_in_amount' => function ($q) {
+                $q->whereNot('status', 'pending');
+            }], 'investment_amount')
             ->withSum(['wallets as commission' => function ($q) {
                 $q->where('type', 'commission_wallet');
             }], 'balance');
@@ -220,8 +229,6 @@ class MemberController extends Controller
             'hierarchyList' => $hierarchyList,
             'role' => 'user',
         ];
-
-        $id_number = str_pad($user->id, 6, '0', STR_PAD_LEFT);
 
         $user = User::create($userData);
 

@@ -94,7 +94,7 @@ class TransactionController extends Controller
         $walletType = $request->input('type');
 
         $wallet = Wallet::where('user_id', $clientId)->where('type', $walletType)->first();
-        $query = Transaction::where('transaction_type', 'adjustment');
+        $query = Transaction::where('category', 'wallet')->where('transaction_type', 'adjustment');
 
         if ($wallet) {
             $query->where(function ($query) use ($wallet) {
@@ -118,6 +118,7 @@ class TransactionController extends Controller
         // Start building the query
         $query = Transaction::query()
             ->with('user','from_wallet')
+            ->where('category', 'wallet')
             ->where('transaction_type', 'withdrawal')
             ->whereNotNull('from_wallet_id')
             ->whereNull('approved_at')
@@ -142,7 +143,6 @@ class TransactionController extends Controller
             ]);
         });
         
-
         // Fetch the transactions
         $transactions = $query->latest()->paginate(10);
 
@@ -160,28 +160,17 @@ class TransactionController extends Controller
             'transactions' => $transactions,
             'totalAmount' => $totalAmount
         ]);
-        
     }
 
     public function approve_withdrawal_request(ApproveWithdrawalRequest $request)
     {
         $withdrawalRequest = Transaction::with('from_wallet')
             ->where('id', $request->id)
+            ->where('category', 'wallet')
             ->where('transaction_type', 'withdrawal')
-            ->whereNotNull('from_wallet_id')
             ->whereNull('approved_at')
             ->where('status', 'processing')
-            ->firstOrFail();
-
-        // // Verify wallet address and transaction number
-        // if ($request->to_wallet_address !== $withdrawalRequest->to_wallet_address) {
-        //     throw ValidationException::withMessages(['to_wallet_address' => trans('public.incorrect_usdt_address')]);
-        // }
-
-        // // Check if the transaction amount exceeds the wallet balance
-        // if ($withdrawalRequest->transaction_amount > $withdrawalRequest->from_wallet->balance) {
-        //     throw ValidationException::withMessages(['transaction_amount' => trans('public.withdrawal_amount_exceed_balance')]);
-        // }
+            ->first();
 
         // Update withdrawal request status and approval timestamp
         $withdrawalRequest->update([
@@ -201,13 +190,10 @@ class TransactionController extends Controller
 
     public function reject_withdrawal_request(Request $request)
     {
-        // $request->validate([
-        //     'remarks' => ['required'],
-        // ]);
-
-        $withdrawalRequest = Transaction::where('id', $request->id)
+        $withdrawalRequest = Transaction::with('from_wallet')
+            ->where('id', $request->id)
+            ->where('category', 'wallet')
             ->where('transaction_type', 'withdrawal')
-            ->whereNotNull('from_wallet_id')
             ->whereNull('approved_at')
             ->where('status', 'processing')
             ->first();
@@ -236,6 +222,7 @@ class TransactionController extends Controller
         // Start building the query
         $query = Transaction::query()
             ->with('user','from_wallet','to_wallet')
+            ->where('category', $request->category)
             ->where('transaction_type', $request->transaction_type)
             ->whereNotIn('status', ['processing']);
 
@@ -279,8 +266,5 @@ class TransactionController extends Controller
             'transactions' => $transactions,
             'totalAmount' => $totalAmount,
         ]);
-        
     }
-
-
 }

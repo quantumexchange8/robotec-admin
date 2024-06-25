@@ -22,6 +22,7 @@ const props = defineProps({
 const { formatDateTime, formatAmount } = transactionFormat();
 
 const transactions = ref({ data: [] });
+const category = 'trading_account'
 const transaction_type = 'fund_in'
 const totalAmount = ref(0);
 const currentPage = ref(1);
@@ -41,7 +42,7 @@ watch(
 const getResults = async (page = 1, search = '', date = '') => {
     isLoading.value = true;
     try {
-        let url = `/transaction/transasction_data?page=${page}&transaction_type=${transaction_type}`;
+        let url = `/transaction/transasction_data?page=${page}&category=${category}&transaction_type=${transaction_type}`;
 
         if (search) {
             url += `&search=${search}`;
