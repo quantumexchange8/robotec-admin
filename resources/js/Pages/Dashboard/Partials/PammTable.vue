@@ -12,6 +12,7 @@ import Button from '@/Components/Button.vue';
 import NoHistory from "@/Components/NoHistory.vue";
 import { DuplicateIcon } from "@/Components/Icons/outline";
 import Tooltip from "@/Components/Tooltip.vue";
+import Loading from "@/Components/Loading.vue";
 
 const props = defineProps({
     search: String,
@@ -27,6 +28,8 @@ const currentPage = ref(1);
 const transactionModal = ref(false);
 const transactionDetails = ref(null);
 const tooltipContent = ref('copy');
+const isLoading = ref(props.isLoading);
+const emit = defineEmits(['update:loading']);
 
 watch(
     [() => props.search, () => props.date],
@@ -36,6 +39,7 @@ watch(
 );
 
 const getResults = async (page = 1, search = '', date = '') => {
+    isLoading.value = true;
     try {
         let url = `/transaction/transasction_data?page=${page}&transaction_type=${transaction_type}`;
 
@@ -52,6 +56,9 @@ const getResults = async (page = 1, search = '', date = '') => {
         totalAmount.value = response.data.totalAmount;
     } catch (error) {
         console.error(error);
+    } finally {
+        isLoading.value = false;
+        emit('update:loading', false);
     }
 };
 
@@ -84,50 +91,57 @@ const closeModal = () => {
 </script>
 
 <template>
-    <div v-if="transactions.data.length == 0" >
-        <div class="w-full h-[360px] p-3 bg-gray-800 rounded-xl flex-col justify-center items-center inline-flex">
-            <div class="self-stretch h-[212px] py-5 flex-col justify-start items-center gap-3 flex">
-                <NoHistory class="w-40 h-[120px] relative" />
-                <div class="self-stretch text-center text-gray-300 text-sm">
-                    {{ $t('public.no_transaction_history_message') }}
+    <div class="relative overflow-x-auto rounded-xl">
+        <div v-if="isLoading" class="flex items-center justify-center py-8 px-3 bg-gray-800">
+            <Loading />
+        </div>
+
+        <div v-else-if="transactions.data.length == 0" >
+            <div class="w-full h-[360px] p-3 bg-gray-800 rounded-xl flex-col justify-center items-center inline-flex">
+                <div class="self-stretch h-[212px] py-5 flex-col justify-start items-center gap-3 flex">
+                    <NoHistory class="w-40 h-[120px] relative" />
+                    <div class="self-stretch text-center text-gray-300 text-sm">
+                        {{ $t('public.no_transaction_history_message') }}
+                    </div>
+                </div>
+            </div>
+            <div class="px-4 py-5 flex items-center justify-center">
+                <div class="rounded-full bg-primary-500 w-9 h-9 flex items-center justify-center">
+                    <div class="text-center text-white text-sm font-medium">1</div>
                 </div>
             </div>
         </div>
-        <div class="px-4 py-5 flex items-center justify-center">
-            <div class="rounded-full bg-primary-500 w-9 h-9 flex items-center justify-center">
-                <div class="text-center text-white text-sm font-medium">1</div>
+
+
+        <div v-else>
+            <div class="w-full px-4 py-3 bg-gray-800 rounded-xl flex-col justify-start items-start inline-flex">
+                <table class="w-full text-sm text-left text-gray-500">
+                    <tbody>
+                        <tr v-for="(transaction, index) in transactions.data" :key="transaction.id" class="bg-gray-800 text-xs border-b border-gray-700" :class="{ 'border-transparent': index === transactions.data.length - 1 }" @click="openModal(transaction)">
+                            <td>
+                                <div class="flex justify-between items-center gap-3 py-2">
+                                    <div>
+                                        <div class="text-gray-300 text-xs">{{ formatDateTime(transaction.created_at) }}</div>
+                                        <div class="text-white text-sm font-medium break-all">{{ transaction.user.name }}</div>
+                                    </div>
+                                    <div class="text-success-500 text-right text-md font-medium">$&nbsp;{{ formatAmount(transaction.transaction_amount) }}</div>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
 
-
-    <div v-else>
-        <div class="w-full px-4 py-3 bg-gray-800 rounded-xl flex-col justify-start items-start inline-flex">
-            <table class="w-full text-sm text-left text-gray-500">
-                <tbody>
-                    <tr v-for="(transaction, index) in transactions.data" :key="transaction.id" class="bg-gray-800 text-xs border-b border-gray-700" :class="{ 'border-transparent': index === transactions.data.length - 1 }" @click="openModal(transaction)">
-                        <td>
-                            <div class="flex justify-between items-center gap-3 py-2">
-                                <div>
-                                    <div class="text-gray-300 text-xs">{{ formatDateTime(transaction.created_at) }}</div>
-                                    <div class="text-white text-sm font-medium break-all">{{ transaction.user.name }}</div>
-                                </div>
-                                <div class="text-success-500 text-right text-md font-medium">$&nbsp;{{ formatAmount(transaction.transaction_amount) }}</div>
-                            </div>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-        <div class="flex justify-center mt-4">
-            <TailwindPagination
-                :item-classes="paginationClass"
-                :active-classes="paginationActiveClass"
-                :data="transactions"
-                :limit="10"
-                @pagination-change-page="handlePageChange"
-            />
-        </div>
+    <div class="flex justify-center mt-4" v-if="!isLoading">
+        <TailwindPagination
+            :item-classes="paginationClass"
+            :active-classes="paginationActiveClass"
+            :data="transactions"
+            :limit="10"
+            @pagination-change-page="handlePageChange"
+        />
     </div>
 
     <Modal :show="transactionModal" :title="$t('public.fund_in_details')" @close="closeModal" max-width="sm">

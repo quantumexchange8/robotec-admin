@@ -81,8 +81,8 @@ class PammController extends Controller
                 $updatedValue = $pamm->value / 100; // Convert percentage to decimal
     
                 $pamm_return = abs($pamm->value);
-                // Calculate the amount based on percentage
-                $amount = abs($updatedValue) * $investmentAmount;
+                // Calculate the amount based on percentage and round up to 2 decimal
+                $amount = round((abs($updatedValue) * $investmentAmount), 2);
 
                 // Assuming you have the user's meta login information and necessary data
                 $meta_login = $record->meta_login;

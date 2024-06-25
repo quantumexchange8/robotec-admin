@@ -12,6 +12,7 @@ import NoRequest from '@/Components/NoRequest.vue';
 import Button from "@/Components/Button.vue";
 import Checkbox from "@/Components/Checkbox.vue";
 import { trans } from "laravel-vue-i18n";
+import Loading from "@/Components/Loading.vue";
 
 const props = defineProps({
     search: String,
@@ -34,7 +35,8 @@ const commissionModal = ref(false);
 const commissionDetails = ref(null);
 const totalPending = ref();
 const totalHistory = ref();
-const emit = defineEmits(['update:totalCommissionRequest']);
+const emit = defineEmits(['update:totalCommissionRequest', 'update:loading']);
+const isLoading = ref(props.isLoading);
 
 watchEffect(() => {
     // Emit the totalCommissionRequest value whenever it changes
@@ -49,6 +51,7 @@ watch(
 );
 
 const getResults = async (page = 1, search = '', date = '', type = '') => {
+    isLoading.value = true;
     try {
         let url = `/commission/commission_request_data?page=${page}`;
 
@@ -70,6 +73,9 @@ const getResults = async (page = 1, search = '', date = '', type = '') => {
         totalHistory.value = response.data.totalHistory;
     } catch (error) {
         console.error(error);
+    } finally {
+        isLoading.value = false;
+        emit('update:loading', false);
     }
 };
 
@@ -223,69 +229,76 @@ const sendApprovalRequest = (onSuccessCallback) => {
         <Button variant="success" :disabled="!isAnyCheckboxChecked || form.processing" @click="approveCommissions">{{ $t('public.approve') }}</Button>
     </div>
 
-    <div v-if="commissions.data.length == 0" >
-        <div class="w-full h-[360px] p-3 bg-gray-800 rounded-xl flex-col justify-center items-center inline-flex">
-            <div class="self-stretch h-[212px] py-5 flex-col justify-start items-center gap-3 flex">
-                <NoRequest class="w-40 h-[120px] relative" />
-                <div class="self-stretch text-center text-gray-300 text-sm">
-                    {{ $t('public.no_commission_request_message') }}
+    <div class="relative overflow-x-auto rounded-xl">
+        <div v-if="isLoading" class="flex items-center justify-center py-8 px-3 bg-gray-800">
+            <Loading />
+        </div>
+
+        <div v-else-if="commissions.data.length == 0" >
+            <div class="w-full h-[360px] p-3 bg-gray-800 rounded-xl flex-col justify-center items-center inline-flex">
+                <div class="self-stretch h-[212px] py-5 flex-col justify-start items-center gap-3 flex">
+                    <NoRequest class="w-40 h-[120px] relative" />
+                    <div class="self-stretch text-center text-gray-300 text-sm">
+                        {{ $t('public.no_commission_request_message') }}
+                    </div>
+                </div>
+            </div>
+            <div class="px-4 py-5 flex items-center justify-center">
+                <div class="rounded-full bg-primary-500 w-9 h-9 flex items-center justify-center">
+                    <div class="text-center text-white text-sm font-medium">1</div>
                 </div>
             </div>
         </div>
-        <div class="px-4 py-5 flex items-center justify-center">
-            <div class="rounded-full bg-primary-500 w-9 h-9 flex items-center justify-center">
-                <div class="text-center text-white text-sm font-medium">1</div>
+
+        <div v-else>
+            <div class="w-full px-4 py-3 bg-gray-800 rounded-xl flex-col justify-start items-start inline-flex">
+                <table class="w-full text-sm text-left text-gray-500">
+                    <thead>
+                    <tr class="bg-gray-800 text-xs border-b border-gray-700">
+                        <th class="py-2">
+                            <Checkbox
+                                v-model="isAllSelected"
+                                @click.native="handleSelectAll"
+                                id="selectAllCheckbox"
+                            />
+                        </th>
+                        <th class="text-white text-sm font-normal">
+                            {{ selectAllLabel }}
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="(commission, index) in commissions.data" :key="commission.id" class="py-2 bg-gray-800 text-xs border-b border-gray-700" :class="{ 'border-transparent': index === commissions.data.length - 1 }" @click="openModal(commission)">
+                            <td>
+                                <Checkbox
+                                    :checked="isAllSelected || isItemSelected(commission.id, commission.amount)"
+                                    :model-value="isChecked.includes(commission.id)"
+                                    @update:model-value="updateChecked(commission.id, commission.amount)"
+                                    @click.stop
+                                />
+                            </td>
+                            <td class="py-2 flex items-center justify-between">
+                                <div>
+                                    <div class="text-gray-300 text-xs">{{ formatDateTime(commission.created_at) }}</div>
+                                    <div class="text-white text-sm font-medium break-all">{{ commission.upline.name }}</div>
+                                </div>
+                                <div class="text-white text-md font-medium flex items-center justify-center">$&nbsp;{{ formatAmount(commission.amount) }}</div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
 
-    <div v-else>
-        <div class="w-full px-4 py-3 bg-gray-800 rounded-xl flex-col justify-start items-start inline-flex">
-            <table class="w-full text-sm text-left text-gray-500">
-                <thead>
-                <tr class="bg-gray-800 text-xs border-b border-gray-700">
-                    <th class="py-2">
-                        <Checkbox
-                            v-model="isAllSelected"
-                            @click.native="handleSelectAll"
-                            id="selectAllCheckbox"
-                        />
-                    </th>
-                    <th class="text-white text-sm font-normal">
-                        {{ selectAllLabel }}
-                    </th>
-                </tr>
-                </thead>
-                <tbody>
-                    <tr v-for="(commission, index) in commissions.data" :key="commission.id" class="py-2 bg-gray-800 text-xs border-b border-gray-700" :class="{ 'border-transparent': index === commissions.data.length - 1 }" @click="openModal(commission)">
-                        <td>
-                            <Checkbox
-                                :checked="isAllSelected || isItemSelected(commission.id, commission.amount)"
-                                :model-value="isChecked.includes(commission.id)"
-                                @update:model-value="updateChecked(commission.id, commission.amount)"
-                                @click.stop
-                            />
-                        </td>
-                        <td class="py-2 flex items-center justify-between">
-                            <div>
-                                <div class="text-gray-300 text-xs">{{ formatDateTime(commission.created_at) }}</div>
-                                <div class="text-white text-sm font-medium break-all">{{ commission.upline.name }}</div>
-                            </div>
-                            <div class="text-white text-md font-medium flex items-center justify-center">$&nbsp;{{ formatAmount(commission.amount) }}</div>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-        <div class="flex justify-center mt-4">
-            <TailwindPagination
-                :item-classes="paginationClass"
-                :active-classes="paginationActiveClass"
-                :data="commissions"
-                :limit="10"
-                @pagination-change-page="handlePageChange"
-            />
-        </div>
+    <div class="flex justify-center mt-4" v-if="!isLoading">
+        <TailwindPagination
+            :item-classes="paginationClass"
+            :active-classes="paginationActiveClass"
+            :data="commissions"
+            :limit="10"
+            @pagination-change-page="handlePageChange"
+        />
     </div>
 
     <Modal :show="commissionModal" :title="$t('public.commission_payout_details')" @close="closeModal" max-width="sm">

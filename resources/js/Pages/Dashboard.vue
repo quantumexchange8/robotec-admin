@@ -43,7 +43,7 @@ const handleRedirectTo = (pending) => {
 
     <AuthenticatedLayout dashboard>
         <template #header>
-            <h2 class="font-semibold text-xl text-white px-4 py-2">{{ $t('public.dashboard') }}</h2>
+            <h2 class="font-semibold text-xl text-white px-4 pt-5 pb-2">{{ $t('public.dashboard') }}</h2>
         </template>
 
         <div class="flex flex-col justify-end items-center gap-3 self-stretch">

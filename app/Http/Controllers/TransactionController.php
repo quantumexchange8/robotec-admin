@@ -94,15 +94,17 @@ class TransactionController extends Controller
         $walletType = $request->input('type');
 
         $wallet = Wallet::where('user_id', $clientId)->where('type', $walletType)->first();
+        $query = Transaction::where('transaction_type', 'adjustment');
 
-        $histories = Transaction::where('transaction_type', 'adjustment')
-            ->where(function ($query) use ($wallet) {
-                $query->where('from_wallet_id', $wallet->id)
-                    ->orWhere('to_wallet_id', $wallet->id);
-            })
-            ->latest()
-            ->paginate(10);
+        if ($wallet) {
+            $query->where(function ($query) use ($wallet) {
+                    $query->where('from_wallet_id', $wallet->id)
+                        ->orWhere('to_wallet_id', $wallet->id);
+                });
+        }
     
+        $histories = $query->latest()->paginate(10);
+
         return response()->json($histories);
     }
 

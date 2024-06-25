@@ -11,6 +11,7 @@ import Modal from "@/Components/Modal.vue";
 import NoHistory from "@/Components//NoHistory.vue";
 import {transactionFormat} from "@/Composables/index.js";
 import { TailwindPagination } from "laravel-vue-pagination";
+import Loading from "@/Components/Loading.vue";
 
 const props = defineProps({
     pamm: Object,
@@ -119,63 +120,69 @@ const updatePamm = () => {
             {{ $t('public.update_history') }}
         </div>
 
-        <div v-if="histories.data.length <= 0">
-            <div class="flex justify-center items-center h-full p-3">
-                <div
-                    class="w-full h-[360px] my-3 px-5 py-8 bg-gray-800 rounded-2xl flex-col justify-center items-center gap-8 inline-flex">
-                    <div class="flex flex-col items-center">
-                        <NoHistory class="w-40 h-[120px]" />
-                        <div
-                            class="w-[328px] text-center text-gray-300 text-sm mt-3">
-                            {{ $t('public.no_history_message') }}
-                        </div>
-                    </div>
+        <div class="relative overflow-x-auto rounded-xl">
+            <div v-if="isLoading" class="flex items-center justify-center py-8 px-3 bg-gray-800">
+                <Loading />
+            </div>
 
+            <div v-else-if="histories.data.length == 0">
+                <div class="flex justify-center items-center h-full p-3">
+                    <div
+                        class="w-full h-[360px] my-3 px-5 py-8 bg-gray-800 rounded-2xl flex-col justify-center items-center gap-8 inline-flex">
+                        <div class="flex flex-col items-center">
+                            <NoHistory class="w-40 h-[120px]" />
+                            <div
+                                class="w-[328px] text-center text-gray-300 text-sm mt-3">
+                                {{ $t('public.no_history_message') }}
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="px-4 py-5 flex items-center justify-center">
+                    <div class="rounded-full bg-primary-500 w-9 h-9 flex items-center justify-center">
+                        <div class="text-center text-white text-sm font-medium">1</div>
+                    </div>
                 </div>
             </div>
-            <div class="px-4 py-5 flex items-center justify-center">
-                <div class="rounded-full bg-primary-500 w-9 h-9 flex items-center justify-center">
-                    <div class="text-center text-white text-sm font-medium">1</div>
+            <div v-else>
+                <div class="p-3 bg-gray-800">
+                    <table class="w-full text-sm text-left">
+                        <tbody>
+                            <tr
+                                v-for="(history, index) in histories.data"
+                                :key="history.id"
+                                class="text-xs text-white border-b border-gray-700"
+                                :class="{ 'border-transparent': index === histories.data.length - 1 }"
+                            >
+                                <td class="py-2 flex justify-between items-center">
+                                    <div>
+                                        <div class="text-gray-300 text-xs gap-3">
+                                            {{ formatDateTime(history.created_at) }}
+                                        </div>
+                                    </div>
+                                    <div class="text-right">
+                                        <div class="font-medium text-md"
+                                            :class="{ 'text-success-500': history.setting_new_value > 0, 'text-error-500': history.setting_new_value < 0, 'text-white': history.setting_new_value === 0 }">
+                                            {{ history.setting_new_value > 0 ? '+' + (history.setting_new_value) : (history.setting_new_value) }}
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
-        <div v-else>
-            <div class="p-3 bg-gray-800">
-                <table class="w-full text-sm text-left">
-                    <tbody>
-                        <tr
-                            v-for="(history, index) in histories.data"
-                            :key="history.id"
-                            class="text-xs text-white border-b border-gray-700"
-                            :class="{ 'border-transparent': index === histories.data.length - 1 }"
-                        >
-                            <td class="py-2 flex justify-between items-center">
-                                <div>
-                                    <div class="text-gray-300 text-xs gap-3">
-                                        {{ formatDateTime(history.created_at) }}
-                                    </div>
-                                </div>
-                                <div class="text-right">
-                                    <div class="font-medium text-md"
-                                        :class="{ 'text-success-500': history.setting_new_value > 0, 'text-error-500': history.setting_new_value < 0, 'text-white': history.setting_new_value === 0 }">
-                                        {{ history.setting_new_value > 0 ? '+' + (history.setting_new_value) : (history.setting_new_value) }}
-                                    </div>
-                                </div>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
 
-            <div class="flex justify-center mt-4" v-if="!isLoading">
-                <TailwindPagination
-                    :item-classes="paginationClass"
-                    :active-classes="paginationActiveClass"
-                    :data="histories"
-                    :limit="2"
-                    @pagination-change-page="handlePageChange"
-                />
-            </div>
+        <div class="flex justify-center mt-4" v-if="!isLoading">
+            <TailwindPagination
+                :item-classes="paginationClass"
+                :active-classes="paginationActiveClass"
+                :data="histories"
+                :limit="2"
+                @pagination-change-page="handlePageChange"
+            />
         </div>
 
         <Modal :show="pammModal" :title="$t('public.update_pamm_return')" @close="closeModal" max-width="sm">

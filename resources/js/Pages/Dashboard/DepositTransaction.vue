@@ -52,11 +52,9 @@ const date = ref(`${formattedStartDate} - ${formattedEndDate}`);
             </div>
         </div>
 
-        <div class="pb-3">
-            <DepositTable
-                :search="search"
-                :date="date"
-            />
-        </div>
+        <DepositTable
+            :search="search"
+            :date="date"
+        />
     </AuthenticatedLayout>
 </template>

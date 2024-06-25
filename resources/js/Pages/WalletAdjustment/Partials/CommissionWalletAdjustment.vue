@@ -13,6 +13,7 @@ import toast from "@/Composables/toast.js";
 import { TailwindPagination } from "laravel-vue-pagination";
 import { trans } from "laravel-vue-i18n";
 import NoHistory from "@/Components/NoHistory.vue";
+import Loading from "@/Components/Loading.vue";
 
 const props = defineProps({
   client: Object,
@@ -24,6 +25,8 @@ const wallet = ref(null);
 const WalletAdjustmentModal = ref(false);
 const isDeduction = ref(true); // Default is deduction modal
 const histories = ref([]);
+const isLoading = ref(props.isLoading);
+const emit = defineEmits(['update:loading']);
 
 const form = useForm({
   id: '',
@@ -48,18 +51,27 @@ const getWalletResults = async (client = props.client, type = props.type) => {
 };
 
 const getHistoryResults = async (page = 1, client = props.client, type = props.type) => {
-  let url = `/transaction/adjustment_history?page=${page}`;
+    isLoading.value = true;
 
-  if (client) {
-    url += `&client=${client}`;
-  }
+    try {
+        let url = `/transaction/adjustment_history?page=${page}`;
 
-  if (type) {
-    url += `&type=${type}`;
-  }
+        if (client) {
+        url += `&client=${client}`;
+        }
 
-  const response = await axios.get(url);
-  histories.value = response.data;
+        if (type) {
+        url += `&type=${type}`;
+        }
+
+        const response = await axios.get(url);
+        histories.value = response.data;
+    } catch (error) {
+        console.error(error);
+    } finally {
+        isLoading.value = false;
+        emit('update:loading', false);
+    }
 };
 
 // Watch for changes in props.type
@@ -187,61 +199,72 @@ const toggleExpanded = (history) => {
                 <div class="text-white text-base font-semibold">{{ $t('public.adjustment_history') }}</div>
             </div>
 
+
             <div v-if="!props.client" class="py-5">
                 <NoClientSelected class="w-40 h-[120px] relative mb-3" />
                 <div class="text-gray-300 text-sm text-center mt-3">{{ $t('public.no_client_selected_message') }}</div>
             </div>
-            <div v-else-if="histories && histories.data == ''" class="py-5">
-                <NoHistory class="w-40 h-[120px] relative" />
-                <div class="text-gray-300 text-sm text-center mt-3">{{ $t('public.no_history_message') }}</div>
-            </div>
-            <div v-else class="w-full justify-start items-center">
-                <div class="w-full px-4 py-3 bg-gray-800 rounded-xl flex-col justify-start items-start inline-flex">
-                    <table class="w-full text-sm text-left text-gray-500">
-                        <tbody>
-                            <tr
-                                v-for="(history, index) in histories.data"
-                                :key="history.id"
-                                class="text-xs text-white border-b border-gray-700"
-                                :class="{ 'border-transparent': index === histories.data.length - 1 }"
-                            >
-                                <td class="w-full py-2 flex justify-between items-center" @click="toggleExpanded(history)">
-                                    <div class="w-full flex-row gap-2">
-                                        <div class="w-full flex justify-between">
-                                            <div class="text-gray-300 text-xs gap-3 justify-start">
-                                                {{ formatDateTime(history.created_at) }}
+            <div v-else-if="!isLoading && (histories && histories.data == '')" class="py-5">
+                    <NoHistory class="w-40 h-[120px] relative" />
+                    <div class="text-gray-300 text-sm text-center mt-3">{{ $t('public.no_history_message') }}</div>
+                </div>
+
+            <div v-else class="w-full relative overflow-x-auto rounded-xl">
+
+                <div v-if="isLoading" class="flex items-center justify-center py-5">
+                    <Loading />
+                </div>
+
+                <div v-else class="w-full justify-start items-center">
+                    <div class="w-full px-4 py-3 bg-gray-800 rounded-xl flex-col justify-start items-start inline-flex">
+                        <table class="w-full text-sm text-left text-gray-500">
+                            <tbody>
+                                <tr
+                                    v-for="(history, index) in histories.data"
+                                    :key="history.id"
+                                    class="text-xs text-white border-b border-gray-700"
+                                    :class="{ 'border-transparent': index === histories.data.length - 1 }"
+                                >
+                                    <td class="w-full py-2 flex justify-between items-center" @click="toggleExpanded(history)">
+                                        <div class="w-full flex-row gap-2">
+                                            <div class="w-full flex justify-between">
+                                                <div class="text-gray-300 text-xs gap-3 justify-start">
+                                                    {{ formatDateTime(history.created_at) }}
+                                                </div>
+                                                <div class="font-medium text-md justify-end"
+                                                    :class="{'text-success-500': history.to_wallet_id,'text-error-500': history.from_wallet_id,'text-white': !history.from_wallet_id && !history.to_wallet_id}">
+                                                    {{ history.to_wallet_id ? '+' + formatAmount(history.transaction_amount) : (history.from_wallet_id ? '-' + formatAmount(history.transaction_amount) : formatAmount(history.transaction_amount))}}
+                                                </div>
                                             </div>
-                                            <div class="font-medium text-md justify-end"
-                                                :class="{'text-success-500': history.to_wallet_id,'text-error-500': history.from_wallet_id,'text-white': !history.from_wallet_id && !history.to_wallet_id}">
-                                                {{ history.to_wallet_id ? '+' + formatAmount(history.transaction_amount) : (history.from_wallet_id ? '-' + formatAmount(history.transaction_amount) : formatAmount(history.transaction_amount))}}
+                                            <div v-if="history.isExpanded" class="w-full flex justify-between">
+                                                <div class="text-gray-300 text-xxs font-medium gap-3 justify-start">
+                                                    {{ $t('public.previous_balance') }}: <span class="text-white">$&nbsp;{{ formatAmount(history.old_wallet_amount) }}</span>
+                                                </div>
+                                                <div class="text-gray-300 text-xxs font-medium gap-3 justify-start">
+                                                    {{ $t('public.current_balance') }}: <span class="text-white">$&nbsp;{{ formatAmount(history.new_wallet_amount) }}</span>
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div v-if="history.isExpanded" class="w-full flex justify-between">
-                                            <div class="text-gray-300 text-xxs font-medium gap-3 justify-start">
-                                                {{ $t('public.previous_balance') }}: <span class="text-white">$&nbsp;{{ formatAmount(history.old_wallet_amount) }}</span>
-                                            </div>
-                                            <div class="text-gray-300 text-xxs font-medium gap-3 justify-start">
-                                                {{ $t('public.current_balance') }}: <span class="text-white">$&nbsp;{{ formatAmount(history.new_wallet_amount) }}</span>
-                                            </div>
+
                                         </div>
 
-                                    </div>
-
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-                <div class="flex justify-center mt-4">
-                    <TailwindPagination
-                        :item-classes="paginationClass"
-                        :active-classes="paginationActiveClass"
-                        :data="histories"
-                        :limit="10"
-                        @pagination-change-page="handlePageChange"
-                    />
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
+            
+            <div class="flex justify-center mt-4" v-if="!isLoading">
+                <TailwindPagination
+                    :item-classes="paginationClass"
+                    :active-classes="paginationActiveClass"
+                    :data="histories"
+                    :limit="10"
+                    @pagination-change-page="handlePageChange"
+                />
+            </div>
+
         </div>
     </div>
 

@@ -6,6 +6,7 @@ import { transactionFormat } from "@/Composables/index.js";
 import { usePage, useForm } from "@inertiajs/vue3";
 import Modal from "@/Components/Modal.vue";
 import NoHistory from "@/Components/NoHistory.vue";
+import Loading from "@/Components/Loading.vue";
 
 const props = defineProps({
     search: String,
@@ -26,7 +27,8 @@ const commissionModal = ref(false);
 const commissionDetails = ref(null);
 const totalPending = ref();
 const totalHistory = ref();
-const emit = defineEmits(['update:totalCommissionHistory']);
+const emit = defineEmits(['update:totalCommissionHistory', 'update:loading']);
+const isLoading = ref(props.isLoading);
 
 watchEffect(() => {
     // Emit the totalCommissionHistory value whenever it changes
@@ -41,6 +43,7 @@ watch(
 );
 
 const getResults = async (page = 1, search = '', date = '', type = '') => {
+    isLoading.value = true;
     try {
         let url = `/commission/commission_request_data?page=${page}`;
 
@@ -63,6 +66,9 @@ const getResults = async (page = 1, search = '', date = '', type = '') => {
         totalHistory.value = response.data.totalHistory;
     } catch (error) {
         console.error(error);
+    } finally {
+        isLoading.value = false;
+        emit('update:loading', false);
     }
 };
 
@@ -99,50 +105,57 @@ const closeModal = () => {
         <div class="text-white font-semibold">{{ $t('public.total') }}: $&nbsp;{{ formatAmount(totalAmount) }}</div>
     </div>
 
-    <div v-if="commissions.data.length == 0" >
-        <div class="w-full h-[360px] p-3 bg-gray-800 rounded-xl flex-col justify-center items-center inline-flex">
-            <div class="self-stretch h-[212px] py-5 flex-col justify-start items-center gap-3 flex">
-                <NoHistory class="w-40 h-[120px] relative" />
-                <div class="self-stretch text-center text-gray-300 text-sm">
-                    {{ $t('public.no_history_message') }}
+    <div class="relative overflow-x-auto rounded-xl">
+        <div v-if="isLoading" class="flex items-center justify-center py-8 px-3 bg-gray-800">
+            <Loading />
+        </div>
+
+        <div v-else-if="commissions.data.length == 0" >
+            <div class="w-full h-[360px] p-3 bg-gray-800 rounded-xl flex-col justify-center items-center inline-flex">
+                <div class="self-stretch h-[212px] py-5 flex-col justify-start items-center gap-3 flex">
+                    <NoHistory class="w-40 h-[120px] relative" />
+                    <div class="self-stretch text-center text-gray-300 text-sm">
+                        {{ $t('public.no_history_message') }}
+                    </div>
+                </div>
+            </div>
+            <div class="px-4 py-5 flex items-center justify-center">
+                <div class="rounded-full bg-primary-500 w-9 h-9 flex items-center justify-center">
+                    <div class="text-center text-white text-sm font-medium">1</div>
                 </div>
             </div>
         </div>
-        <div class="px-4 py-5 flex items-center justify-center">
-            <div class="rounded-full bg-primary-500 w-9 h-9 flex items-center justify-center">
-                <div class="text-center text-white text-sm font-medium">1</div>
+
+
+        <div v-else>
+            <div class="w-full px-4 py-3 bg-gray-800 rounded-xl flex-col justify-start items-start inline-flex">
+                <table class="w-full text-sm text-left text-gray-500">
+                    <tbody>
+                        <tr v-for="(commission, index) in commissions.data" :key="commission.id" class="bg-gray-800 text-xs border-b border-gray-700" :class="{ 'border-transparent': index === commissions.data.length - 1 }" @click="openModal(commission)">
+                            <td>
+                                <div class="flex justify-between items-center gap-3 py-2">
+                                    <div>
+                                        <div class="text-gray-300 text-xs">{{ formatDateTime(commission.created_at) }}</div>
+                                        <div class="text-white text-sm font-medium break-all">{{ commission.upline.name }}</div>
+                                    </div>
+                                    <div class="text-white text-right text-md font-medium">$&nbsp;{{ formatAmount(commission.amount) }}</div>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
 
-
-    <div v-else>
-        <div class="w-full px-4 py-3 bg-gray-800 rounded-xl flex-col justify-start items-start inline-flex">
-            <table class="w-full text-sm text-left text-gray-500">
-                <tbody>
-                    <tr v-for="(commission, index) in commissions.data" :key="commission.id" class="bg-gray-800 text-xs border-b border-gray-700" :class="{ 'border-transparent': index === commissions.data.length - 1 }" @click="openModal(commission)">
-                        <td>
-                            <div class="flex justify-between items-center gap-3 py-2">
-                                <div>
-                                    <div class="text-gray-300 text-xs">{{ formatDateTime(commission.created_at) }}</div>
-                                    <div class="text-white text-sm font-medium break-all">{{ commission.upline.name }}</div>
-                                </div>
-                                <div class="text-white text-right text-md font-medium">$&nbsp;{{ formatAmount(commission.amount) }}</div>
-                            </div>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-        <div class="flex justify-center mt-4">
-            <TailwindPagination
-                :item-classes="paginationClass"
-                :active-classes="paginationActiveClass"
-                :data="commissions"
-                :limit="10"
-                @pagination-change-page="handlePageChange"
-            />
-        </div>
+    <div class="flex justify-center mt-4" v-if="!isLoading">
+        <TailwindPagination
+            :item-classes="paginationClass"
+            :active-classes="paginationActiveClass"
+            :data="commissions"
+            :limit="10"
+            @pagination-change-page="handlePageChange"
+        />
     </div>
 
     <Modal :show="commissionModal" :title="$t('public.commission_payout_details')" @close="closeModal" max-width="sm">

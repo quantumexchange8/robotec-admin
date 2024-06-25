@@ -363,7 +363,6 @@ class MemberController extends Controller
     public function getAllClients(Request $request)
     {
         $users = User::query()
-            ->where('role', 'user')
             ->when($request->filled('query'), function ($query) use ($request) {
                 $search = $request->input('query');
                 $query->where(function ($innerQuery) use ($search) {

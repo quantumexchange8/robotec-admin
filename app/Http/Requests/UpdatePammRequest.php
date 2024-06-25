@@ -14,7 +14,7 @@ class UpdatePammRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'pamm' => ['required', 'regex:/^[+-]?\d*\.?\d+$/'],
+            'pamm' => ['required', 'regex:/^[+-]?\d+(\.\d+)?$/'],
         ];
     }
     
