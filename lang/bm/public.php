@@ -183,4 +183,5 @@ return [
     'incorrect_usdt_address' => 'Alamat USDT tidak sesuai untuk permintaan pengeluaran ini',
     'withdrawal_amount_exceed_balance' => 'Jumlah pengeluaran melebihi baki dompet',
     'unauthorized_access' => 'Akses tidak dibenarkan',
+    'no_usdt_address' => 'Tiada Alamat USDT',
 ];

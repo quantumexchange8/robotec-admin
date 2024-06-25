@@ -183,4 +183,5 @@ return [
     'incorrect_usdt_address' => 'USDT地址不正确,请检查此提款请求的钱包地址',
     'withdrawal_amount_exceed_balance' => '提款金额超出钱包余额',
     'unauthorized_access' => '未经授权的访问',
+    'no_usdt_address' => '没有USDT地址',
 ];

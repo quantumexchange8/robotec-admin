@@ -16,7 +16,7 @@ class DashboardController extends Controller
         $totalDeposit = Transaction::where('transaction_type', 'deposit')->where('status', 'success')->sum('transaction_amount');
         $totalWithdrawal = Transaction::where('transaction_type', 'withdrawal')->where('status', 'success')->sum('transaction_amount');
         $totalPurchasesEA = Transaction::where('transaction_type', 'purchase_robotec')->where('status', 'success')->sum('transaction_amount');
-        $totalPammFundIn = Transaction::where('transaction_type', 'pamm_funding')->where('status', 'success')->sum('transaction_amount');
+        $totalPammFundIn = Transaction::where('transaction_type', 'fund_in')->where('status', 'success')->sum('transaction_amount');
 
         return Inertia::render('Dashboard', [
             'totalClient' => $totalClient,

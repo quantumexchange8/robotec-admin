@@ -269,7 +269,7 @@ const updateClient = (clientDetails) => {
             <div class="w-full justify-start items-center gap-3 inline-flex">
                 <img class="w-9 h-9 rounded-full" :src="clientDetails.profile_photo || '/data/profile_photo.svg'" alt="Client profile picture"/>
                 <div class="w-full flex-col justify-start items-start inline-flex">
-                    <div class="self-stretch text-white text-base font-medium font-sans leading-normal break-all">{{ clientDetails.name }}</div>
+                    <div class="self-stretch text-white text-md font-medium font-sans leading-normal break-all">{{ clientDetails.name }}</div>
                     <div class="text-gray-300 text-xs font-normal font-sans leading-[18px]">{{ $t('public.id') }}: {{ clientDetails.id_number }}</div>
                 </div>
             </div>
@@ -319,7 +319,7 @@ const updateClient = (clientDetails) => {
 
             <div class="items-center mb-5">
                 <div class="text-gray-300 text-xs font-normal font-sans leading-[18px] mb-1">{{ $t('public.usdt_address') }}</div>
-                <div class="text-white text-xs font-normal font-sans leading-tight overflow-x-auto">{{ clientDetails.usdt_address ?? 'No USDT Address' }}</div>
+                <div class="text-white text-xs font-normal font-sans leading-tight overflow-x-auto">{{ clientDetails.usdt_address ?? $t('public.no_usdt_address') }}</div>
             </div>
 
             <div class="items-center pt-8 flex gap-3">

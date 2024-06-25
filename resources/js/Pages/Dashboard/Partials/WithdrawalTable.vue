@@ -160,7 +160,7 @@ const closeModal = () => {
             <div class="w-full justify-start items-center gap-3 inline-flex">
                 <img class="w-9 h-9 rounded-full" :src="transactionDetails.user.profile_photo || '/data/profile_photo.svg'" alt="Client profile picture"/>
                 <div class="w-full flex-col justify-start items-start inline-flex">
-                    <div class="self-stretch text-white font-medium break-all">{{ transactionDetails.user.name }}</div>
+                    <div class="self-stretch text-white text-md font-medium break-all">{{ transactionDetails.user.name }}</div>
                     <div class="text-gray-300 text-xs">{{ $t('public.id') }}: {{ transactionDetails.user.id_number }}</div>
                 </div>
             </div>

@@ -211,7 +211,7 @@ const toggleExpanded = (history) => {
                                             <div class="text-gray-300 text-xs gap-3 justify-start">
                                                 {{ formatDateTime(history.created_at) }}
                                             </div>
-                                            <div class="font-medium leading-normal text-md justify-end"
+                                            <div class="font-medium text-md justify-end"
                                                 :class="{'text-success-500': history.to_wallet_id,'text-error-500': history.from_wallet_id,'text-white': !history.from_wallet_id && !history.to_wallet_id}">
                                                 {{ history.to_wallet_id ? '+' + formatAmount(history.transaction_amount) : (history.from_wallet_id ? '-' + formatAmount(history.transaction_amount) : formatAmount(history.transaction_amount))}}
                                             </div>

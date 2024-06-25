@@ -183,4 +183,5 @@ return [
     'incorrect_usdt_address' => 'The USDT address is not for this withdrawal request',
     'withdrawal_amount_exceed_balance' => 'The withdrawal amount exceeds the wallet balance',
     'unauthorized_access' => 'Unauthorized access',
+    'no_usdt_address' => 'No USDT Address',
 ];
