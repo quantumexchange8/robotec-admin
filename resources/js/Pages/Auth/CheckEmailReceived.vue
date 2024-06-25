@@ -43,7 +43,24 @@ const goToLoginPage = () => {
 }
 
 const openEmailApp = () => {
-    window.location.href = 'mailto:';
+    const userAgent = navigator.userAgent || navigator.vendor || window.opera;
+
+    if (/android/i.test(userAgent)) {
+        // Intent URL with chooser for Android to prompt user choice
+        const emailIntentUrl = "intent://#Intent;scheme=mailto;action=android.intent.action.VIEW;chooser=1;end";
+        window.location.href = emailIntentUrl;
+    } else if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
+        // Check if device supports mailto: and can handle email links
+        if (navigator.canShare && navigator.canShare({ url: 'mailto:' })) {
+            window.location.href = 'mailto:';
+        } else {
+            // Fallback for iOS devices without default Mail app support
+            alert('Please set up a default Mail app to send emails.');
+        }
+    } else {
+        // Fallback for unsupported platforms or unknown user agents
+        alert('Opening email app is not supported on your device.');
+    }
 }
 </script>
 

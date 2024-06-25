@@ -251,7 +251,7 @@ const sendApprovalRequest = (onSuccessCallback) => {
                             id="selectAllCheckbox"
                         />
                     </th>
-                    <th class="text-white text-sm">
+                    <th class="text-white text-sm font-normal">
                         {{ selectAllLabel }}
                     </th>
                 </tr>

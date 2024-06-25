@@ -39,7 +39,7 @@ function uploadPhotoFromCamera() {
 
 // Function to handle uploading profile photo from File
 function uploadFromFile() {
-    document.getElementById('fileInputFile').click();
+    document.getElementById('fileInput').click();
 }
 
 // Function to handle the selected file from the input element
@@ -80,7 +80,7 @@ function handleFileUpload(event) {
                             <!-- Hidden file input elements -->
                             <input id="fileInputLibrary" type="file" accept="image/*" style="display: none" @change="handleFileUpload">
                             <input id="fileInputCamera" type="file" accept="image/*" capture="environment" style="display: none" @change="handleFileUpload">
-                            <input id="fileInputFile" type="file" accept="image/*" style="display: none" @change="handleFileUpload">
+                            <input id="fileInput" type="file" accept="image/*" style="display: none" @change="handleFileUpload">
 
                             <DropdownLink @click.prevent="uploadFromPhotoLibrary">
                                 <div class="flex items-center justify-between gap-2">
