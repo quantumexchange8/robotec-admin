@@ -15,5 +15,12 @@ class RunningNumberSeeder extends Seeder
             'digits' => 7,
             'last_number' => 0,
         ]);
+
+        RunningNumber::create([
+            'type' => 'adjustment',
+            'prefix' => 'ADJ',
+            'digits' => 7,
+            'last_number' => 0,
+        ]);
     }
 }
