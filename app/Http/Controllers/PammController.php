@@ -9,7 +9,9 @@ use App\Models\AutoTrading;
 use App\Models\Transaction;
 use Illuminate\Http\Request;
 use App\Models\SettingHistory;
+use App\Models\TradingAccount;
 use Illuminate\Support\Carbon;
+use App\Jobs\ProcessPAMMTrades;
 use App\Services\CTraderService;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
@@ -58,8 +60,8 @@ class PammController extends Controller
             'setting_new_value' => $newValue,
         ]);
 
-        // Create PAMM trade based on the updated value
-        $this->createPAMMTradesForAutoTrading($pamm);
+        // Dispatch ProcessPAMMTrades job automatically
+        ProcessPAMMTrades::dispatch($pamm);
     
         return redirect()->back()->with('toast', [
             'title' => trans('public.pamm_update_success_title'),
@@ -67,79 +69,79 @@ class PammController extends Controller
         ]);
     }
 
-    private function createPAMMTradesForAutoTrading(Setting $pamm)
-    {
+    // private function createPAMMTradesForAutoTrading(Setting $pamm)
+    // {
     
-        $autoTradingRecords = AutoTrading::where('status', 'ongoing')->get();
+    //     $autoTradingRecords = AutoTrading::where('status', 'ongoing')->get();
     
-        // Initialize CTraderService
-        $cTraderService = new CTraderService();
+    //     // Initialize CTraderService
+    //     $cTraderService = new CTraderService();
     
-        foreach ($autoTradingRecords as $record) {
-            try {
-                $investmentAmount = $record->investment_amount;
-                $updatedValue = $pamm->value / 100; // Convert percentage to decimal
+    //     foreach ($autoTradingRecords as $record) {
+    //         try {
+    //             $tradingAccount = TradingAccount::where('meta_login', $record->meta_login)->first();
+    //             $updatedValue = $pamm->value / 100; // Convert percentage to decimal
     
-                $pamm_return = abs($pamm->value);
-                // Calculate the amount based on percentage and round up to 2 decimal
-                $amount = round((abs($updatedValue) * $investmentAmount), 2);
+    //             $pamm_return = abs($pamm->value);
+    //             // Calculate the amount based on percentage and round up to 2 decimal
+    //             $amount = round((abs($updatedValue) * $tradingAccount->balance), 2);
 
-                // Assuming you have the user's meta login information and necessary data
-                $meta_login = $record->meta_login;
-                $comment = "PAMM Return Balance";
+    //             // Assuming you have the user's meta login information and necessary data
+    //             $meta_login = $record->meta_login;
+    //             $comment = "PAMM Return Balance";
     
-                // Determine trade type based on updatedValue
-                $tradeType = $updatedValue >= 0 ? ChangeTraderBalanceType::DEPOSIT : ChangeTraderBalanceType::WITHDRAW;
+    //             // Determine trade type based on updatedValue
+    //             $tradeType = $updatedValue >= 0 ? ChangeTraderBalanceType::DEPOSIT : ChangeTraderBalanceType::WITHDRAW;
     
-                // Create the trade
-                $trade = $cTraderService->createTrade($meta_login, $amount, $comment, $tradeType);
+    //             // Create the trade
+    //             $trade = $cTraderService->createTrade($meta_login, $amount, $comment, $tradeType);
     
-                // Update cumulative_pamm_return and cumulative_amount based on tradeType
-                if ($tradeType === ChangeTraderBalanceType::DEPOSIT) {
-                    $record->cumulative_pamm_return += $pamm_return;
-                    $record->cumulative_amount += $amount;
-                } else {
-                    $record->cumulative_pamm_return -= $pamm_return;
-                    $record->cumulative_amount -= $amount;
-                }
+    //             // Update cumulative_pamm_return and cumulative_amount based on tradeType
+    //             if ($tradeType === ChangeTraderBalanceType::DEPOSIT) {
+    //                 $record->cumulative_pamm_return += $pamm_return;
+    //                 $record->cumulative_amount += $amount;
+    //             } else {
+    //                 $record->cumulative_pamm_return -= $pamm_return;
+    //                 $record->cumulative_amount -= $amount;
+    //             }
     
-                // Save the updated record
-                $record->save();
+    //             // Save the updated record
+    //             $record->save();
 
-                // Create a transaction record
-                $this->createTransactionRecord($record->user_id, $meta_login, $amount, $tradeType, $trade->getTicket());
+    //             // Create a transaction record
+    //             $this->createTransactionRecord($record->user_id, $meta_login, $amount, $tradeType, $trade->getTicket());
     
-            } catch (\Exception $e) {
-                Log::error($e->getMessage());
-            }
-        }
-    }
+    //         } catch (\Exception $e) {
+    //             Log::error($e->getMessage());
+    //         }
+    //     }
+    // }
 
-    private function createTransactionRecord($user_id, $meta_login, $amount, $tradeType, $ticket)
-    {
-        try {
-            // Determine transaction type text
-            $transactionType = $tradeType == ChangeTraderBalanceType::DEPOSIT ? 'deposit' : 'withdrawal';
+    // private function createTransactionRecord($user_id, $meta_login, $amount, $tradeType, $ticket)
+    // {
+    //     try {
+    //         // Determine transaction type text
+    //         $transactionType = $tradeType == ChangeTraderBalanceType::DEPOSIT ? 'deposit' : 'withdrawal';
 
-            // Create transaction record
-            Transaction::create([
-                'user_id' => $user_id,
-                'category' => 'trading_account',
-                'transaction_type' => $transactionType,
-                'from_meta_login' => ChangeTraderBalanceType::DEPOSIT ? null : $meta_login,
-                'to_meta_login' => ChangeTraderBalanceType::DEPOSIT ? $meta_login : null,
-                'ticket' => $ticket,
-                'transaction_number' => RunningNumberService::getID('transaction'),
-                'amount' => $amount,
-                'transaction_amount' => $amount,
-                'status' => 'success',
-                'remarks' => 'AutoTrading',
-                'handle_by' => Auth::id(),
-                'approved_at' => now(),
-            ]);
+    //         // Create transaction record
+    //         Transaction::create([
+    //             'user_id' => $user_id,
+    //             'category' => 'trading_account',
+    //             'transaction_type' => $transactionType,
+    //             'from_meta_login' => ChangeTraderBalanceType::DEPOSIT ? null : $meta_login,
+    //             'to_meta_login' => ChangeTraderBalanceType::DEPOSIT ? $meta_login : null,
+    //             'ticket' => $ticket,
+    //             'transaction_number' => RunningNumberService::getID('transaction'),
+    //             'amount' => $amount,
+    //             'transaction_amount' => $amount,
+    //             'status' => 'success',
+    //             'remarks' => 'AutoTrading',
+    //             'handle_by' => Auth::id(),
+    //             'approved_at' => now(),
+    //         ]);
 
-        } catch (\Exception $e) {
-            Log::error($e->getMessage());
-        }
-    }
+    //     } catch (\Exception $e) {
+    //         Log::error($e->getMessage());
+    //     }
+    // }
 }

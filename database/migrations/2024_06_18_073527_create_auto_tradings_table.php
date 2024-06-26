@@ -23,6 +23,7 @@ return new class extends Migration
             $table->timestamp('matured_at')->nullable();
             $table->double('cumulative_pamm_return')->default(0);
             $table->decimal('cumulative_amount', 13, 2)->default(0);
+            $table->decimal('cumulative_earning', 13, 2)->default(0);
             $table->softDeletes();
             $table->timestamps();
 
