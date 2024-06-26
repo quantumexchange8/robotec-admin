@@ -43,15 +43,15 @@ const Tag = !props.external ? Link : 'a'
             <EmptyCircleIcon aria-hidden="true" class="flex-shrink-0 w-6 h-6 text-gray-300" />
         </slot>
 
-        <div class="flex items-center gap-2">
+        <div class="flex items-center gap-2 w-full">
             <span
-                class="text-base font-medium"
+                class="text-base text-left font-medium w-full"
                 v-show="sidebarState.isOpen || sidebarState.isHovered"
             >
                 {{ title }}
             </span>
-            <div v-if="pendingCounts > 0" class="h-5 px-1 min-w-4 flex flex-col justify-center items-center bg-error-500 text-white rounded-[20px]">
-                <div class="text-right text-white text-xs font-medium">{{ pendingCounts }}</div>
+            <div v-if="pendingCounts > 0" class="h-5 w-5 grow-0 shrink-0 flex flex-col justify-center items-center bg-error-500 text-white rounded-full">
+                <div class="text-white text-xs font-medium">{{ pendingCounts }}</div>
             </div>
         </div>
     </component>
