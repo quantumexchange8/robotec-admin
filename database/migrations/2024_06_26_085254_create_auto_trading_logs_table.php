@@ -11,8 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('auto_tradings_logs', function (Blueprint $table) {
+        Schema::create('auto_trading_logs', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('auto_trading_id')->nullable();
             $table->double('old_pamm')->default(0);
             $table->double('new_pamm')->default(0);
             $table->decimal('old_amount', 13, 2)->default(0);
