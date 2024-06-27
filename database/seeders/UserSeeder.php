@@ -20,6 +20,7 @@ class UserSeeder extends Seeder
             'dial_code' => '+60',
             'phone' => '+60123456789',
             'referral_code' => 'RBTx666666',
+            'id_number' => '000001',
             'role' => 'admin',
         ]);
     }

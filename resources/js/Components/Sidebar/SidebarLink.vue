@@ -78,8 +78,8 @@ const Tag = !props.external ? Link : 'a'
             >
                 {{ title }}
             </span>
-            <div v-if="pendingCounts > 0" class="h-5 px-1 min-w-4 flex flex-col justify-center items-center bg-error-500 text-white rounded-[20px]">
-                <div class="text-right text-white text-xs font-medium">{{ pendingCounts }}</div>
+            <div v-if="pendingCounts > 0" class="h-5 w-5 grow-0 shrink-0 flex flex-col justify-center items-center bg-error-500 text-white rounded-full">
+                <div class="text-white text-xs font-medium">{{ pendingCounts }}</div>
             </div>
         </div>
     </button>

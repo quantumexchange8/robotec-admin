@@ -54,8 +54,8 @@ class ProcessPAMMTrades implements ShouldQueue
                 $updatedValue = $this->pamm->value / 100; // Convert percentage to decimal
 
                 $pamm_return = abs($this->pamm->value);
-                $amount = round((abs($updatedValue) * $record->cumulative_earning), 2);
                 $earning = $record->cumulative_earning;
+                $amount = round((abs($updatedValue) * $earning), 2);
 
                 $meta_login = $record->meta_login;
                 $comment = "PAMM Return Balance";
@@ -118,11 +118,11 @@ class ProcessPAMMTrades implements ShouldQueue
                 AutoTradingLog::create([
                     'auto_trading_id' => $record->id,
                     'old_pamm' => $oldPamm ?? 0,
-                    'new_pamm' => $record->cumulative_pamm_return ?? 0,
+                    'new_pamm' => $oldPamm + $pamm_return ?? 0,
                     'old_amount' => $oldAmount ?? 0,
-                    'new_amount' => $record->cumulative_amount ?? 0,
+                    'new_amount' => $oldAmount + $amount ?? 0,
                     'old_earning' => $oldEarning ?? 0,
-                    'new_earning' => $record->cumulative_earning ?? 0,
+                    'new_earning' => $oldEarning + $amount ?? 0,
                     'status' => 'failed',
                     'remarks' => 'Failed to execute AutoTrading job: ' . $e->getMessage(),
                 ]);
