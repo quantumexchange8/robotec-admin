@@ -54,7 +54,7 @@ const date = ref(`${formattedStartDate} - ${formattedEndDate}`);
             </div>
         </div>
 
-        <div class="p-3">
+        <div>
             <PammTable 
                 :search="search" 
                 :date="date" 

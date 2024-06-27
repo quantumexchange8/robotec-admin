@@ -21,6 +21,7 @@ class AutoTrading extends Model
         'matured_at',
         'cumulative_pamm_return',
         'cumulative_amount',
+        'cumulative_earning'
     ];
 
 }

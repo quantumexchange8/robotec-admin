@@ -54,28 +54,37 @@ class ProcessPAMMTrades implements ShouldQueue
                 $updatedValue = $this->pamm->value / 100; // Convert percentage to decimal
 
                 $pamm_return = abs($this->pamm->value);
-                $amount = round((abs($updatedValue) * $record->cumulative_earning), 2);
                 $earning = $record->cumulative_earning;
+                $amount = round((abs($updatedValue) * $earning), 2);
 
                 $meta_login = $record->meta_login;
                 $comment = "PAMM Return Balance";
 
                 $tradeType = $updatedValue >= 0 ? ChangeTraderBalanceType::DEPOSIT : ChangeTraderBalanceType::WITHDRAW;
                 
+                // Initialize new values
+                $newPamm = $oldPamm;
+                $newAmount = $oldAmount;
+                $newEarning = $oldEarning;
+
                 if ($tradeType === ChangeTraderBalanceType::DEPOSIT) {
-                    $record->cumulative_pamm_return += $pamm_return;
-                    $record->cumulative_amount += $amount;
-                    $record->cumulative_earning += $amount;
+                    $newPamm += $pamm_return;
+                    $newAmount += $amount;
+                    $newEarning += $amount;
                 } else {
                     if ($earning - $amount < 0.01) {
                         $amount = $earning;
                         $record->status = 'transfer';
-                    }    
+                    }
 
-                    $record->cumulative_pamm_return -= $pamm_return;
-                    $record->cumulative_amount -= $amount;
-                    $record->cumulative_earning -= $amount;
+                    $newPamm -= $pamm_return;
+                    $newAmount -= $amount;
+                    $newEarning -= $amount;
                 }
+                
+                $record->cumulative_pamm_return = $newPamm;
+                $record->cumulative_amount = $newAmount;
+                $record->cumulative_earning = $newEarning;
 
                 $trade = $cTraderService->createTrade($meta_login, $amount, $comment, $tradeType);
 
@@ -103,11 +112,11 @@ class ProcessPAMMTrades implements ShouldQueue
                 AutoTradingLog::create([
                     'auto_trading_id' => $record->id,
                     'old_pamm' => $oldPamm,
-                    'new_pamm' => $record->cumulative_pamm_return,
+                    'new_pamm' => $newPamm,
                     'old_amount' => $oldAmount,
-                    'new_amount' => $record->cumulative_amount,
+                    'new_amount' => $newAmount,
                     'old_earning' => $oldEarning,
-                    'new_earning' => $record->cumulative_earning,
+                    'new_earning' => $newEarning,
                     'status' => 'success',
                     'remarks' => 'AutoTrading job executed successfully.',
                 ]);
@@ -117,12 +126,12 @@ class ProcessPAMMTrades implements ShouldQueue
 
                 AutoTradingLog::create([
                     'auto_trading_id' => $record->id,
-                    'old_pamm' => $oldPamm ?? 0,
-                    'new_pamm' => $record->cumulative_pamm_return ?? 0,
-                    'old_amount' => $oldAmount ?? 0,
-                    'new_amount' => $record->cumulative_amount ?? 0,
-                    'old_earning' => $oldEarning ?? 0,
-                    'new_earning' => $record->cumulative_earning ?? 0,
+                    'old_pamm' => $oldPamm,
+                    'new_pamm' => $newPamm,
+                    'old_amount' => $oldAmount,
+                    'new_amount' => $newAmount,
+                    'old_earning' => $oldEarning,
+                    'new_earning' => $newEarning,
                     'status' => 'failed',
                     'remarks' => 'Failed to execute AutoTrading job: ' . $e->getMessage(),
                 ]);
