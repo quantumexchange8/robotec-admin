@@ -117,12 +117,12 @@ class ProcessPAMMTrades implements ShouldQueue
 
                 AutoTradingLog::create([
                     'auto_trading_id' => $record->id,
-                    'old_pamm' => $oldPamm ?? 0,
-                    'new_pamm' => $oldPamm + $pamm_return ?? 0,
-                    'old_amount' => $oldAmount ?? 0,
-                    'new_amount' => $oldAmount + $amount ?? 0,
-                    'old_earning' => $oldEarning ?? 0,
-                    'new_earning' => $oldEarning + $amount ?? 0,
+                    'old_pamm' => $oldPamm,
+                    'new_pamm' => $oldPamm + $pamm_return,
+                    'old_amount' => $oldAmount,
+                    'new_amount' => $oldAmount + $amount,
+                    'old_earning' => $oldEarning,
+                    'new_earning' => $oldEarning + $amount,
                     'status' => 'failed',
                     'remarks' => 'Failed to execute AutoTrading job: ' . $e->getMessage(),
                 ]);

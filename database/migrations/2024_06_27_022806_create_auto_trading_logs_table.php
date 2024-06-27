@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('auto_tradings_logs', function (Blueprint $table) {
+        Schema::create('auto_trading_logs', function (Blueprint $table) {
             $table->id();
             $table->double('old_pamm')->default(0);
             $table->double('new_pamm')->default(0);
