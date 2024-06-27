@@ -147,7 +147,7 @@ const closeModal = () => {
 
     <Modal :show="transactionModal" :title="$t('public.fund_in_details')" @close="closeModal" max-width="sm">
         <div v-if="transactionDetails">
-            <div class="w-full justify-start items-center gap-3 border-b border-gray-700 inline-flex">
+            <div class="w-full justify-start items-center gap-3 inline-flex">
                 <img class="w-9 h-9 rounded-full" :src="transactionDetails.user.profile_photo || '/data/profile_photo.svg'" alt="Client profile picture"/>
                 <div class="w-full flex-col justify-start items-start inline-flex">
                     <div class="self-stretch text-white text-md font-medium break-all">{{ transactionDetails.user.name }}</div>

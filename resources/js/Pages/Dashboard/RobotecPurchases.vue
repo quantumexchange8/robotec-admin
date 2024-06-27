@@ -54,7 +54,7 @@ const date = ref(`${formattedStartDate} - ${formattedEndDate}`);
             </div>
         </div>
 
-        <div class="py-3">
+        <div>
             <RobotecPurchasesTable 
                 :search="search" 
                 :date="date" 
